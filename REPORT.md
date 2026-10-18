@@ -871,6 +871,82 @@ The memory solution is therefore not walled off. It sits behind a shallow ridge 
 
 **Caveats.** There are 1–6 runs per cell. "Switching" is judged by the existence of a selective pointer neuron (a "neither" rate below 0.4). The fork runs use a fresh optimizer and were trained for only 2²⁵ sequences.
 
+### 7.15 Second round on accuracy estimation: task-only designs, held-out seeds, adaptive sampling, and explanation-predicted boundaries (`w1.py`–`w9.py`, `x1.py`–`x3.py`)
+
+This round started from an analysis by ChatGPT Pro, given the question in `QUESTION_FOR_CHATGPT_PRO.md`. Its code was not recoverable, so I reimplemented its two main proposals from the description and checked them independently. Then, following the brief "use the explanation, and make finding it cheaper than brute force", I tested explanation-driven estimators across independently trained seeds.
+
+**ARC's bar, for reference.** ARC would "consider it a major research breakthrough" to produce a *mechanistic* estimate, one that "reasons deductively based on the structure of the model" rather than from sampled examples, that "matches the performance of random sampling in terms of mean squared error versus compute". The comparison is to be averaged over random seeds, and weight noise is suggested only as a cheap proxy. By that definition, everything in this section except the last part still samples.
+
+**A population of seeds (`w3.py`).** Weight-perturbed copies of one network are not independent draws, so I trained 16 fresh 16-neuron seeds (`pop/p0–15.npz`) with AlgZoo's schedule, scaled to 2²⁷ sequences to fit the compute available. They reach 0.73–0.88 accuracy, less than the zoo's 2³⁰ models. With the mystery model and seeds 0–4, that gives 22 independent networks.
+
+**Task-only designs (`w1.py`, `w2.py`, `w5.py`).** Two unbiased estimators with honest error bars from independent scrambles:
+
+- **Ordered Sobol.** An exact transport of N(0,1)¹⁰ into top-3 order statistics, an arrangement and 7 exact lower inputs, driven by scrambled Sobol points. It costs one forward pass per point. The design depends only on the task, so it is free prework.
+- **Exact last-input integration.** Given x₁..x₉, the logits are piecewise linear in x₁₀, with at most 16 hinges, and the target changes only at the prefix's max and 2nd max. So P(correct | x₁..x₉) is a sum of at most 19 terms Φ(U) − Φ(L). This matches a dense numerical grid to about 1e-5. The fair cost, from matched numba kernels, is **2.2–2.5 forwards per prefix**. A NumPy version measured 5.3, an implementation artifact. ChatGPT reported 2.3 in C++.
+
+Variance reduction against plain sampling at equal compute:
+
+| network | ordered Sobol, 2¹² | 2¹⁶ | last input + Sobol per prefix, 2¹² | 2¹⁶ | net at 2.3 forwards per prefix, 2¹⁶ |
+|---|---|---|---|---|---|
+| mystery | 2.4× | 3.0× | 6.0× | 9.6× | 4.2× |
+| seed 2 | 1.8× | 2.2× | 4.7× | 7.7× | 3.3× |
+| seed 3 | 1.7× | 2.1× | 5.1× | 5.7× | 2.5× |
+| seed 0 | 1.4× | 1.4× | 3.8× | 7.2× | 3.1× |
+| seed 1 | 1.7× | 2.3× | 3.9× | 5.9× | 2.6× |
+| seed 4 | 1.4× | 1.6× | 3.4× | 6.8× | 3.0× |
+
+Gains are from 16–64 replicates, so each is uncertain by about ±50%; a plain-sampling control in the same runs reads 0.7–1.6×. **Integrating a second input does not pay (`w6.py`, `w7.py`).** With random prefixes, x₁₀ alone gives 1.9–2.1× per prefix; adding x₉ (exactly, or by 2–8 stratified points) raises that only to 2.5–3.5×. The cost rises much faster, to 2.8–13.5 forwards, so net efficiency falls from about 1.0× to 0.3–1.0×. On its own, conditioning on an input removes variance at about the rate it adds cost. The last-input method's net advantage above comes from pairing it with the Sobol design. None of this uses the mechanism: these are generic numerical tricks, capped at small constant factors.
+
+**Most informative runs first (`w8.py`).** This is adaptive stratified sampling with a stopping rule:
+
+- **Strata:** 44 strata from the failure modes (sign and size of S, and a grid in a = (M−S)/|M| and b = (S−R)/|M|), with exactly known masses.
+- **Allocation:** each batch of 256 runs goes to strata in proportion to mass × √(e(1−e)), with error rates shrunk toward the other seeds (empirical Bayes, leave-one-seed-out).
+- **Stopping:** stop when the estimated SE reaches the target.
+
+Over the 22 held-out networks, 100 repetitions each:
+
+| target SE | runs used (median) | brute force | saving | realized RMSE | bias | 95% coverage |
+|---|---|---|---|---|---|---|
+| 0.5 points | 4,340 | 5,725 | 1.3× | 0.50 | +0.16 | 0.94 |
+| 0.2 points | 26,322 | 35,779 | 1.4× | 0.20 | +0.04 | 0.95 |
+| 0.1 points | 104,826 | 143,117 | 1.4× | 0.10 | +0.01 | 0.94 |
+| 0.05 points | 419,563 | 572,470 | 1.4× | 0.05 | +0.005 | 0.95 |
+
+The error bars are honest. The small positive bias at loose targets is the usual optional-stopping effect, and an anytime-valid interval would remove it. **Why the saving is small (`w9.py`):** I computed the Neyman bound, the best any allocation over a given stratification can do even with *true* stratum error rates:
+
+| network | 44 gap strata | 60 finer gap strata | + positions of max and 2nd (6,000 strata) |
+|---|---|---|---|
+| mystery | 2.9× | 2.9× | 5.0× |
+| seed 2 | 2.4× | 2.4× | 3.8× |
+| seed 3 | 2.3× | 2.3× | 3.7× |
+| seed 0 | 1.8× | 1.8× | 2.6× |
+| seeds 1, 4 | 1.3–1.5× | 1.3–1.5× | 2.4–2.5× |
+| 16 new 2²⁷ seeds | 1.2–1.5× | 1.2–1.5× | 1.6–2.8× |
+
+Finer gap bins add nothing: inside the near-tie strata the outcome stays close to a coin flip. A large saving needs strata where the outcome is nearly certain, which means knowing the network's own boundary, not the task's.
+
+**Predicting the boundary from the explanation (`x1.py`, `x4.py`).**
+
+- **A threshold-shifted tracker fails.** This is the online 2nd-max algorithm with the network's event thresholds for new max and new 2nd max, linear in the ages, with 6 parameters fitted by coordinate search. The best fit is zero shift, which agrees with the network on only 95.4% of inputs, no better than "always correct".
+- **The errors are blur, not bias.** In near-ties, the error rate is the same whichever value came first: 25% when S precedes R against 23% when R precedes S, and 18% against 15% for M and S. It falls smoothly with the gap. For the mystery model it is 44% at b < 0.005, 21% at 0.01–0.02, 5% at 0.03–0.06 and 2% at 0.06–0.1. Seed 0's blur is about twice as wide. The network compares as if one value carried noise of about 0.02·|M|.
+- **The ages explain part of the blur; the lower inputs explain none that a classifier can find.** Gradient-boosted classifiers predicting near-tie errors (residual variance, against 0.182 with no features): gap only 0.169; + positions of M, S and R 0.106; + all lower inputs and positions, no better. For seed 0 the same sequence is 0.217, 0.152, then no better. So the ages explain about 40% of which near-ties go wrong. That "blurred comparator with age-dependent width" explanation has a ceiling of about 5× (mystery) and 2.6× (seed 0), as above, and it needs fitting, that is, sampling.
+
+**A weight-derived blur, with no sampling (`x2.py`, `x3.py`).** The mean-field boundary (lower inputs at μ(R)) plus a Gaussian blur, with width taken from the gradient of each logit margin with respect to the lower inputs and their truncated-normal variance: P(correct | M, S, R, positions) ≈ Πⱼ Φ(mⱼ/(σ(R)·‖∇ₗₒw mⱼ‖)). The integrand is smooth, so Gauss–Legendre in (M, a, b) converges, and it converges to the wrong answer:
+
+| grid (points) | 0.23M | 0.51M | 1.35M | 2.95M | 6.05M |
+|---|---|---|---|---|---|
+| weight-derived blur | −4.31 points | −2.04 | −2.32 | −2.42 | −2.60 |
+| mean field, sharp | −1.64 | +0.47 | +0.32 | +0.16 | +0.06 |
+
+Pointwise checks at 3,000 random points, against 300 redraws of the lower inputs each, show two failures:
+
+- **The ReLUs clip the lower inputs' influence**, so a linear spread predicts errors where there are none: clean region 0.980 predicted against 0.998 true.
+- **The mean-field point is not a typical input.** In the worst cells the network errs at μ(R) but is right on 84–95% of real draws, and the linearization at that point gives 0–4%. The sharp mean field is off pointwise by 3.3 points on average, and is right overall only because breaks and rescues cancel.
+
+The nonlinear one-input-at-a-time treatment (first-order cut-HDMR, 7.13) remains the best model of the lower inputs, at about 0.1 points of residual error.
+
+**Bottom line.** Of the estimators that still sample, the best is last-input integration plus an ordered Sobol design, at about 2.5–4× sampling's efficiency for the zoo models. Explanation-driven allocation is honest but capped at about 1.4× in practice, and about 3–5× with perfect knowledge of the strata. Every mechanistic estimate tried needs the 720 arrangements × a 3D grid, about 10⁵–10⁶ network evaluations or more. At that compute sampling's SE is about 0.01–0.07 points, while the best mechanistic approximation errors are about 0.06–0.3 points (mean field) and worse with the derived blur. Matching sampling would need an estimate that avoids both the arrangement enumeration, using the time-translation structure, and network evaluation altogether. That means a closed-form state from the clock eigenmodes, with age-dependent comparator thresholds including ReLU clipping.
+
 ## 8. Open problems and caveats
 
 - **The clock analysis is linear.** It uses the eigenmodes of the usually-active neurons, but those neurons do switch off at certain ages. The causal interventions and patching are exact operations on the final state, but they act in that approximate basis.
@@ -885,6 +961,8 @@ The memory solution is therefore not walled off. It sits behind a shallow ridge 
 
 Per-cell RMSE also rises (0.081 → 0.092 and 0.100 → 0.105). So the cut-HDMR expansion of the correct/incorrect indicator does not converge: pair terms overshoot. First order is the best this family of approximations can do.
 - **The readout side of "why training lands here" is resolved** (7.12): it is the convex optimum for the recurrence's features. For the recurrence, the switch is located in one neuron's recurrent threshold (n10 snapping onto ≈0.5–0.7·S). Forked training (7.14) shows the fork is stochastic: about 31–46% of runs from scratch switch, the outcome depends on data order and initial weights, and it is settled by about 2²⁴ sequences. A mid-training learning-rate "kick" before then reliably induces switching. The barrier is shallow along a curved path (about 0.07 nats), and per-seed rates range from 1/9 to 8/8 (7.14). 24 fresh initializations switch at 54%, and no simple scalar statistic of the initial weights predicts it (all p ≥ 0.08). Tracking recruitment shows the pointer is chosen among the initially positive-input neurons by early growth, by about 2²² sequences. Section 7.14 shows that the competition is over threshold targets. M (the new-max detector) is taken first. A run selects only if another neuron settles on the 2nd-max threshold by about 2²³ sequences; otherwise a neuron goes always-on. The loss-landscape scan (7.14) gives a partial reason. At 2²² the loss already prefers S-ward thresholds, but S is less linearly available in the state, so they are harder to reach. By 2²³ co-adaptation flips the preference to M. Always-on is never preferred directly. Per-seed rates (14–15 runs each) range from 2/15 to 14/14. Initialization transplants locate seed 3's predisposition in the joint recurrent-plus-readout configuration, spread across neurons, which consistently makes n13 a one-step-late pointer. Simple weight statistics (p ≥ 0.08) and the early S-decodability gap (p = 0.87) do not predict switching. Transplanting n13 alone (0/4) or everything except n13 (1/4) fails, so the property is an interaction between n13 and its seed 3 surroundings, not a single-neuron trait. The initial *readout* carries it: with forward dynamics identical, seed 3's readout gives 6/6 against 0/4. But not through the step-0 gradient: a minimal readout transplant that gives n13 an even larger initial-gradient lead switches 0/6. So the predisposition acts through the training trajectory. A *frozen* seed 3 readout is enough for 3/3 switching, while training only n13's own row fails 0/3, so the decisive dynamics are the whole recurrence learning toward a fixed readout geometry. **No predictor at initialization was found.** Six single statistics and a 26-feature cross-validated classifier (46–50% accuracy against 50% chance) all fail on 48 fresh runs. The best single candidate, the winner's gradient margin, looked borderline at first (p = 0.056) but failed to replicate (p = 0.27 held-out, 0.57 overall). The one-step-late pointer itself is now explained: it is a gate opened by silent comparators (7.9). It would also need a quantitative theory of how that initial competition plays out over the roughly 12k steps before the pointer forms. Narrowing it further would need many more transplant conditions, each needing several training runs, plus a theory of why that path is attractive under gradient descent.
+- **Explanation-driven and task-only estimators were re-examined on 22 independent seeds (7.15).** The best sampling-based combination is about 2.5–4× sampling's efficiency. Mechanism-defined adaptive sampling saves 1.4× in practice and at most about 3–5× even with perfect stratum knowledge, because near-tie outcomes are "blurred" rather than shifted. A weight-derived Gaussian blur converges to −2.6 points because ReLU clipping makes the lower inputs' effect nonlinear. A competitive mechanistic estimate would need a closed-form state model that avoids both the 720-arrangement enumeration and network evaluation.
+- **The 16 extra seeds are under-trained** (2²⁷ sequences, accuracy 0.73–0.88), so the held-out population is more heterogeneous than the zoo's 2³⁰ models.
 - **The mystery model has no training checkpoints.** That it is a "tidier" online selector is inferred from the zoo seeds, especially seed 2's transient ~40° 2nd-max clock.
 
 ## 9. Ledger of ideas: tried, outcome, and why each line is closed
@@ -927,5 +1005,11 @@ Each line of investigation is listed with what was tried, the result, and why I 
 - ✔ **Boundary-aware quadrature in scale-adapted coordinates, with prefix caching**: converges to 0.002–0.004 points for the selector models at the largest grids.
 - ✘ **Beating sampling with an honest error bar**: randomized replicates give standard errors 6–20× sampling's. A control variate is worse than plain sampling. Stratified sampling gives a 1.2–2.8× gain, but it still samples.
 - ✘ **Removing the memory model's bias** by treating the 4th input exactly: worse (+0.27 points). The bias comes from the lower inputs' variance, which no mean-field variant captures.
+- ✔ **Task-only designs (7.15)**: ordered Sobol gives 1.4–3.0×; exact last-input integration gives 4–10× per prefix and about 2.5–4× net at a matched cost of 2.2–2.5 forwards. Both still sample.
+- ✘ **Integrating a second input exactly (7.15)**: cost rises faster than variance falls (net 0.3–1.0×).
+- ✘ **Most-informative-first adaptive sampling over failure-mode strata (7.15)**: honest, 1.4× on 22 held-out seeds, Neyman ceiling 1.2–5×.
+- ✘ **Explanation-predicted boundary (7.15)**: the threshold-shift tracker gets zero shift (no information); errors are symmetric blur; the ages explain about 40% of near-tie outcomes.
+- ✘ **Weight-derived Gaussian blur, no sampling (7.15)**: converges to −2.6 points because of ReLU clipping and an unrepresentative mean-field point.
+- ◐ **Closed-form clock-state estimator**: the remaining route to ARC's bar, a new modelling project rather than a variation of the above.
 
-**Conclusion.** I have run out of productive ideas within the scope of this investigation. Every line above is either resolved or has been tried and found unproductive. The two partly-open items each need a new theoretical framework, not another experiment of the kinds already run, and I don't have such a framework to propose.
+**Conclusion.** Every line above is either resolved or has been tried and found unproductive. The partly-open items each need a new theoretical framework rather than another experiment of the kinds already run. For ARC's challenge specifically, that framework would be a closed-form model of the selector's state, with clock eigenmodes plus age-dependent comparator thresholds including ReLU clipping. It would have to replace both the 720-arrangement enumeration and network evaluation (7.15).
