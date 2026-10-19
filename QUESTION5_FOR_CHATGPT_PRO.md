@@ -63,6 +63,7 @@ ARC's estimation challenge: they would "consider it a major research breakthroug
 - For MF3, the deterministic integral is 1.5–2.6× better than sampling in MSE.
 - But the correction from the anchor to the true accuracy is a 7–8-dimensional integral over the smaller inputs. It must be modelled per configuration inside the arrangement enumeration: for MF3, at least 720 × (S-points) × (rows) forwards per outer node, about 41k even for one node with the cheapest first-order model, which is itself 0.156 points off.
 - Sampling the correction on top of the anchor would be a control variate, which is excluded.
+- **End to end** (`z38`): the MF3 outer rule with the first-order correction at every configuration is 5.8, 2.1 and 0.34 points off at 84k, 668k and 10.5M forwards, where sampling gives 0.096, 0.034 and 0.009.
 
 ## The question
 

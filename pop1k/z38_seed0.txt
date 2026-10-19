@@ -1,0 +1,6 @@
+16 population networks (every 64th) + 6 zoo; deterministic estimate = MF3 outer rule x first-order lower-input model; truth 2^24 samples
+  n = 1, K = 4, q = 4: about      83,520 forwards; error RMS 5.761 points (mean +5.596); sampling at that cost 0.096   zoo +4.19 +5.62 +5.07 +4.32 +5.73 +6.33
+  n = 2, K = 4, q = 4: about     334,080 forwards; error RMS 3.158 points (mean +3.135); sampling at that cost 0.048   zoo +3.19 +3.38 +2.81 +2.81 +3.63 +3.78
+  n = 2, K = 8, q = 4: about     668,160 forwards; error RMS 2.057 points (mean +2.034); sampling at that cost 0.034   zoo +2.21 +1.97 +1.37 +2.08 +2.33 +2.30
+  n = 3, K = 8, q = 8: about   2,954,880 forwards; error RMS 0.628 points (mean +0.504); sampling at that cost 0.016   zoo +0.51 +0.53 +0.22 +0.16 +0.23 +0.57
+  n = 4, K = 16, q = 8: about  10,506,240 forwards; error RMS 0.342 points (mean +0.239); sampling at that cost 0.009   zoo +0.49 +0.03 -0.31 +0.37 +0.45 +0.18
