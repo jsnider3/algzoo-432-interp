@@ -1,0 +1,6 @@
+64 population networks (every 16th) + 6 zoo; 2^17 configurations x 64 draws; q = 6 Gauss-Legendre; 1.33 adjacent triples per configuration; points
+  P1m      bias mean -0.1600  median -0.1436  RMS 0.1909  noise 0.0098  noise-subtracted RMS 0.1906  zoo -0.113 -0.224 -0.232 -0.204 -0.067 -0.205
+  PA_gap1  bias mean -0.0191  median -0.0235  RMS 0.0758  noise 0.0076  noise-subtracted RMS 0.0754  zoo -0.023 -0.082 -0.055 -0.040 +0.018 -0.007
+  PA_gap2  bias mean +0.0428  median +0.0236  RMS 0.0759  noise 0.0069  noise-subtracted RMS 0.0756  zoo +0.018 +0.019 +0.024 +0.024 +0.046 +0.031
+  PT_gap1  bias mean -0.0353  median -0.0340  RMS 0.0818  noise 0.0079  noise-subtracted RMS 0.0814  zoo -0.035 -0.101 -0.072 -0.056 +0.007 -0.040
+  PT_gap2  bias mean +0.0476  median +0.0257  RMS 0.0854  noise 0.0068  noise-subtracted RMS 0.0852  zoo +0.015 +0.016 +0.058 +0.021 +0.044 +0.045

@@ -1,0 +1,4 @@
+16 population networks (every 64th) + 6 zoo; patterns discovered along the S-lines at the n^3 outer nodes (K = 64 points per line); 100 arrangements, 2^13 held-out configurations each
+  order 1 (1 lines per arrangement, about     9,274 forwards): coverage 0.306; disagreement 5.61%; net error RMS 2.965 (arrangement noise removed 2.920) points; sampling at that cost 0.275
+  order 2 (8 lines per arrangement, about    74,189 forwards): coverage 0.589; disagreement 3.16%; net error RMS 1.689 (arrangement noise removed 1.669) points; sampling at that cost 0.097
+  order 3 (27 lines per arrangement, about   250,387 forwards): coverage 0.731; disagreement 1.94%; net error RMS 1.295 (arrangement noise removed 1.283) points; sampling at that cost 0.053

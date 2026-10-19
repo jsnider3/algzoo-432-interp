@@ -345,3 +345,5 @@ Fixed: lines.trace_line ties now follow the lowest-index argmax rule; z11 exact 
 - z31 (adaptive boxes, GL2 + centre): 1.46 / 1.63 / 0.37 points at 144 / 216 / 432 nodes, far worse than the tensor rule.
 - z21 orders 9–10 (K = 256): 0.022 at 6.8M (4.0× MSE) and 0.011 at 9.3M (1.5×). The order 5–8 'rate −0.25' was a plateau; over orders 5–10 the rate is −0.50, the same as sampling's. So the anchor reaches parity near 10^7, but there the lower-input models (0.05) are far above sampling's 0.009.
 - z31 at 864 nodes: 0.063 (sampling 0.010).
+- z33 (patterns discovered along S-lines at the outer nodes, all kept, nearest-centroid fallback): with 1 / 8 / 27 lines, coverage is 31% / 59% / 73% and the error 2.9 / 1.67 / 1.28 (sampling 0.28 / 0.097 / 0.053). Worse than integrating the lines.
+- z32 (2^17 × 64, noise 0.007): noise-subtracted RMS on the dev networks is PA_gap1 0.075 / PA_gap2 0.076 / PT_gap1 0.081 / PT_gap2 0.085. Adjacent triples don't help. The residual is spread between networks (SD about 0.07).
