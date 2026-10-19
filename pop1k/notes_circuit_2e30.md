@@ -350,3 +350,4 @@ Fixed: lines.trace_line ties now follow the lowest-index argmax rule; z11 exact 
 - z34 (ideal additive model: exact first-order ANOVA, K = 32 common backgrounds, 2^15 × 32): mean +0.063, SD 0.041, noise-subtracted RMS 0.074. This is the additive family's floor.
 - z35 (least-violation fallback on the greedy sets): disagreement 2.2% / 1.6% / 0.95% at K = 10 / 30 / 100, worse than the centroid fallback (1.3% / 0.9% / 0.6%).
 - z36 (joint product GL rule over the six lower inputs): RMS 0.23 at q = 2 (64 rows) and 0.15 at q = 3 (729 rows), worse than the pair model.
+- z37 (other k): MF2 anchor bias 5.7 RMS, its integral 0.03 at 1.7k (sampling 0.67). MF3 anchor bias 0.68 RMS, its integral 0.127 / 0.074 / 0.073 at 24k / 55k / 98k (sampling 0.178 / 0.119 / 0.089), so it beats sampling for the anchor. The correction is the obstacle: per configuration, inside 720 arrangements, at least about 41k per node; first-order MF3 model 0.156.

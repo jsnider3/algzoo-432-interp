@@ -1,0 +1,24 @@
+16 population networks (every 64th) + 6 zoo; MF3 anchor (720 arrangements, charged 1,528 forwards per outer node), K = 256; references 2^24
+  MF3 anchor bias against the true accuracy: mean +0.244  RMS 0.682 points  zoo +0.014 +0.082 +1.402 -0.029 -0.260 -0.076
+  order  1 (  1 outer nodes, about     1,528 forwards): anchor integral error RMS 3.510; error against the true accuracy RMS 3.791; sampling at that cost 0.712
+  order  2 (  4 outer nodes, about     6,112 forwards): anchor integral error RMS 1.190; error against the true accuracy RMS 1.550; sampling at that cost 0.356
+  order  3 (  9 outer nodes, about    13,752 forwards): anchor integral error RMS 0.308; error against the true accuracy RMS 0.769; sampling at that cost 0.237
+  order  4 ( 16 outer nodes, about    24,448 forwards): anchor integral error RMS 0.127; error against the true accuracy RMS 0.700; sampling at that cost 0.178
+  order  5 ( 25 outer nodes, about    38,200 forwards): anchor integral error RMS 0.118; error against the true accuracy RMS 0.742; sampling at that cost 0.142
+  order  6 ( 36 outer nodes, about    55,008 forwards): anchor integral error RMS 0.074; error against the true accuracy RMS 0.654; sampling at that cost 0.119
+  order  7 ( 49 outer nodes, about    74,872 forwards): anchor integral error RMS 0.133; error against the true accuracy RMS 0.723; sampling at that cost 0.102
+  order  8 ( 64 outer nodes, about    97,792 forwards): anchor integral error RMS 0.073; error against the true accuracy RMS 0.673; sampling at that cost 0.089
+  order  9 ( 81 outer nodes, about   123,768 forwards): anchor integral error RMS 0.090; error against the true accuracy RMS 0.694; sampling at that cost 0.079
+  order 10 (100 outer nodes, about   152,800 forwards): anchor integral error RMS 0.052; error against the true accuracy RMS 0.688; sampling at that cost 0.071
+16 population networks (every 64th) + 6 zoo; MF2 anchor (90 arrangements, charged 191 forwards per outer node), K = 256; references 2^24
+  MF2 anchor bias against the true accuracy: mean +5.339  RMS 5.722 points  zoo +3.045 +4.956 +6.422 +3.614 +4.255 +6.587
+  order  1 (  1 outer nodes, about       191 forwards): anchor integral error RMS 0.512; error against the true accuracy RMS 5.947; sampling at that cost 2.014
+  order  2 (  2 outer nodes, about       382 forwards): anchor integral error RMS 0.307; error against the true accuracy RMS 5.855; sampling at that cost 1.424
+  order  3 (  3 outer nodes, about       573 forwards): anchor integral error RMS 0.160; error against the true accuracy RMS 5.685; sampling at that cost 1.163
+  order  4 (  4 outer nodes, about       764 forwards): anchor integral error RMS 0.094; error against the true accuracy RMS 5.651; sampling at that cost 1.007
+  order  5 (  5 outer nodes, about       955 forwards): anchor integral error RMS 0.071; error against the true accuracy RMS 5.771; sampling at that cost 0.901
+  order  6 (  6 outer nodes, about     1,146 forwards): anchor integral error RMS 0.061; error against the true accuracy RMS 5.707; sampling at that cost 0.822
+  order  7 (  7 outer nodes, about     1,337 forwards): anchor integral error RMS 0.043; error against the true accuracy RMS 5.741; sampling at that cost 0.761
+  order  8 (  8 outer nodes, about     1,528 forwards): anchor integral error RMS 0.037; error against the true accuracy RMS 5.717; sampling at that cost 0.712
+  order  9 (  9 outer nodes, about     1,719 forwards): anchor integral error RMS 0.029; error against the true accuracy RMS 5.740; sampling at that cost 0.671
+  order 10 ( 10 outer nodes, about     1,910 forwards): anchor integral error RMS 0.031; error against the true accuracy RMS 5.741; sampling at that cost 0.637
