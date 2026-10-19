@@ -347,3 +347,6 @@ Fixed: lines.trace_line ties now follow the lowest-index argmax rule; z11 exact 
 - z31 at 864 nodes: 0.063 (sampling 0.010).
 - z33 (patterns discovered along S-lines at the outer nodes, all kept, nearest-centroid fallback): with 1 / 8 / 27 lines, coverage is 31% / 59% / 73% and the error 2.9 / 1.67 / 1.28 (sampling 0.28 / 0.097 / 0.053). Worse than integrating the lines.
 - z32 (2^17 × 64, noise 0.007): noise-subtracted RMS on the dev networks is PA_gap1 0.075 / PA_gap2 0.076 / PT_gap1 0.081 / PT_gap2 0.085. Adjacent triples don't help. The residual is spread between networks (SD about 0.07).
+- z34 (ideal additive model: exact first-order ANOVA, K = 32 common backgrounds, 2^15 × 32): mean +0.063, SD 0.041, noise-subtracted RMS 0.074. This is the additive family's floor.
+- z35 (least-violation fallback on the greedy sets): disagreement 2.2% / 1.6% / 0.95% at K = 10 / 30 / 100, worse than the centroid fallback (1.3% / 0.9% / 0.6%).
+- z36 (joint product GL rule over the six lower inputs): RMS 0.23 at q = 2 (64 rows) and 0.15 at q = 3 (729 rows), worse than the pair model.
