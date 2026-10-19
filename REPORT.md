@@ -1244,6 +1244,12 @@ This round moved from the 22 seeds of 7.15 to 1,024 freshly trained networks, wi
     - line pieces: exact S-lines;
     - region-based closed forms: grid, oracle, line-discovered;
     - population-learned design choices: the nearby-pair rule.
+- **Why this cannot be closed by a proof.**
+  - Any computation on the weights can, given enough compute, find the accuracy exactly; `z9`'s region walk does it for MF3. So the question is only cost, at one fixed size (16 neurons, 10 steps). Complexity theory gives no per-instance lower bound at a fixed size.
+  - The nearest theory is volume estimation in the black-box (membership-oracle) model. There, deterministic polynomial-time algorithms provably cannot approximate the volume of a convex body in n dimensions to better than a factor exponential in n (Elekes 1986; Bárány and Füredi 1987). Randomized algorithms can (Dyer, Frieze and Kannan 1991).
+  - So in the black-box setting deterministic estimation is strictly weaker than sampling, and a mechanistic method could only win by using the weights' internal structure.
+  - That is what every route in this section tried: lines, regions, linear maps, clock states and additive lower-input effects. Each has now been bounded at the level of its family, by an ideal or oracle version: `z26`, `z30`, `z34`, the order-10 tensor rule. Even those best cases fall short of sampling in 10³–10⁵ forwards.
+  - A successful method would need structure that none of these families uses. Nothing measured here points to where that structure would come from.
 - **Verdict for ARC's bar.** Deterministic top-4 integration does not reach the sampling line anywhere in 10³–10⁵ forwards. The MF4 anchor alone needs about 10⁶ forwards to come within 3× of sampling's MSE, and it is not the accuracy (+0.3 points optimistic). The correction adds orders of magnitude more, because it is neither local to the boundary nor decomposable without bias. A closed form does not rescue it either: the position effects do not factor (`z24`), and each arrangement's value space holds hundreds of linear regions (`z25`, `z26`). So for these networks the accuracy integral has no low-cost deterministic description at the precision ARC asks for. That is a measured statement about these computations, not a proof about all algorithms.
 
 ## 8. Open problems and caveats
