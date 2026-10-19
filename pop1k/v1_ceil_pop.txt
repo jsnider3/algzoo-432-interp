@@ -1,0 +1,4 @@
+64 networks, 8192 random inputs each; variance-reduction factor p(1-p)/Var(P_line), grid of 256 nodes
+  network   x10     S      M      R
+  median    1.92   3.02   1.71   1.91 
+  p10-p90  1.7-2.4 2.2-3.7 1.4-2.0 1.6-2.2

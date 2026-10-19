@@ -1,3 +1,9 @@
 __pycache__/
 *.pyc
 *.log
+# large regenerable outputs (see README, "Data files")
+*.resume.pt
+chatgpt2/*.zip
+pop1k/seed0_z13_q*.npz
+chatgpt2/roles_run_*/designed_v3_population.npz
+chatgpt2/roles_run_*/mechanisms.npz

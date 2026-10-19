@@ -1,0 +1,30 @@
+weights_additive {'0': 1.2305432216640888, '1729': 1.2423647359352248}
+roles60_ridge {'0': 1.7036813716555606, '1729': 1.7347599436034071}
+invariant_matched_ridge {'0': 1.3637378106277351, '1729': 1.3494086747356198}
+hybrid_matched_ridge {'0': 1.1800484388256494, '1729': 1.1561094036012642}
+weights_gbm {'0': 1.170348371611729, '1729': 1.202700689839141}
+hybrid_gbm {'0': 1.0521202177301607, '1729': 1.0635822151888317}
+Results written to chatgpt2/roles_run_2e28
+	Command being timed: "python -P chatgpt2/roles_round2/roles_mechanism.py --root . --population pop1k/snap_2e28.npz --labels pop1k/snap_2e28.roles.npz --buckets pop1k/snap_2e28.buckets.npz --out chatgpt2/roles_run_2e28 --gbm --mechanisms --threads 2"
+	User time (seconds): 820.01
+	System time (seconds): 43.07
+	Percent of CPU this job got: 388%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 3:41.94
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 360432
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 7
+	Minor (reclaiming a frame) page faults: 7474070
+	Voluntary context switches: 1084147
+	Involuntary context switches: 67743
+	Swaps: 0
+	File system inputs: 1032
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

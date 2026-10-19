@@ -1,0 +1,77 @@
+# algzoo-432-interp
+
+Mechanistic interpretability of ARC's AlgZoo 432-parameter 2nd-argmax RNN (`alg_zoo.example_2nd_argmax()`): a 16-neuron ReLU RNN with no biases that outputs the position of the second-largest of 10 N(0,1) inputs. The write-up is **[REPORT.md](REPORT.md)**. It covers the mechanism (age code, clocks, comparators, write pointer), its failure modes, the other zoo seeds and sizes, the training-time fork between "memory" and "online selection", and attempts at ARC's mechanistic accuracy-estimation challenge. [QUESTION_FOR_CHATGPT_PRO.md](QUESTION_FOR_CHATGPT_PRO.md) is the brief that started REPORT 7.15. It is kept as sent, so a few of its numbers predate later corrections; REPORT.md is authoritative. `QUESTION2_FOR_CHATGPT_PRO.md` and `QUESTION3_FOR_CHATGPT_PRO.md` are the briefs for the population rounds (REPORT 7.16), with the answers summarized in `chatgpt2/`. `QUESTION4_FOR_CHATGPT_PRO.md` asks for a deterministic integral of the leakage model over the top-4 configurations. The answer, a negative result, is summarized in `chatgpt2/chatgpt_answer_3.md`, with the follow-up in REPORT 7.16 (`z13`, `z14`).
+
+## Setup
+
+- Python 3 with **numpy** and **scipy**. That is enough for most analysis scripts.
+- Additional packages for some scripts:
+  - **torch**: training scripts and a few analyses (`a8`, `c1`, `j1`, `j2`, `seeds_probe`).
+  - **scikit-learn**: `b4`, `n3`, `x4`.
+  - **numba**: `w5`, `v1`, `lines`, `z11` (exact mode).
+  - **CUDA torch** (one 8 GB GPU is enough): the population scripts `batch_train`, `z1`–`z8`, `z10`–`z14`, `v1`, `lw2`. `z9` is CPU-only (multiprocessing).
+- **[AlgZoo](https://github.com/alignment-research-center/alg-zoo)** (`alg_zoo`) is needed only for the `load*.py` exporters and for scripts that build or train a `DistRNN` (all `k`, `l`, `m`, `p` and `q` training scripts, plus `n3`, `u1` and `w3`). Its weights are already exported here, so analyses do not need it.
+
+Run every script **from the repository root**, for example `python a7.py`. Scripts import each other by module name (`common`, `seeds_clocks`, `k1`, `j5`, …) and read data files by relative path. Each script prints its own results; nothing is cached between scripts except the files listed below.
+
+## Data files
+
+| file | contents | written by |
+|---|---|---|
+| `weights.npz` | the 432-parameter "mystery" model | `load.py` |
+| `weights_seed{0..4}.npz` | zoo 16-neuron, length-10 models, seeds 0–4 | `load_seeds.py` |
+| `weights_h{4,6,8,32}.npz` | zoo models with other hidden sizes | `load_sizes.py` |
+| `ckpt/s{seed}_e{k}.npz` | zoo training checkpoints after 2^k sequences (k = 0 is the initialization; k = 20–30) | `load_ckpts.py` |
+| `pop/p{0..15}.npz` | 16 fresh 16-neuron seeds trained to 2^27 sequences | `w3.py` |
+| `fork_s0.npz` | a switched fork of seed 0 from 2^22 (REPORT 7.14 barrier) | `k8.py` |
+| `ckpt_metrics.json` | per-checkpoint metrics for REPORT 6 | `d1.py` |
+| `p1_cols.npy` | minimal readout-column transplant set | `p1.py` |
+| `thr.npy` | per-age decision thresholds | `a22.py` |
+| `pop1k/seed0.npz` | 1,024 networks trained to 2^30 sequences, with snapshots: keys `s<step>_{Wih,Whh,Wo}` (step 1,048,576 = 2^30 sequences), `init_*`, and `acc_2e20` | `batch_train.py` |
+| `pop1k/snap_2e28.npz` | the same networks at 2^28 sequences | `batch_train.py` |
+| `pop1k/*.roles.npz`, `*.buckets.npz` | per-neuron features and role buckets | `z2.py`, `z3.py` |
+| `pop1k/z*_seed0.txt`, `pop1k/v1_*.txt` | printed outputs of the population analyses | `z2`–`z11`, `v1` |
+| `pop1k/notes_circuit_2e28.md`, `pop1k/notes_circuit_2e30.md` | working notes behind REPORT 7.16 | |
+| `pop1k/seed0_z12.npz` | per-network outputs of the integrand check | `z12.py` |
+| `chatgpt2/` | ChatGPT Pro's population answers (`chatgpt_answer_1`–`3.md`), its scripts, and their reruns | |
+
+Weight keys: `rnn.weight_ih_l0` (H,1), `rnn.weight_hh_l0` (H,H), `linear.weight` (10,H). `common.py` (mystery model only, with Jacobians) and `seeds_clocks.py` (`load`, `run` for any weights file) are NumPy re-implementations of the forward pass.
+
+**Training logs are not in the repository.** Training scripts print one line per run to stdout. The report's run counts in 7.14 were tallied from those outputs, saved as `*.log` files, which `.gitignore` excludes. The scripts that re-read them (`k11`, `k13`, `l8`, `m6`, `m7`, `n3`, `q4`) need the training scripts re-run first, with output redirected to the file names they open. Several of the quadrature estimators (`n1`, `n4`, `r5`, `s*`, `t2`) take CPU-hours. Large regenerable outputs are not committed either: `pop1k/seed0_z13_q*.npz` (16 MB each; `python z13.py 8192 256 <q>`, about 15 s), the `designed_v3_population.npz` and `mechanisms.npz` arrays of `chatgpt2/roles_run_*` (rerun `chatgpt2/roles_round2/roles_mechanism.py`), the training resume checkpoint `pop1k/seed0.npz.resume.pt`, and the zip bundles sent to ChatGPT.
+
+## Script index
+
+Scripts are named by round of experiments (one letter per round, numbered within it). This table maps them to REPORT.md sections.
+
+| report section | scripts |
+|---|---|
+| 2.1 state stores ages | `a6`, `a7` (shifted readout), `a8` (held-out age probes), `a9`, `a16` (state surrogates), `a3`, `a5`, `a18`, `feats` (feature regressions) |
+| 2.2 comparators | `a10`–`a12`, `a22` |
+| 2.3 clocks, phase handoff | `a19`–`a21`, `seeds_clocks` |
+| 2.4 causal tests | `e1` (ageing/rotating clocks), `a21` (mode removal), `y2` (zero- vs mean-ablation) |
+| 2.5 Fourier readout | `a23` |
+| 2.6 length generalization | `e5`, `e6` |
+| 3 failure modes | `a13`, `a14`, `a17`, `e8`–`e10`, `b5`, `a2`, `e7`, `y3` (region counts) |
+| 4 short programs, pruning | `b1`–`b7` |
+| 5 other seeds | `c1`–`c6`, `seeds_clocks`, `seeds_probe`, `e2`–`e4` |
+| 6 training dynamics | `d1`, `d2` |
+| 7.1 patching | `f1`, `f2` |
+| 7.2 2nd-max storage | `f3`, `f4` |
+| 7.3 max suppression | `f5`–`f7`, `a15` |
+| 7.4 seed 2's switch | `g2` |
+| 7.5 stratified estimate | `g1` |
+| 7.6 seed 2 decoded | `h1`–`h4` |
+| 7.7 comparator-resolution estimate | `h5`, `h6` |
+| 7.8 other sizes | `h7`–`h9` |
+| 7.9 write pointer | `i1`–`i4`, `i9`–`i14`, `n2`, `y1` (64-candidate pulse scan) |
+| 7.10 32-neuron time cells | `i5` |
+| 7.11 mechanism-informed estimators | `i6`–`i8` |
+| 7.12 readout optimum, n10's switch | `j1`–`j4` |
+| 7.13 sampling-free estimation | `j5`–`j7`, `k9`, `k10`, `l1`, `l3`, `n1`, `n4`, `n5`, `o1`–`o4`, `r1`–`r5`, `s1`–`s8`, `t1`, `t2`, `cache`, `y6` (sampled 3- vs 4-input mean field) |
+| 7.14 training replays | `k1`–`k8`, `k11`–`k14`, `l2`, `l4`–`l10`, `m1`–`m7`, `n3`, `p1`–`p4`, `q1`–`q6`, `u1`, `y4` (straight-line barrier control), `y5` (switch-criterion control), `y7` (initial-gradient statistics) |
+| 7.15 second estimation round | `w1`–`w9`, `x1`–`x4` |
+| 7.16 population and leakage model | `batch_train` (population trainer), `z1` (population strata), `z2`, `z3` (neuron roles), `z4`–`z7` (error anatomy, mean field, handoffs, informative inputs), `z8` (lower-input closures, first-order model), `v1` (exact 2nd-max line), `z9` (exact mean-field integral), `z10`, `lw2` (leakage anatomy), `z11`, `lines` (leakage model), `z12` (structure of the top-4 integrand), `z13`, `z14` (local fidelity of lower-input models; margin-additive model) |
+| exporters | `load`, `load_ckpts`, `load_seeds`, `load_sizes` |
+| misc. diagnostics | `a1` (activity statistics), `a4` (homogeneity, activation patterns) |
+
+`y1`–`y7` were added in an audit of the report. They back the corrections listed in REPORT.md section 10.

@@ -1,0 +1,4 @@
+1024 population networks (s1048576) + 6 zoo; pool 2^18; q = 8; points; residual = estimate - true accuracy
+  MF3 alone                                    pop mean +0.247  SD 0.511  RMS 0.567   mystery -0.011 seed0 +0.047 seed1 +1.377 seed2 -0.046 seed3 -0.237 seed4 -0.043
+  MF3 + 1st-order penalty (57 fwd/config)      pop mean -0.000  SD 0.156  RMS 0.156   mystery +0.041 seed0 -0.169 seed1 -0.355 seed2 -0.027 seed3 -0.039 seed4 +0.125
+  predicted vs true MF3 leakage across the population: corr 0.955, slope 0.92; pool noise in the model residual about 0.039 per network

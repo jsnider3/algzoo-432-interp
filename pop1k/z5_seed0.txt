@@ -1,0 +1,11 @@
+1024 networks (s1048576); accuracy 0.9249 +- 3.42 points; mean field 0.9276, corr 0.9893
+mean field - true (points): mean +0.267, SD 0.523, p5/p50/p95 [-0.46  0.18  1.23]
+  after affine calibration: RMSE 0.500 points
+  leakage predicted from weights                            CV RMSE ridge 0.465  gbm 0.428
+  leakage predicted from roles + means                      CV RMSE ridge 0.418  gbm 0.387
+  leakage predicted from sorted z2 features + MF accuracy   CV RMSE ridge 0.407  gbm 0.399
+
+cost: per-network RMSE (points) against the 2^18-pool accuracy, raw / calibrated
+  K=  256 (sampling SE 1.66): plain sampling 1.485/1.408   ordered Sobol 1.357/1.187   mean field, Sobol top-3 1.467/1.414
+  K= 1024 (sampling SE 0.83): plain sampling 0.749/0.676   ordered Sobol 0.686/0.681   mean field, Sobol top-3 0.926/0.923
+  K= 4096 (sampling SE 0.41): plain sampling 0.413/0.373   ordered Sobol 0.326/0.311   mean field, Sobol top-3 0.732/0.624

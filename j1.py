@@ -17,7 +17,6 @@ for name,path in [("mystery","weights.npz"),("seed 2","weights_seed2.npz"),("see
     W,acc=fit_readout(Wih,Whh); 
     agree=((run(xte,Wih,Whh)[:,-1]@W.T).argmax(1)==(run(xte,Wih,Whh)[:,-1]@Wo.T).argmax(1)).mean()
     print(f"{name}: trained readout acc {acc_tr:.4f} | readout refit from scratch, recurrence fixed: acc {acc:.4f}, cosine to trained Wo {cos(W,Wo):.3f}, output agreement {agree:.3f}")
-import sys; sys.exit()
 print("\nseed 2 across its switch: recurrence from checkpoint A + optimally re-fit readout")
 for e in [23,24,25,26,30]:
     Wih,Whh,Wo=load(f"ckpt/s2_e{e}.npz"); acc_tr=((run(xte,Wih,Whh)[:,-1]@Wo.T).argmax(1)==yte).mean(); W,acc=fit_readout(Wih,Whh)

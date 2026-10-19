@@ -1,10 +1,11 @@
 import re, json, numpy as np
 from scipy.stats import wilcoxon, binomtest
+K=8192   # readout-freeze length to compare; q3 logs may hold runs with other K
 D={}
 for f in ["q3_0.log","q3_3.log","q3_6.log","q3b_8.log","q3b_14.log","q3b_19.log"]:
     for l in open(f):
-        m=re.search(r"init (\d+), .*acc ([\d.]+) clean-err ([\d.]+) pointer ([\d.]+) switch=(\w+)",l)
-        if m: D[int(m[1])]=(float(m[2]),float(m[3]),m[5]=="True")
+        m=re.search(r"init (\d+), readout frozen for first (\d+) steps: acc ([\d.]+) clean-err ([\d.]+) pointer ([\d.]+) switch=(\w+)",l)
+        if m and int(m[2])==K: D[int(m[1])]=(float(m[3]),float(m[4]),m[6]=="True")
 N={}
 for f in ["k12_a.log","k12_b.log"]:
     for l in open(f):

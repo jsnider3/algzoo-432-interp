@@ -1,0 +1,7 @@
+zoo models; efficiency p(1-p)/(n cost Var) over 32 ordered-Sobol scrambles, full / incremental cost
+  n=2^12 k= 5: cost 2.98/1.87 fwd; mystery 1.5/2.4  seed0 1.3/2.1  seed1 1.3/2.1  seed2 1.5/2.4  seed3 1.1/1.7  seed4 1.2/2.0   max |bias|/SE 1.2
+  n=2^12 k= 7: cost 2.70/1.36 fwd; mystery 1.6/3.2  seed0 1.3/2.5  seed1 1.3/2.6  seed2 1.1/2.3  seed3 1.4/2.9  seed4 1.1/2.1   max |bias|/SE 1.2
+  n=2^12 k=10: cost 3.06/1.18 fwd; mystery 1.6/4.2  seed0 1.2/3.1  seed1 0.8/2.2  seed2 2.4/6.2  seed3 1.3/3.4  seed4 1.0/2.5   max |bias|/SE 2.0
+  n=2^14 k= 5: cost 2.98/1.87 fwd; mystery 2.0/3.2  seed0 1.7/2.7  seed1 1.4/2.3  seed2 3.9/6.4  seed3 1.8/2.8  seed4 1.8/2.8   max |bias|/SE 1.6
+  n=2^14 k= 7: cost 2.70/1.36 fwd; mystery 1.7/3.3  seed0 1.7/3.3  seed1 1.3/2.6  seed2 3.0/6.0  seed3 2.0/4.0  seed4 1.6/3.2   max |bias|/SE 1.4
+  n=2^14 k=10: cost 3.06/1.18 fwd; mystery 1.1/2.8  seed0 1.1/2.8  seed1 1.1/3.0  seed2 2.0/5.3  seed3 1.8/4.6  seed4 1.1/2.8   max |bias|/SE 1.5

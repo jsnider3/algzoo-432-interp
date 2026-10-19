@@ -2,7 +2,7 @@ import torch as th, numpy as np
 from alg_zoo import example_2nd_argmax
 m = example_2nd_argmax()
 sd = {k: v.numpy() for k, v in m.state_dict().items()}
-np.savez("work/weights.npz", **sd)
+np.savez("weights.npz", **sd)
 for k,v in sd.items(): print(k, v.shape)
 th.manual_seed(0)
 x = th.randn(200000, 10)

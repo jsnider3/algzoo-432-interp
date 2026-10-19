@@ -1,0 +1,1 @@
+1024 networks (snapshot s1048576); accuracy 5/50/95%: [0.86   0.9317 0.9635]; saved pop1k/seed0.roles.npz

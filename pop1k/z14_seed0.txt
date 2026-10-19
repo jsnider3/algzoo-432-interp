@@ -1,0 +1,10 @@
+64 population networks (every 16th) + 6 zoo; 4096 top-4 configurations, 256 lower-input draws each; q = 8
+  I0     local MSE / p(1-p)                pop median 0.1768 [p10 0.1333, p90 0.2198]  zoo 0.1495 0.2040 0.2026 0.1936 0.1932 0.1575
+  P1     local MSE / p(1-p)                pop median 0.1175 [p10 0.0921, p90 0.1518]  zoo 0.0940 0.1394 0.1349 0.1122 0.1000 0.1239
+  Pmarg  local MSE / p(1-p)                pop median 0.0113 [p10 0.0069, p90 0.0184]  zoo 0.0102 0.0108 0.0123 0.0128 0.0090 0.0162
+  Pvec   local MSE / p(1-p)                pop median 0.0137 [p10 0.0070, p90 0.0251]  zoo 0.0191 0.0119 0.0129 0.0260 0.0096 0.0179
+  I0     bias, points                      pop median +0.258 [p10 -0.052, p90 +0.748]  zoo +0.198 +0.542 +0.712 +0.625 +0.115 +0.288
+  P1     bias, points                      pop median +0.032 [p10 -0.159, p90 +0.208]  zoo -0.013 +0.032 +0.230 -0.125 +0.109 -0.264
+  Pmarg  bias, points                      pop median -0.086 [p10 -0.208, p90 +0.060]  zoo -0.134 -0.094 -0.100 -0.145 -0.092 -0.133
+  Pvec   bias, points                      pop median -0.418 [p10 -0.771, p90 -0.185]  zoo -0.423 -0.355 -0.536 -0.689 -0.249 -0.603
+  Pvec - Pmarg, points                     pop median -0.337 [p10 -0.647, p90 -0.114]  zoo -0.289 -0.261 -0.436 -0.544 -0.156 -0.470

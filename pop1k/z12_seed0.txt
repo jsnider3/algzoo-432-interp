@@ -1,0 +1,26 @@
+64 population networks (every 16th) + 6 zoo; 2^17 top-4 configurations (sampled, to describe the integrand); q = 16; 5040 arrangements seen
+  accuracy                                                   pop median 0.9229  [p10 0.8730, p90 0.9588]   zoo 0.9539 0.9103 0.8815 0.9495 0.9328 0.8919
+  Var(I0) / p(1-p)                                           pop median 0.967  [p10 0.935, p90 0.997]   zoo 0.977 0.964 0.947 0.972 0.989 0.984
+  Var(P) / p(1-p)   (P = I0 + first-order penalty)           pop median 0.793  [p10 0.764, p90 0.829]   zoo 0.842 0.765 0.785 0.790 0.804 0.803
+  Var(penalty) / p(1-p)                                      pop median 0.4700  [p10 0.3987, p90 0.5793]   zoo 0.3884 0.5179 0.5240 0.4990 0.4534 0.4504
+  mean penalty (points)                                      pop median -0.280  [p10 -0.642, p90 -0.010]   zoo -0.105 -0.342 -0.756 -0.215 -0.083 -0.209
+  share of configurations with a nonzero penalty             pop median 0.117  [p10 0.067, p90 0.192]   zoo 0.057 0.154 0.188 0.086 0.101 0.160
+  |MF4 margin| < 0.25: share of configurations               pop median 0.030  [p10 0.016, p90 0.051]   zoo 0.011 0.045 0.045 0.018 0.025 0.050
+       share of E[pen^2]                                     pop median 0.610  [p10 0.553, p90 0.712]   zoo 0.516 0.678 0.598 0.553 0.605 0.704
+       share of mean penalty                                 pop median 0.277  [p10 0.061, p90 0.764]   zoo 0.031 0.386 0.186 0.277 0.237 0.625
+  |MF4 margin| < 0.5: share of configurations                pop median 0.060  [p10 0.032, p90 0.103]   zoo 0.022 0.090 0.091 0.036 0.051 0.099
+       share of E[pen^2]                                     pop median 0.801  [p10 0.743, p90 0.873]   zoo 0.729 0.822 0.788 0.729 0.790 0.858
+       share of mean penalty                                 pop median 0.508  [p10 0.202, p90 0.836]   zoo 0.254 0.455 0.393 0.524 0.640 0.644
+  |MF4 margin| < 1: share of configurations                  pop median 0.122  [p10 0.065, p90 0.201]   zoo 0.045 0.176 0.183 0.073 0.101 0.192
+       share of E[pen^2]                                     pop median 0.918  [p10 0.870, p90 0.949]   zoo 0.862 0.921 0.899 0.857 0.916 0.943
+       share of mean penalty                                 pop median 0.680  [p10 0.379, p90 0.974]   zoo 0.563 0.574 0.620 0.484 0.599 0.570
+  |MF4 margin| < 2: share of configurations                  pop median 0.255  [p10 0.138, p90 0.374]   zoo 0.095 0.329 0.356 0.153 0.198 0.353
+       share of E[pen^2]                                     pop median 0.976  [p10 0.949, p90 0.988]   zoo 0.939 0.976 0.963 0.940 0.977 0.982
+       share of mean penalty                                 pop median 0.847  [p10 0.550, p90 1.058]   zoo 0.764 0.734 0.763 0.602 0.701 0.651
+  |MF4 margin| < 4: share of configurations                  pop median 0.500  [p10 0.313, p90 0.659]   zoo 0.213 0.549 0.611 0.341 0.391 0.574
+       share of E[pen^2]                                     pop median 0.996  [p10 0.990, p90 0.998]   zoo 0.986 0.996 0.991 0.983 0.998 0.996
+       share of mean penalty                                 pop median 0.954  [p10 0.755, p90 1.025]   zoo 0.939 0.914 0.872 0.820 0.968 0.713
+  share of Var between arrangements: truth                   pop median 0.062  [p10 0.028, p90 0.198]   zoo 0.032 0.074 0.208 0.039 0.044 0.126
+  share of Var between arrangements: I0                      pop median 0.077  [p10 0.035, p90 0.230]   zoo 0.039 0.089 0.250 0.052 0.056 0.141
+  share of Var between arrangements: P                       pop median 0.081  [p10 0.037, p90 0.245]   zoo 0.038 0.093 0.274 0.050 0.059 0.157
+  share of Var between arrangements: penalty                 pop median 0.013  [p10 0.007, p90 0.020]   zoo 0.009 0.007 0.030 0.017 0.012 0.017

@@ -1,0 +1,99 @@
+ALGZOO Q3: MECHANISTIC ROLES AND REGIONAL ACCURACY PREDICTION
+
+Main executable: roles_mechanism.py (self-contained).
+Dependencies: Python, NumPy, SciPy, scikit-learn, threadpoolctl. No Torch is
+needed by this executable. The supplied z2.py label-generation script has its
+own Torch dependency.
+
+DATA AND FILES
+
+Keep the original supplied data in an algzoo_roles directory. The commands
+below assume roles_mechanism.py is beside that directory. Adjust --root and
+input paths if your directory names differ. In the development workspace the
+executable is under algzoo_roles/roles_work/.
+
+roles_results.json is the consolidated facts reference for this investigation.
+It nests the authoritative experiment reports, validation audits, timings,
+source-file hashes, residual decompositions and explicitly qualified paired
+bootstrap diagnostics. No preliminary comparator gate results are included.
+The raw out-of-fold arrays and auxiliary scripts provide additional detail.
+
+calibrated_hybrid.npz contains the portable final region-matched ridge
+coefficients. It is fitted to the supplied 2^28 population. It uses 60 fixed
+designed inputs, weights, continuous role features, and local gated margin
+sensitivities. It does not estimate accuracy by counting errors on those inputs.
+
+ESTIMATE ONE TARGET WITH THE PROVIDED CALIBRATOR
+
+python roles_mechanism.py --predict algzoo_roles/weights.npz --calibrator calibrated_hybrid.npz --out mystery_prediction
+
+Read mystery_prediction/prediction.json. The prediction uses no random target
+accuracy sample. The 60 forward passes and additional derivative/feature
+computations are target-specific work. The result is a calibrated prediction,
+not an unbiased estimator or a per-network accuracy guarantee.
+
+REPRODUCE THE MAIN POPULATION COMPARISON
+
+python roles_mechanism.py --root algzoo_roles --population algzoo_roles/pop1k/snap_2e28.npz --labels algzoo_roles/pop1k/snap_2e28.roles.npz --buckets algzoo_roles/pop1k/snap_2e28.buckets.npz --out roles_run
+
+--out is a DIRECTORY. The run writes results.json, out_of_fold.npz, designed
+population/zoo feature caches, zoo_reference.npz and portable calibrators:
+calibrated_roles.npz, calibrated_invariant.npz and calibrated_hybrid.npz.
+The four default comparisons include the weight baseline, designed role bag,
+invariant region-matched diagnostics, and the region-matched hybrid.
+
+OPTIONAL FINAL DIAGNOSTICS
+
+python roles_mechanism.py --root algzoo_roles --population algzoo_roles/pop1k/snap_2e28.npz --labels algzoo_roles/pop1k/snap_2e28.roles.npz --buckets algzoo_roles/pop1k/snap_2e28.buckets.npz --out roles_full_run --fresh-pop --mechanisms --gbm
+
+--fresh-pop adds independent 2^16-input reference labels for every population
+network. These are validation labels and are not used in per-target features.
+--mechanisms reproduces the final comparator coverage and intervention checks.
+--gbm adds the fixed weights-only and hybrid GBM comparisons. GBM is a nonlinear
+diagnostic of predictive interactions, not the mechanistic explanation.
+
+These wrapper commands describe the released command-line interface. The
+consolidated investigation also includes auxiliary audits and static-feature
+experiments performed by the individual scripts; one main-wrapper run does not
+recreate every auxiliary JSON byte for byte.
+
+RERUN ON THE CONVERGED POPULATION
+
+python roles_mechanism.py --root algzoo_roles --population NEW_WEIGHTS.npz --labels NEW_WEIGHTS.roles.npz --buckets NEW_WEIGHTS.buckets.npz --out converged_roles_run --fresh-pop --mechanisms --gbm
+
+Replace the three NEW_WEIGHTS paths with the new files. Labels and bucket IDs
+must belong to the same snapshot and network ordering as the weight archive.
+Use whole training lineages as holdouts when comparing snapshots; earlier
+checkpoints of a target are not independent new networks. The latest snapshot
+is selected by default; --snapshot can select a particular snapshot key.
+
+WHAT THE CURRENT RESULTS SUPPORT
+
+At the supplied 2^28 snapshot, mean accuracy is 0.908813 and its across-network
+SD is 3.5685 percentage points. Region-matched hybrid ridge CV RMSE is
+1.1800/1.1561 points on the two fixed fivefold splits; the combined fixed GBM
+gives 1.0533/1.0608 points. The 0.3-point target is not reached. The numerical
+R^2 needed for that target at this population SD is 0.992932.
+
+For the combined GBM, about 69.5% of residual MSE is allocated to clean and
+middle-region errors when cross-region terms are shared equally. Their errors
+are correlated with the other regions. Even replacing those two predicted
+contributions by the true values would leave 0.397-point RMSE in the seed-0
+diagnostic. See residual_analysis in roles_results.json for full matrices.
+
+Comparator tests, event selection, stored trajectories, handoff and readout
+rejection are separate mechanisms. Simple local comparator coverage is neither
+necessary nor sufficient on the constructed tests. Always-on and other units
+mix value and age coding. Readout phase and hidden-unit rescaling must be
+handled: the original magnitude-only role descriptors can stay unchanged even
+when a cyclic readout shift destroys accuracy.
+
+The optimized complete hybrid pipeline took 3.214 ms for one target in a
+matched CPU assay, versus 2.086 ms for 4,096 ordinary forwards. No total-compute
+advantage is demonstrated. Equivalent-IID sample counts in the report compare
+MSE at representative accuracy only; they are not measured speedups.
+
+The paired bootstrap intervals in roles_results.json are conditional
+development diagnostics. They hold the out-of-fold fits, folds, shared input
+pool and method selection fixed; they are not formal coverage guarantees for
+new training populations or arbitrary individual targets.

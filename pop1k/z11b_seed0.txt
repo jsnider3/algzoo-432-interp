@@ -1,0 +1,14 @@
+1024 population networks (s1048576) + 6 zoo; pool 2^18; q = 4; points; residual = estimate - true accuracy
+  MF5 alone                                    pop mean +0.287  SD 0.213  RMS 0.357   mystery +0.127 seed0 +0.338 seed1 +0.526 seed2 +0.148 seed3 +0.171 seed4 +0.302
+  MF5 + 1st-order penalty (21 fwd/config)      pop mean +0.099  SD 0.072  RMS 0.122   mystery +0.055 seed0 +0.095 seed1 +0.135 seed2 +0.037 seed3 +0.053 seed4 +0.132
+  predicted vs true MF5 leakage across the population: corr 0.975, slope 1.35
+  MF6 alone                                    pop mean +0.222  SD 0.158  RMS 0.272   mystery +0.118 seed0 +0.254 seed1 +0.407 seed2 +0.124 seed3 +0.145 seed4 +0.303
+  MF6 + 1st-order penalty (17 fwd/config)      pop mean +0.076  SD 0.059  RMS 0.096   mystery +0.015 seed0 +0.105 seed1 +0.079 seed2 +0.033 seed3 +0.045 seed4 +0.123
+  predicted vs true MF6 leakage across the population: corr 0.973, slope 1.42
+1024 population networks (s1048576) + 6 zoo; pool 2^18; q = 8; points; residual = estimate - true accuracy
+  MF4 alone                                    pop mean +0.304  SD 0.284  RMS 0.416   mystery +0.166 seed0 +0.327 seed1 +0.727 seed2 +0.188 seed3 +0.057 seed4 +0.240
+  MF4 + 1st-order penalty (49 fwd/config)      pop mean +0.032  SD 0.061  RMS 0.069   mystery +0.021 seed0 -0.005 seed1 +0.000 seed2 -0.042 seed3 +0.042 seed4 +0.098
+  predicted vs true MF4 leakage across the population: corr 0.978, slope 1.07
+  MF5 alone                                    pop mean +0.287  SD 0.213  RMS 0.357   mystery +0.127 seed0 +0.338 seed1 +0.526 seed2 +0.148 seed3 +0.171 seed4 +0.302
+  MF5 + 1st-order penalty (41 fwd/config)      pop mean +0.037  SD 0.045  RMS 0.058   mystery +0.030 seed0 +0.025 seed1 +0.024 seed2 -0.006 seed3 +0.010 seed4 +0.077
+  predicted vs true MF5 leakage across the population: corr 0.983, slope 1.12

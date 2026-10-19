@@ -1,0 +1,25 @@
+1024 population networks (s1048576) + 6 zoo; pool 2^18; q = 4; points; residual = estimate - true accuracy
+  MF3 alone                                    pop mean +0.247  SD 0.511  RMS 0.567   mystery -0.011 seed0 +0.047 seed1 +1.377 seed2 -0.046 seed3 -0.237 seed4 -0.043
+  MF3 + 1st-order penalty (29 fwd/config)      pop mean +0.189  SD 0.190  RMS 0.268   mystery +0.137 seed0 +0.005 seed1 +0.023 seed2 +0.111 seed3 +0.116 seed4 +0.301
+  predicted vs true MF3 leakage across the population: corr 0.928, slope 0.99
+  MF4 alone                                    pop mean +0.304  SD 0.284  RMS 0.416   mystery +0.166 seed0 +0.327 seed1 +0.727 seed2 +0.188 seed3 +0.057 seed4 +0.240
+  MF4 + 1st-order penalty (25 fwd/config)      pop mean +0.124  SD 0.092  RMS 0.154   mystery +0.064 seed0 +0.061 seed1 +0.163 seed2 +0.032 seed3 +0.112 seed4 +0.166
+  predicted vs true MF4 leakage across the population: corr 0.963, slope 1.23
+Traceback (most recent call last):
+  File "/mnt/c/Users/josh/Documents/Git/algzoo-432-interp/z11.py", line 53, in <module>
+    res=run(W,x,(3,4),q)
+        ^^^^^^^^^^^^^^^^
+  File "/home/josh/.local/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/josh/Documents/Git/algzoo-432-interp/z11.py", line 41, in run
+    I=(forward(*W,X.reshape(1,-1,10).expand(N,-1,-1)).argmax(-1).view(N,B,R)==y[None,:,None]).float()
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/c/Users/josh/Documents/Git/algzoo-432-interp/batch_train.py", line 29, in forward
+    h=th.relu(th.baddbmm(x[:,:,t,None]*Wih[:,None,:], h, WhhT))
+                         ~~~~~~~~~~~~~^~~~~~~~~~~~~~
+torch.AcceleratorError: CUDA error: out of memory
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+

@@ -1,0 +1,50 @@
+1024 networks; accuracy mean 0.9088, SD across networks 3.57 points
+
+role counts per network (mean; % of networks with >= 1):
+  dead         0.00    0.2%
+  always-on    5.71   99.4%
+  event-ptr    0.38   37.6%
+  late-ptr     0.17   16.5%
+  max-det      0.88   78.3%
+  late-marker  0.13   13.1%
+  comparator   3.11   96.3%
+  other        5.61   99.7%
+
+networks with a pointer (event-ptr or late-ptr): 53.2%; accuracy 0.9144 vs 0.9025 without
+  by selectivity score: <.2: 0.906 (n=363)  .2-.4: 0.889 (n=105)  .4-.6: 0.905 (n=163)  .6-.8: 0.918 (n=393)
+  by # always-on : 1: 0.920 (n=20)  2: 0.921 (n=66)  3: 0.915 (n=104)  4: 0.923 (n=141)  5: 0.918 (n=163)  6: 0.914 (n=164)  7: 0.904 (n=112)
+  by # event-ptr : 0: 0.909 (n=639)  1: 0.909 (n=377)
+  by # late-ptr  : 0: 0.905 (n=855)  1: 0.928 (n=167)
+  by # comparator: 0: 0.889 (n=38)  1: 0.868 (n=58)  2: 0.879 (n=202)  3: 0.911 (n=298)  4: 0.926 (n=318)  5: 0.935 (n=99)  6: 0.937 (n=11)
+
+12 k-means clusters: size, share in each rule role, and centroid of key features
+  cl  size       w_in      rate on_newmax on_new2nd on_neithe after_new after_new after_nei    thr_R2  eta_ageM  eta_ageS   dominant role
+   3  4134      -0.32      0.93      0.90      0.93      0.95      0.97      0.92      0.94      0.34      0.39      0.06   always-on 51%
+   1  3494      -0.03      0.96      0.91      0.95      0.97      0.95      0.96      0.98      0.47      0.33      0.08   always-on 59%
+   5  1878       0.32      0.99      0.96      0.99      0.99      0.99      0.99      1.00      0.70      0.21      0.05   always-on 88%
+   0  1495      -9.56      0.79      0.09      0.74      1.00      0.78      0.79      0.83      0.88      0.29      0.14   comparator 100%
+   7  1332      -8.92      0.79      0.09      0.73      0.99      0.77      0.79      0.82      0.90      0.28      0.14   comparator 100%
+   4  1128      -0.05      0.76      0.72      0.74      0.78      0.36      0.81      0.90      0.10      0.36      0.10   other 99%
+   8   894      -2.52      0.67      0.43      0.60      0.75      0.06      0.79      0.88      0.10      0.47      0.07   other 64%
+   6   619       9.46      0.19      0.94      0.15      0.00      0.20      0.20      0.16      0.96      0.61      0.01   max-det 98%
+   9   465      -0.21      0.50      0.42      0.49      0.52      0.60      0.59      0.43      0.02      0.29      0.21   other 64%
+  11   373       7.27      0.39      0.96      0.77      0.13      0.39      0.40      0.36      0.96      0.58      0.11   event-ptr 99%
+  10   293      18.41      0.17      0.94      0.02      0.00      0.17      0.17      0.14      0.98      0.58      0.01   max-det 99%
+   2   279       0.17      0.28      0.33      0.32      0.26      0.73      0.23      0.13      0.08      0.61      0.01   late-marker 49%
+
+predicting accuracy (5-fold CV RMSE in points; worth p(1-p)/RMSE^2 samples at p = 0.909); predict-the-mean: 3.57
+  selectivity score only       ridge 3.52 (~67 samples)   gbm 3.46 (~69 samples)
+  role counts                  ridge 2.12 (~184 samples)   gbm 1.87 (~237 samples)
+  role counts + role means     ridge 1.28 (~502 samples)   gbm 1.27 (~517 samples)
+  role counts + means + selectivity ridge 1.29 (~498 samples)   gbm 1.26 (~519 samples)
+  12 cluster counts + means    ridge 1.54 (~348 samples)   gbm 1.60 (~322 samples)
+  sorted neuron features       ridge 1.11 (~672 samples)   gbm 1.17 (~605 samples)
+  weights only (sorted)        ridge 1.48 (~378 samples)   gbm 1.23 (~549 samples)
+
+error by region: mass, error rate, contribution to error and its SD across networks (points), CV R^2 from roles,
+  and correlation of the contribution with role counts (always-on, event-ptr, late-ptr, max-det, late-marker, comparator)
+  S<0 (blind spot)         1.1%  70.5%  0.75  0.13  0.77 | -0.44 +0.48 +0.28 -0.18 +0.15 -0.21
+  M-S near tie (a<.05)     8.5%  24.8%  2.12  0.74  0.89 | +0.39 -0.07 -0.14 -0.45 +0.17 -0.32
+  S-R near tie (b<.03)     9.4%  32.6%  3.06  0.60  0.84 | +0.37 -0.03 -0.25 -0.39 +0.14 -0.37
+  middle                  25.8%   8.0%  2.06  1.28  0.87 | +0.36 -0.01 -0.25 -0.37 +0.12 -0.51
+  clean (a,b >= .1)       55.2%   2.0%  1.13  1.24  0.82 | +0.28 +0.03 -0.20 -0.19 +0.11 -0.65

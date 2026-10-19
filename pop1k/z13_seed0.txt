@@ -1,0 +1,78 @@
+64 population networks (every 16th) + 6 zoo; 8192 top-4 configurations, 256 lower-input draws each; q = 16
+  accuracy (configurations x draws)                    pop median 0.9247 [p10 0.8704, p90 0.9599]  zoo 0.9530 0.9125 0.8824 0.9492 0.9332 0.8908
+  E[p(c)(1-p(c))] / p(1-p)   (irreducible lower-input share) pop median 0.312 [p10 0.260, p90 0.376]  zoo 0.241 0.339 0.339 0.327 0.289 0.293
+ local error: E[(model - p(c))^2] - noise, as a share of p(1-p); and integrated bias (points)
+  I0     local MSE / p(1-p)                            pop median 0.1799 [p10 0.1413, p90 0.2158]  zoo 0.1393 0.1872 0.2037 0.2007 0.1928 0.1624
+  P1     local MSE / p(1-p)                            pop median 0.1200 [p10 0.0906, p90 0.1496]  zoo 0.0826 0.1275 0.1265 0.1276 0.1046 0.1233
+  Praw   local MSE / p(1-p)                            pop median 0.5433 [p10 0.4016, p90 0.7089]  zoo 0.3666 0.4985 0.6503 0.6066 0.5096 0.5539
+  Pprod  local MSE / p(1-p)                            pop median 0.0598 [p10 0.0436, p90 0.0783]  zoo 0.0401 0.0639 0.0670 0.0650 0.0544 0.0632
+  Pmarg  local MSE / p(1-p)                            pop median 0.0101 [p10 0.0063, p90 0.0169]  zoo 0.0087 0.0108 0.0130 0.0132 0.0081 0.0131
+  I0     bias, points                                  pop median +0.274 [p10 -0.021, p90 +0.767]  zoo +0.168 +0.508 +0.722 +0.318 +0.182 +0.238
+  P1     bias, points                                  pop median -0.010 [p10 -0.156, p90 +0.127]  zoo +0.014 -0.126 -0.023 -0.158 -0.002 -0.122
+  Praw   bias, points                                  pop median +0.158 [p10 -0.095, p90 +0.382]  zoo +0.141 +0.118 +0.505 -0.274 +0.160 +0.012
+  Pprod  bias, points                                  pop median -0.004 [p10 -0.121, p90 +0.116]  zoo +0.021 -0.067 +0.008 -0.138 -0.016 -0.084
+  Pmarg  bias, points                                  pop median -0.145 [p10 -0.268, p90 -0.022]  zoo -0.125 -0.186 -0.238 -0.201 -0.070 -0.208
+  clipping alone (P1 - Praw), points                   pop median -0.171 [p10 -0.331, p90 -0.006]  zoo -0.127 -0.245 -0.529 +0.116 -0.163 -0.134
+  share of configurations where P1 reverses I0         pop median 0.0198 [p10 0.0106, p90 0.0333]  zoo 0.0096 0.0227 0.0343 0.0146 0.0183 0.0280
+    among them, mean p(c) when I0 = 0 (P1 = 1)         pop median 0.566 [p10 0.522, p90 0.600]  zoo 0.562 0.576 0.571 0.617 0.618 0.542
+    among them, mean p(c) when I0 = 1 (P1 = 0)         pop median 0.541 [p10 0.509, p90 0.569]  zoo 0.506 0.570 0.513 0.543 0.532 0.551
+    share of P1's local squared error from reversals   pop median 0.651 [p10 0.605, p90 0.686]  zoo 0.645 0.616 0.641 0.609 0.672 0.655
+  |m0| < 0.5 (I0   ): local MSE share of its total     pop median 0.661 [p10 0.570, p90 0.757]  zoo 0.543 0.714 0.684 0.573 0.570 0.769
+  |m0| < 0.5 (P1   ): local MSE share of its total     pop median 0.876 [p10 0.820, p90 0.931]  zoo 0.790 0.907 0.860 0.855 0.853 0.915
+  |m0| < 0.5 (Praw ): local MSE share of its total     pop median 0.960 [p10 0.924, p90 0.982]  zoo 0.935 0.973 0.959 0.929 0.942 0.970
+  |m0| < 0.5 (Pprod): local MSE share of its total     pop median 0.883 [p10 0.821, p90 0.922]  zoo 0.819 0.895 0.854 0.876 0.849 0.915
+  |m0| < 0.5 (Pmarg): local MSE share of its total     pop median 0.200 [p10 0.120, p90 0.275]  zoo 0.078 0.205 0.171 0.154 0.202 0.235
+  share of draws with a tied top logit                 pop median 0.00e+00 [p10 0.00e+00, p90 4.77e-07]  zoo 0.00e+00 0.00e+00 0.00e+00 0.00e+00 0.00e+00 4.77e-07
+
+64 population networks (every 16th) + 6 zoo; 8192 top-4 configurations, 256 lower-input draws each; q = 12
+  accuracy (configurations x draws)                    pop median 0.9247 [p10 0.8704, p90 0.9599]  zoo 0.9530 0.9125 0.8824 0.9492 0.9332 0.8908
+  E[p(c)(1-p(c))] / p(1-p)   (irreducible lower-input share) pop median 0.312 [p10 0.260, p90 0.376]  zoo 0.241 0.339 0.339 0.327 0.289 0.293
+ local error: E[(model - p(c))^2] - noise, as a share of p(1-p); and integrated bias (points)
+  I0     local MSE / p(1-p)                            pop median 0.1799 [p10 0.1413, p90 0.2158]  zoo 0.1393 0.1872 0.2037 0.2007 0.1928 0.1624
+  P1     local MSE / p(1-p)                            pop median 0.1203 [p10 0.0914, p90 0.1508]  zoo 0.0834 0.1264 0.1266 0.1319 0.1054 0.1224
+  Praw   local MSE / p(1-p)                            pop median 0.5429 [p10 0.4004, p90 0.7162]  zoo 0.3672 0.4916 0.6506 0.6193 0.5031 0.5563
+  Pprod  local MSE / p(1-p)                            pop median 0.0607 [p10 0.0444, p90 0.0800]  zoo 0.0412 0.0643 0.0672 0.0670 0.0557 0.0637
+  Pmarg  local MSE / p(1-p)                            pop median 0.0101 [p10 0.0063, p90 0.0172]  zoo 0.0088 0.0108 0.0131 0.0132 0.0082 0.0130
+  I0     bias, points                                  pop median +0.274 [p10 -0.021, p90 +0.767]  zoo +0.168 +0.508 +0.722 +0.318 +0.182 +0.238
+  P1     bias, points                                  pop median +0.001 [p10 -0.127, p90 +0.166]  zoo +0.018 -0.058 -0.013 -0.143 +0.010 -0.086
+  Praw   bias, points                                  pop median +0.178 [p10 -0.072, p90 +0.411]  zoo +0.144 +0.154 +0.510 -0.259 +0.164 +0.064
+  Pprod  bias, points                                  pop median +0.012 [p10 -0.110, p90 +0.144]  zoo +0.028 -0.018 +0.020 -0.122 -0.009 -0.049
+  Pmarg  bias, points                                  pop median -0.128 [p10 -0.249, p90 -0.003]  zoo -0.118 -0.159 -0.216 -0.189 -0.060 -0.185
+  clipping alone (P1 - Praw), points                   pop median -0.173 [p10 -0.326, p90 +0.001]  zoo -0.126 -0.212 -0.523 +0.116 -0.154 -0.151
+  share of configurations where P1 reverses I0         pop median 0.0189 [p10 0.0100, p90 0.0324]  zoo 0.0089 0.0223 0.0332 0.0143 0.0178 0.0259
+    among them, mean p(c) when I0 = 0 (P1 = 1)         pop median 0.565 [p10 0.523, p90 0.603]  zoo 0.562 0.574 0.571 0.613 0.615 0.542
+    among them, mean p(c) when I0 = 1 (P1 = 0)         pop median 0.539 [p10 0.499, p90 0.568]  zoo 0.508 0.565 0.510 0.541 0.525 0.543
+    share of P1's local squared error from reversals   pop median 0.612 [p10 0.571, p90 0.658]  zoo 0.588 0.597 0.616 0.568 0.633 0.598
+  |m0| < 0.5 (I0   ): local MSE share of its total     pop median 0.661 [p10 0.570, p90 0.757]  zoo 0.543 0.714 0.684 0.573 0.570 0.769
+  |m0| < 0.5 (P1   ): local MSE share of its total     pop median 0.868 [p10 0.816, p90 0.925]  zoo 0.776 0.901 0.853 0.850 0.841 0.912
+  |m0| < 0.5 (Praw ): local MSE share of its total     pop median 0.958 [p10 0.923, p90 0.980]  zoo 0.927 0.971 0.959 0.926 0.939 0.970
+  |m0| < 0.5 (Pprod): local MSE share of its total     pop median 0.872 [p10 0.811, p90 0.911]  zoo 0.801 0.885 0.844 0.868 0.835 0.907
+  |m0| < 0.5 (Pmarg): local MSE share of its total     pop median 0.202 [p10 0.122, p90 0.281]  zoo 0.077 0.208 0.176 0.161 0.211 0.239
+  share of draws with a tied top logit                 pop median 0.00e+00 [p10 0.00e+00, p90 4.77e-07]  zoo 0.00e+00 0.00e+00 0.00e+00 0.00e+00 0.00e+00 4.77e-07
+
+64 population networks (every 16th) + 6 zoo; 8192 top-4 configurations, 256 lower-input draws each; q = 8
+  accuracy (configurations x draws)                    pop median 0.9247 [p10 0.8704, p90 0.9599]  zoo 0.9530 0.9125 0.8824 0.9492 0.9332 0.8908
+  E[p(c)(1-p(c))] / p(1-p)   (irreducible lower-input share) pop median 0.312 [p10 0.260, p90 0.376]  zoo 0.241 0.339 0.339 0.327 0.289 0.293
+ local error: E[(model - p(c))^2] - noise, as a share of p(1-p); and integrated bias (points)
+  I0     local MSE / p(1-p)                            pop median 0.1799 [p10 0.1413, p90 0.2158]  zoo 0.1393 0.1872 0.2037 0.2007 0.1928 0.1624
+  P1     local MSE / p(1-p)                            pop median 0.1229 [p10 0.0937, p90 0.1522]  zoo 0.0876 0.1306 0.1289 0.1273 0.1066 0.1249
+  Praw   local MSE / p(1-p)                            pop median 0.5362 [p10 0.3960, p90 0.6811]  zoo 0.3667 0.4856 0.6363 0.5923 0.5099 0.5327
+  Pprod  local MSE / p(1-p)                            pop median 0.0637 [p10 0.0469, p90 0.0828]  zoo 0.0440 0.0666 0.0698 0.0663 0.0577 0.0663
+  Pmarg  local MSE / p(1-p)                            pop median 0.0105 [p10 0.0065, p90 0.0178]  zoo 0.0093 0.0112 0.0132 0.0134 0.0082 0.0134
+  I0     bias, points                                  pop median +0.274 [p10 -0.021, p90 +0.767]  zoo +0.168 +0.508 +0.722 +0.318 +0.182 +0.238
+  P1     bias, points                                  pop median +0.041 [p10 -0.090, p90 +0.212]  zoo +0.022 -0.031 +0.064 -0.109 +0.045 -0.084
+  Praw   bias, points                                  pop median +0.196 [p10 -0.040, p90 +0.441]  zoo +0.159 +0.158 +0.589 -0.205 +0.179 +0.060
+  Pprod  bias, points                                  pop median +0.029 [p10 -0.078, p90 +0.199]  zoo +0.035 +0.006 +0.076 -0.090 +0.024 -0.041
+  Pmarg  bias, points                                  pop median -0.091 [p10 -0.207, p90 +0.031]  zoo -0.105 -0.122 -0.162 -0.161 -0.041 -0.136
+  clipping alone (P1 - Praw), points                   pop median -0.160 [p10 -0.309, p90 +0.003]  zoo -0.137 -0.189 -0.525 +0.096 -0.134 -0.143
+  share of configurations where P1 reverses I0         pop median 0.0203 [p10 0.0108, p90 0.0349]  zoo 0.0101 0.0232 0.0350 0.0150 0.0184 0.0277
+    among them, mean p(c) when I0 = 0 (P1 = 1)         pop median 0.563 [p10 0.518, p90 0.603]  zoo 0.555 0.571 0.565 0.613 0.612 0.537
+    among them, mean p(c) when I0 = 1 (P1 = 0)         pop median 0.547 [p10 0.513, p90 0.572]  zoo 0.501 0.565 0.518 0.546 0.525 0.552
+    share of P1's local squared error from reversals   pop median 0.666 [p10 0.613, p90 0.699]  zoo 0.637 0.613 0.660 0.632 0.659 0.653
+  |m0| < 0.5 (I0   ): local MSE share of its total     pop median 0.661 [p10 0.570, p90 0.757]  zoo 0.543 0.714 0.684 0.573 0.570 0.769
+  |m0| < 0.5 (P1   ): local MSE share of its total     pop median 0.858 [p10 0.793, p90 0.910]  zoo 0.758 0.892 0.854 0.852 0.823 0.902
+  |m0| < 0.5 (Praw ): local MSE share of its total     pop median 0.953 [p10 0.916, p90 0.976]  zoo 0.923 0.968 0.955 0.930 0.938 0.962
+  |m0| < 0.5 (Pprod): local MSE share of its total     pop median 0.852 [p10 0.785, p90 0.892]  zoo 0.771 0.871 0.830 0.856 0.810 0.890
+  |m0| < 0.5 (Pmarg): local MSE share of its total     pop median 0.213 [p10 0.126, p90 0.287]  zoo 0.091 0.227 0.186 0.161 0.233 0.247
+  share of draws with a tied top logit                 pop median 0.00e+00 [p10 0.00e+00, p90 4.77e-07]  zoo 0.00e+00 0.00e+00 0.00e+00 0.00e+00 0.00e+00 4.77e-07
+

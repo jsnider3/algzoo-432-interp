@@ -1,0 +1,3 @@
+128 population networks (every 8th) + 6 zoo; pool 2^16; MF4; exact lines; points (pool noise about 0.066 per network); cost 64.5 forwards per configuration
+  MF4 alone                  pop mean +0.330  SD 0.287  RMS 0.438   mystery +0.281 seed0 +0.288 seed1 +0.671 seed2 +0.163 seed3 +0.125 seed4 +0.215
+  MF4 + exact 1st order      pop mean -0.051  SD 0.078  RMS 0.093   mystery +0.034 seed0 -0.111 seed1 -0.201 seed2 -0.114 seed3 +0.031 seed4 -0.058

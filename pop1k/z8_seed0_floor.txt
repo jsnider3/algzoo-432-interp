@@ -1,0 +1,10 @@
+1024 networks, 2048 configurations x 8 redraws; truth 0.9229; noise of the truth ~0.126 points
+  additive model (q=8)             error (points): mean -0.388  SD 0.439  RMS 0.585;  per-configuration MAE 0.0354
+  its Gaussian                     error (points): mean -0.379  SD 0.445  RMS 0.585;  per-configuration MAE 0.0366
+  mean field (max, R competitors)  error (points): mean +0.450  SD 0.601  RMS 0.751;  per-configuration MAE 0.0535
+  variance within top-3 configurations 45% (median); exact P(correct | top-3) would gain at most 1.81x over sampling
+    S<0        0.9%  error rate truth 0.6478, additive 0.5374;  contribution +0.102 (SD 0.079)
+    M-S tie    9.8%  error rate truth 0.2109, additive 0.2237;  contribution -0.126 (SD 0.104)
+    S-R tie   10.1%  error rate truth 0.2719, additive 0.2829;  contribution -0.111 (SD 0.136)
+    middle    25.6%  error rate truth 0.0580, additive 0.0669;  contribution -0.230 (SD 0.166)
+    clean     53.6%  error rate truth 0.0153, additive 0.0157;  contribution -0.023 (SD 0.205)

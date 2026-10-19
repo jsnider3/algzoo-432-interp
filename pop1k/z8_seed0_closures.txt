@@ -1,0 +1,5 @@
+48 networks x 48 configurations; true margin (target - runner-up): median mean 3.95, median SD 0.82
+  resid: margin mean |error| median 1.57;  SD ratio median 10.65 (IQR 5.25-25.14);  1 networks with diverging moments
+  stein: margin mean |error| median 0.87;  SD ratio median 2.23 (IQR 1.23-4.58);  1 networks with diverging moments
+  biv  : margin mean |error| median 1.38;  SD ratio median 7.69 (IQR 4.00-17.35);  1 networks with diverging moments
+  jac  : margin mean |error| median 0.26;  SD ratio median 0.85 (IQR 0.53-1.02);  0 networks with diverging moments

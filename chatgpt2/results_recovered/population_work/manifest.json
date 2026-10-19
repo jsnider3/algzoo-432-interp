@@ -1,0 +1,24 @@
+{
+  "recovery_date": "2026-10-18",
+  "original_archive_recovered": false,
+  "original_main_script_exactly_restored": true,
+  "original_main_script_sha256": "55a2029fd4d578337d529b8a05e272e3cb11edf1f60080e3295f58aaadaa398a",
+  "raw_replicate_arrays_recovered": false,
+  "files": [
+    {
+      "name": "population_estimator.py",
+      "bytes": 19981,
+      "sha256": "55a2029fd4d578337d529b8a05e272e3cb11edf1f60080e3295f58aaadaa398a"
+    },
+    {
+      "name": "population_summary.json",
+      "bytes": 32230,
+      "sha256": "5072859627c21752e299e85309f35c99e850c2b8a58527faef21ce8695a25b4e"
+    },
+    {
+      "name": "README_recovery.txt",
+      "bytes": 4144,
+      "sha256": "c011a80d562bbd64388ec299e1762af1d951bad7c76bee95869e6439796fa04d"
+    }
+  ]
+}

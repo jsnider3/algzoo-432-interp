@@ -1,5 +1,5 @@
-import numpy as np
-w = np.load("/home/josh/Git/MechInterp/work/weights.npz")
+import os, numpy as np
+w = np.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), "weights.npz"))
 Wih = w['rnn.weight_ih_l0'][:,0].astype(np.float64)
 Whh = w['rnn.weight_hh_l0'].astype(np.float64)
 Wo  = w['linear.weight'].astype(np.float64)

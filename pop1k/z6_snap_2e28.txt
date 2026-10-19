@@ -1,0 +1,17 @@
+1024 networks, accuracy 0.9080 +- 3.61 points; non-tie error rate (%) k steps after the event:
+  k=0: handoff  14.1 (SD 13.8, corr with accuracy -0.81)   direct   2.6 (SD  2.8, corr -0.56)
+  k=1: handoff   4.9 (SD  4.9, corr with accuracy -0.85)   direct   2.6 (SD  2.0, corr -0.71)
+  k=2: handoff   3.4 (SD  3.4, corr with accuracy -0.83)   direct   2.5 (SD  2.1, corr -0.69)
+  k=3: handoff   2.8 (SD  2.7, corr with accuracy -0.83)   direct   2.3 (SD  2.0, corr -0.71)
+handoff k=0 by comparator count: 0: 40.5% (n=38)  1: 36.8% (n=58)  2: 23.8% (n=202)  3: 11.7% (n=298)  4: 6.4% (n=318)  5: 4.3% (n=99)  6: 4.3% (n=11)
+  event pointer only n= 376: handoff k=0  16.3%, k=1  4.8%; accuracy 0.9078
+  late pointer only  n= 160: handoff k=0   6.9%, k=1  2.9%; accuracy 0.9279
+  no pointer         n= 479: handoff k=0  14.9%, k=1  5.8%; accuracy 0.9016
+accuracy from the 8-number latency profile, CV RMSE (points): ridge 0.892  gbm 0.792
+  handoff k=0 (SD 13.82%) predicted from roles+means: ridge R2 0.76 gbm R2 0.86; weights: ridge R2 0.73 gbm R2 0.84
+  handoff k=1 (SD 4.89%) predicted from roles+means: ridge R2 0.65 gbm R2 0.64; weights: ridge R2 0.53 gbm R2 0.67
+  direct k=0 (SD 2.81%) predicted from roles+means: ridge R2 0.33 gbm R2 0.35; weights: ridge R2 0.33 gbm R2 0.33
+
+real	0m32.632s
+user	2m7.298s
+sys	0m3.384s

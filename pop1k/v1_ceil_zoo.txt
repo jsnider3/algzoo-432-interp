@@ -1,0 +1,9 @@
+6 networks, 32768 random inputs each; variance-reduction factor p(1-p)/Var(P_line), grid of 256 nodes
+  network   x10     S      M      R
+  mystery   2.05   4.64   1.72   2.05 
+  seed0     1.86   3.29   2.00   1.86 
+  seed1     1.90   2.08   1.54   1.56 
+  seed2     2.04   3.33   1.47   2.10 
+  seed3     2.07   3.29   1.80   1.95 
+  seed4     1.78   2.64   1.76   1.74 
+  median    1.97   3.29   1.74   1.90 

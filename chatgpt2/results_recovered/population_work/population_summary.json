@@ -1,0 +1,805 @@
+{
+  "schema_version": "recovered-summary-1",
+  "recovery": {
+    "status": "reconstructed_from_conversation",
+    "date": "2026-10-18",
+    "reason": "The prior session's transient deliverables had expired before the user approved persistent saving.",
+    "sources": [
+      "Previously delivered final research answer in this conversation.",
+      "Conversation summary preserving recorded experiment results and audit findings."
+    ],
+    "original_population_summary_json_recovered": false,
+    "original_raw_replicate_arrays_recovered": false,
+    "original_input_and_source_feature_caches_recovered": false,
+    "new_experiments_run_for_recovery": false,
+    "external_sources_used_for_recovery": false,
+    "precision_policy": "Preserve numerical precision present in the conversation. Benchmarks whose remaining report contains only two decimal places are explicitly labeled; no missing digits or arrays are reconstructed.",
+    "completeness": "This is a recovered summary of reported findings, not a byte-identical copy of the original JSON and not a replacement for unavailable raw experimental records.",
+    "unavailable_original_raw_replicate_files": [
+      "continuous_all_4096.npz",
+      "continuous_mean_4096.npz",
+      "continuous_subset_16384.npz"
+    ]
+  },
+  "study": {
+    "task": "Estimate the probability that a bias-free ReLU RNN correctly predicts the position of the second-largest of 10 independent standard normal inputs.",
+    "input_distribution": "10 iid N(0,1) values",
+    "hidden_units": 16,
+    "weight_count": 432,
+    "weight_shapes": {
+      "Wih": [
+        16
+      ],
+      "Whh": [
+        16,
+        16
+      ],
+      "Wo": [
+        10,
+        16
+      ]
+    },
+    "population_size": 1024,
+    "population_archive": "chatgpt2/pop1k_2e24_2e26.npz",
+    "primary_snapshot": "s65536",
+    "primary_snapshot_training_sequences": 67108864,
+    "earlier_snapshot": "s16384",
+    "earlier_snapshot_training_sequences": 16777216,
+    "primary_cost_metric": "Count target network forward passes, including pilot calls. Source-network prework is free under this metric.",
+    "wall_clock_qualification": "The tested adaptive margin implementation did not demonstrate a total-compute or wall-clock gain.",
+    "target_accuracy_definition": "argmax(logits) equals the true second-largest position, with the evaluator's usual first-index argmax tie rule.",
+    "development_qualification": "The method family and configuration menu were developed using this archive. Exact self-source exclusion in the fresh benchmarks is not a pristine model-level confirmatory evaluation. A separate nested fixed-menu diagnostic is reported below."
+  },
+  "benchmark_interpretation": {
+    "headline_statistic": "Median across targets of per-target sample variance(plain MC) / sample variance(population estimator).",
+    "replicates": 32,
+    "bootstrap_replicates": 1000,
+    "bootstrap_unit": "Entire replicate rows, preserving pairing with MC and dependence among targets from shared inputs.",
+    "bootstrap_scope": "Replicate randomness conditional on the fixed source bank and fixed target group. It does not quantify uncertainty over future training populations.",
+    "point_estimator": "Unclipped and unbiased for every fixed target over pilot, independent reference, and correction randomness.",
+    "variance_equals_mse": "For the unbiased estimator, true variance equals true MSE. The benchmark estimates variance across replicates rather than using exact target accuracies.",
+    "ratio_caveat": "Ratios of sample variances and their medians are not unbiased estimators of variance ratios.",
+    "streams": "A fresh independent pilot, reference integration bank, and iid rejection-sampling candidate stream in every replicate. No frozen candidate pool is resampled.",
+    "source_exclusion": "For each population target, its own source column is exactly excluded whenever that member appears in the source dictionary.",
+    "execution_harness": "Benchmark mode computes extra target outcomes to support efficient paired evaluation, but only the counted pilot and accepted correction outcomes enter the estimator. Standalone estimation executes exactly the target budget.",
+    "acceptance_probability": "(0.02 + sqrt(g*(1-g))) / 0.52",
+    "minimum_acceptance_probability_exact": "1/26",
+    "finite_reference_uncertainty_included": true
+  },
+  "benchmarks": {
+    "margin_4096": {
+      "original_output_stem": "continuous_all_4096",
+      "recovered_record_type": "Reported summaries; raw replicate arrays unavailable.",
+      "reported_gain_decimal_places": 6,
+      "configuration": {
+        "method": "margin",
+        "target_budget": 4096,
+        "pilot_passes": 256,
+        "correction_passes": 3840,
+        "source_dictionary_size_before_self_exclusion": 512,
+        "source_count_for_population_target": "511 if target is a dictionary member, otherwise 512",
+        "reference_inputs": 16384,
+        "candidate_block": 16384,
+        "ridge_penalty": 1,
+        "population_targets": 1024,
+        "replicates": 32,
+        "bootstrap_replicates": 1000,
+        "seed": 451203,
+        "perturb_seed": 8803,
+        "device": "cpu"
+      },
+      "groups": {
+        "population": {
+          "count": 1024,
+          "median_empirical_variance_gain": 1.809429,
+          "median_bootstrap95": [
+            1.602402,
+            2.049824
+          ],
+          "median_gain_from_unbiased_variance_estimator": 1.960226,
+          "median_reported_variance_over_replicate_variance": 0.9835
+        },
+        "zoo": {
+          "count": 6,
+          "median_empirical_variance_gain": 1.989256,
+          "median_bootstrap95": [
+            1.385147,
+            2.786525
+          ],
+          "median_gain_from_unbiased_variance_estimator": 2.105307,
+          "median_reported_variance_over_replicate_variance": 0.9849
+        },
+        "mul0.003": {
+          "count": 6,
+          "median_empirical_variance_gain": 2.340661,
+          "median_bootstrap95": [
+            1.530826,
+            3.101212
+          ],
+          "median_gain_from_unbiased_variance_estimator": 2.174325,
+          "median_reported_variance_over_replicate_variance": 0.9789
+        },
+        "mul0.01": {
+          "count": 6,
+          "median_empirical_variance_gain": 1.441302,
+          "median_bootstrap95": [
+            1.133451,
+            1.892224
+          ],
+          "median_gain_from_unbiased_variance_estimator": 1.664448,
+          "median_reported_variance_over_replicate_variance": 0.9446
+        },
+        "older": {
+          "count": 16,
+          "median_empirical_variance_gain": 1.292174,
+          "median_bootstrap95": [
+            1.010515,
+            1.718676
+          ],
+          "median_gain_from_unbiased_variance_estimator": 1.637571,
+          "median_reported_variance_over_replicate_variance": 0.9141
+        }
+      },
+      "original_zoo_individual_empirical_variance_gains": {
+        "mystery": 3.32366,
+        "seed0": 2.15035,
+        "seed1": 1.82816,
+        "seed2": 1.22029,
+        "seed3": 2.15509,
+        "seed4": 1.59312
+      },
+      "individual_gain_qualification": "Individual ratios from only 32 replicates are noisy and should not be overinterpreted.",
+      "reported_population_median_finite_sample95_interval_width": 0.77,
+      "reported_benchmark_harness_seconds_approximate": 548,
+      "stress_targets": {
+        "all_zero": {
+          "exact_accuracy": 0.1,
+          "mean_estimated_accuracy": 0.099568685,
+          "standard_error_of_replicate_mean": 0.00079449,
+          "empirical_variance_gain": 0.82347,
+          "normal95_single_replicate_intervals_covering_truth": 30,
+          "interval_count": 32,
+          "exact_efficiency_for_this_target": 0.9375,
+          "explanation": "The constant zero target margin makes g=0.5 and acceptance=1. The method reduces to MC using the post-pilot observations."
+        },
+        "untrained_random": {
+          "mean_estimated_accuracy": 0.1144058,
+          "mean_mc_accuracy": 0.1155777,
+          "empirical_variance_gain": 1.44055,
+          "standard_error_of_replicate_mean": 0.0008043
+        }
+      }
+    },
+    "mean_4096": {
+      "original_output_stem": "continuous_mean_4096",
+      "recovered_record_type": "Rounded final-answer summaries only; missing digits and raw arrays unavailable.",
+      "reported_gain_decimal_places": 2,
+      "configuration": {
+        "method": "mean",
+        "target_budget": 4096,
+        "pilot_passes": 0,
+        "correction_passes": 4096,
+        "source_dictionary_size_before_self_exclusion": 1024,
+        "source_count_for_population_target": 1023,
+        "source_count_for_external_target": 1024,
+        "reference_inputs": 16384,
+        "candidate_block": 16384,
+        "population_targets": 1024,
+        "replicates": 32,
+        "bootstrap_replicates": 1000,
+        "seed": 451203,
+        "perturb_seed": 8803,
+        "device": "cpu"
+      },
+      "groups": {
+        "population": {
+          "count": 1024,
+          "median_empirical_variance_gain": 1.58,
+          "median_bootstrap95": [
+            1.4,
+            1.78
+          ]
+        },
+        "zoo": {
+          "count": 6,
+          "median_empirical_variance_gain": 1.9,
+          "median_bootstrap95": [
+            1.43,
+            2.41
+          ]
+        },
+        "mul0.003": {
+          "count": 6,
+          "median_empirical_variance_gain": 1.81,
+          "median_bootstrap95": [
+            1.34,
+            2.47
+          ]
+        },
+        "mul0.01": {
+          "count": 6,
+          "median_empirical_variance_gain": 0.98,
+          "median_bootstrap95": [
+            0.71,
+            1.27
+          ]
+        },
+        "older": {
+          "count": 16,
+          "median_empirical_variance_gain": 1.3,
+          "median_bootstrap95": [
+            1.03,
+            1.62
+          ]
+        }
+      },
+      "stress_all_zero": {
+        "empirical_variance_relative_to_mc_approximate": 12.5,
+        "qualification": "Unbiasedness survives population mismatch; variance domination of MC does not."
+      }
+    },
+    "margin_16384": {
+      "original_output_stem": "continuous_subset_16384",
+      "recovered_record_type": "Rounded final-answer summaries only; missing digits and raw arrays unavailable.",
+      "reported_gain_decimal_places": 2,
+      "configuration": {
+        "method": "margin",
+        "target_budget": 16384,
+        "pilot_passes": 1024,
+        "correction_passes": 15360,
+        "source_dictionary_size_before_self_exclusion": 512,
+        "source_count_for_population_target": "511 if target is a dictionary member, otherwise 512",
+        "reference_inputs": 65536,
+        "candidate_block": 65536,
+        "ridge_penalty": 1,
+        "population_targets": 128,
+        "target_selection": "Random population subset",
+        "replicates": 32,
+        "bootstrap_replicates": 1000,
+        "seed": 451203,
+        "perturb_seed": 8803,
+        "device": "cpu"
+      },
+      "groups": {
+        "population": {
+          "count": 128,
+          "median_empirical_variance_gain": 1.82,
+          "median_bootstrap95": [
+            1.67,
+            2.11
+          ],
+          "median_gain_from_unbiased_variance_estimator": 2.13
+        },
+        "zoo": {
+          "count": 6,
+          "median_empirical_variance_gain": 1.97,
+          "median_bootstrap95": [
+            1.38,
+            3.03
+          ]
+        },
+        "mul0.003": {
+          "count": 6,
+          "median_empirical_variance_gain": 1.6,
+          "median_bootstrap95": [
+            1.25,
+            2.41
+          ]
+        },
+        "mul0.01": {
+          "count": 6,
+          "median_empirical_variance_gain": 1.93,
+          "median_bootstrap95": [
+            1.37,
+            2.51
+          ]
+        },
+        "older": {
+          "count": 16,
+          "median_empirical_variance_gain": 1.78,
+          "median_bootstrap95": [
+            1.37,
+            2.17
+          ]
+        }
+      },
+      "reported_population_median_finite_sample95_interval_width": 0.43,
+      "exact_efficiency_for_all_zero_target": 0.9375,
+      "ridge_qualification": "This frozen end-to-end benchmark used penalty 1.0; the separate larger-pilot nested diagnostic preferred 0.1. The benchmark was not retroactively retuned."
+    }
+  },
+  "reference_accuracy_diagnostics": {
+    "reference_inputs": 131072,
+    "input_seed": 8802,
+    "qualification": "Finite-sample reference accuracy estimates, not exact target accuracies.",
+    "population": {
+      "mean": 0.86027147,
+      "p5": 0.7825882,
+      "median": 0.86735153,
+      "p95": 0.91791801
+    },
+    "perturbation": {
+      "rule": "Multiply every entry of all three weight matrices by 1 + epsilon * an independent N(0,1) value.",
+      "seed": 8803,
+      "realizations_per_model_per_epsilon": 1,
+      "distinction": "This follows the written question and differs from the additive recurrent-only perturbation in the supplied i8.py.",
+      "columns": [
+        "original",
+        "epsilon_0.003",
+        "epsilon_0.01"
+      ],
+      "models": {
+        "mystery": [
+          0.95288849,
+          0.93025208,
+          0.87522125
+        ],
+        "seed0": [
+          0.90790558,
+          0.88432312,
+          0.7256012
+        ],
+        "seed1": [
+          0.87931061,
+          0.85622406,
+          0.73387146
+        ],
+        "seed2": [
+          0.94904327,
+          0.94326019,
+          0.90112305
+        ],
+        "seed3": [
+          0.93218994,
+          0.92347717,
+          0.82510376
+        ],
+        "seed4": [
+          0.88961029,
+          0.84670258,
+          0.71918488
+        ]
+      }
+    }
+  },
+  "binary_basis_saturation_diagnostic": {
+    "population_targets": 1024,
+    "target_fit_observations": 32768,
+    "independent_test_observations": 131072,
+    "ridge_penalty": 0.01,
+    "target_self_source_excluded": true,
+    "qualification": "Privileged representation diagnostic. The 32,768 target fitting observations and finite integration costs are excluded from these gains; this is not a practical budget-corrected benchmark.",
+    "population_score_proposal": "q = 0.1 + 0.9*sqrt(pbar*(1-pbar))/E[sqrt(pbar*(1-pbar))], with target excluded from pbar.",
+    "oracle_proposal_qualification": "The proposal proportional to |f-g| requires target residual knowledge and is unimplementable under the query budget. It is not a universal ceiling.",
+    "columns": [
+      "source_count",
+      "median_error_R2",
+      "iid_residual_gain",
+      "population_score_is_gain",
+      "oracle_absolute_residual_is_gain",
+      "clipped_iid_gain",
+      "clipped_population_score_is_gain"
+    ],
+    "rows": [
+      [
+        8,
+        0.2122,
+        1.2693,
+        1.7891,
+        3.429,
+        1.2693,
+        1.7891
+      ],
+      [
+        32,
+        0.2853,
+        1.3993,
+        2.0184,
+        4.2094,
+        1.4,
+        2.0204
+      ],
+      [
+        128,
+        0.3542,
+        1.5485,
+        2.2237,
+        4.6951,
+        1.5546,
+        2.2362
+      ],
+      [
+        512,
+        0.4209,
+        1.7267,
+        2.4525,
+        5.1564,
+        1.7519,
+        2.4986
+      ],
+      [
+        1023,
+        0.4498,
+        1.8174,
+        2.5549,
+        5.3798,
+        1.8621,
+        2.6386
+      ]
+    ],
+    "nearest_neighbor": {
+      "selection_target_observations": 32768,
+      "all_1023_peers": {
+        "median_test_disagreement": 0.1244,
+        "median_error_correlation": 0.3813,
+        "copy_neighbor_iid_gain": 0.9325,
+        "fitted_single_slope_iid_gain": 1.1701
+      },
+      "eight_peers": {
+        "median_test_disagreement": 0.1359,
+        "copy_neighbor_iid_gain": 0.859,
+        "fitted_single_slope_iid_gain": 1.1034
+      }
+    }
+  },
+  "covariance_spectrum_diagnostic": {
+    "component_counts": [
+      1,
+      8,
+      32,
+      128,
+      512
+    ],
+    "error_cumulative_variance_percent": [
+      26.1,
+      35.36,
+      44.15,
+      57.17,
+      82.83
+    ],
+    "standardized_normalized_margin_cumulative_variance_percent": [
+      54.19,
+      70.54,
+      80.21,
+      88.36,
+      96.57
+    ],
+    "error_components_for_90_percent": 680,
+    "error_components_for_95_percent": 826,
+    "margin_components_for_90_percent": 170,
+    "margin_components_for_95_percent": 392,
+    "scope": "A spectral tail constrains common linear subspace approximations. It does not rule out a low-dimensional nonlinear family of error boundaries."
+  },
+  "margin_representation_diagnostic": {
+    "held_out_population_targets": 64,
+    "source_dictionary_size": 512,
+    "all_64_targets_excluded_from_sources": true,
+    "original_zoo_targets": 6,
+    "test_observations": 32768,
+    "pilot_split": "First three quarters for ridge fitting and final quarter for shift/scale calibration, followed by a full-pilot ridge refit.",
+    "qualification": "Single-pilot moment diagnostics. Gains exclude pilot costs and finite-reference uncertainty. Percentiles show target heterogeneity, not confidence intervals.",
+    "margin_definition": "(true-class logit - maximum incorrect-class logit) / norm(input)",
+    "rows": [
+      {
+        "pilot": 256,
+        "population_median_iid_gain": 1.535,
+        "population_median_is_gain": 2.453,
+        "population_is_gain_p5_p95": [
+          1.801,
+          3.04
+        ],
+        "zoo_median_is_gain": 2.516
+      },
+      {
+        "pilot": 1024,
+        "population_median_iid_gain": 1.643,
+        "population_median_is_gain": 2.797,
+        "population_is_gain_p5_p95": [
+          2.165,
+          3.629
+        ],
+        "zoo_median_is_gain": 3.091
+      },
+      {
+        "pilot": 4096,
+        "population_median_iid_gain": 1.763,
+        "population_median_is_gain": 3.149,
+        "population_is_gain_p5_p95": [
+          2.451,
+          4.065
+        ],
+        "zoo_median_is_gain": 3.444
+      }
+    ],
+    "reported_margin_R2_at_4096_pilot": 0.847,
+    "exploratory_alternatives_approximate_median_is_gains": {
+      "asinh_margin": 3.11,
+      "difficulty_weighted_margin": 3.19,
+      "quadratic_pca_features": 2.66,
+      "neighbor_weighted_error_average": 2.43,
+      "neighbor_weighted_margin_average": 2.37,
+      "shared_logit_coefficients_at_2048_pilot_and_512_sources": 2.46,
+      "binary_error_ridge": 2.39
+    },
+    "binary_error_ridge_approximate_iid_gain": 1.6,
+    "alternative_comparison_qualification": "Exploratory configurations; do not interpret the differences as independently replicated confirmation."
+  },
+  "nested_fixed_menu_diagnostic": {
+    "seed": 2026110431,
+    "outer_folds": 8,
+    "outer_targets_per_fold": 128,
+    "population_targets_total": 1024,
+    "sources_per_fold": 512,
+    "inner_selection_targets_per_fold": 64,
+    "sources_and_inner_targets_disjoint": true,
+    "all_outer_targets_excluded_from_sources_and_tuning": true,
+    "ridge_menu": [
+      0.1,
+      1
+    ],
+    "selection_objective": "Minimize the mean inner-target normalized residual-importance variance V/[p*(1-p)].",
+    "row_ranges_zero_based_half_open": {
+      "inner_pilot_train": "[0, pilot)",
+      "inner_validation_test": "[0, 16384)",
+      "outer_pilot_train": "[4096, 4096 + pilot)",
+      "outer_evaluation_test": "[32768, 65536)"
+    },
+    "exact_control_and_proposal_normalizer_integrals_assumed": true,
+    "finite_reference_uncertainty_included": false,
+    "qualification": "Nested target-independent selection within a frozen two-penalty menu. The menu itself arose from archive exploration. These are held-out moment diagnostics, not fresh end-to-end replicate gains.",
+    "percentile_scope": "p5/p95 are heterogeneity across target networks, not confidence intervals.",
+    "rows": [
+      {
+        "pilot": 256,
+        "selected_ridge_penalty": 1,
+        "folds_selecting_penalty": 8,
+        "median_gain_before_pilot_cost": 2.475,
+        "gain_before_pilot_cost_p5_p95": [
+          1.912,
+          3.336
+        ],
+        "median_gain_at_total_budget_4096": 2.32,
+        "gain_at_total_budget_4096_p5_p95": [
+          1.792,
+          3.128
+        ],
+        "median_gain_at_total_budget_16384": 2.436,
+        "gain_at_total_budget_16384_p5_p95": [
+          1.882,
+          3.284
+        ],
+        "mean_normalized_variance": 0.4053,
+        "median_acceptance_probability": 0.497,
+        "median_iid_gain_before_pilot_cost": 1.55
+      },
+      {
+        "pilot": 1024,
+        "selected_ridge_penalty": 0.1,
+        "folds_selecting_penalty": 8,
+        "median_gain_before_pilot_cost": 2.787,
+        "gain_before_pilot_cost_p5_p95": [
+          2.114,
+          3.885
+        ],
+        "median_gain_at_total_budget_4096": 2.091,
+        "gain_at_total_budget_4096_p5_p95": [
+          1.586,
+          2.914
+        ],
+        "median_gain_at_total_budget_16384": 2.613,
+        "gain_at_total_budget_16384_p5_p95": [
+          1.982,
+          3.643
+        ],
+        "mean_normalized_variance": 0.361,
+        "median_acceptance_probability": 0.4307,
+        "median_iid_gain_before_pilot_cost": 1.644
+      }
+    ],
+    "reported_runtime_seconds_approximate": 9.6
+  },
+  "snapshot_diagnostics": {
+    "qualification": "Privileged fits using 32,768 target labels; finite source-integral uncertainty and target pilot cost omitted. An intermediate snapshot on a long learning-rate schedule is not equivalent to a completed short-budget training run.",
+    "early_basis_predicting_later_targets": {
+      "snapshot": "s16384",
+      "same_seed_target_source_excluded": true,
+      "common_test_observations": 32768,
+      "median_error_R2": 0.4039,
+      "median_iid_gain": 1.6775,
+      "median_population_score_is_gain": 2.0742,
+      "median_clipped_population_score_is_gain": 2.1613
+    },
+    "later_basis_on_same_test_inputs": {
+      "snapshot": "s65536",
+      "median_error_R2": 0.4491,
+      "median_iid_gain": 1.8153,
+      "median_population_score_is_gain": 2.5486,
+      "median_clipped_population_score_is_gain": 2.6261
+    },
+    "same_seed_changes": {
+      "early_median_accuracy_on_comparison_inputs": 0.75308,
+      "later_median_accuracy_on_comparison_inputs": 0.86684,
+      "error_pattern_disagreement": 0.21741,
+      "early_wrong_later_correct_fraction": 0.16156,
+      "early_correct_later_wrong_fraction": 0.05315,
+      "fraction_of_later_errors_already_wrong_early": 0.60256,
+      "error_correlation": 0.31788,
+      "accuracy_pearson_correlation": 0.46097,
+      "accuracy_spearman_correlation": 0.44629
+    },
+    "all_peer_later_basis_external_targets": {
+      "fit_observations": 32768,
+      "test_observations": 131072,
+      "ridge_penalty": 0.01,
+      "columns": [
+        "raw_iid_gain",
+        "population_score_is_gain",
+        "unimplementable_absolute_residual_oracle_gain",
+        "clipped_population_score_is_gain"
+      ],
+      "groups": {
+        "zoo": [
+          1.655,
+          2.642,
+          5.992,
+          2.778
+        ],
+        "mul0.003": [
+          1.807,
+          2.522,
+          5.787,
+          2.622
+        ],
+        "mul0.01": [
+          1.654,
+          1.473,
+          3.552,
+          1.496
+        ],
+        "older": [
+          1.779,
+          2.187,
+          4.349,
+          2.235
+        ]
+      }
+    }
+  },
+  "cpu_timing": {
+    "target": "mystery",
+    "target_budget": 4096,
+    "pilot": 256,
+    "source_dictionary_size": 512,
+    "reference_inputs": 16384,
+    "candidate_block": 16384,
+    "blas_threads": 1,
+    "fresh_trials": 5,
+    "warmed_microtimings": 10,
+    "source_network_forward_passes": 16908288,
+    "median_source_feature_evaluation_seconds": 7.2,
+    "component_medians_ms": {
+      "source_pilot": 37.886,
+      "source_reference": 3632,
+      "source_candidates": 3587,
+      "counted_target_forwards_total": 2.148,
+      "target_pilot": 0.238,
+      "target_correction": 1.888,
+      "margin_control_fit": 13.23,
+      "warmed_margin_control_fit": 10.679,
+      "surrogate_prediction_acceptance_reference_and_residual_processing": 5.876,
+      "entire_pipeline_with_source_features_available": 21.05,
+      "warmed_plain_mc_4096": 1.987
+    },
+    "component_aggregation_note": "Medians of individual components need not sum to the median total.",
+    "source_only_ridge_map_precomputation": {
+      "build_ms": 19.022,
+      "storage_mb": 2.9,
+      "target_specific_fit_ms": 0.0834,
+      "reported_prediction_parity": "Same coefficients and predictions after float32 conversion.",
+      "estimated_total_pipeline_ms_after_maps_and_source_cache": 8.108,
+      "estimated_wall_clock_slowdown_relative_to_plain_mc": 4.08,
+      "estimate_qualification": "The 8.108 ms figure is estimated from measured components, not a newly executed fully integrated cached-map pipeline."
+    },
+    "measured_cached_source_pipeline_slowdown": 10.59,
+    "conclusion": "The adaptive margin prototype saves target queries but was slower in wall-clock time even with source evaluations cached. A population-mean control permits more complete precomputation but achieved a smaller gain and was fragile under severe mismatch."
+  },
+  "estimator_theory": {
+    "notation": {
+      "f": "Target error indicator",
+      "p": "E_P[f]; target accuracy is 1-p",
+      "g": "Pilot-fitted surrogate, fixed before reference and correction stages",
+      "a": "Acceptance probability in [delta,1]",
+      "G": "E_P[g]",
+      "Z": "E_P[a]",
+      "Q": "Distribution with dQ/dP = a/Z",
+      "R": "(f-g)/a on accepted inputs",
+      "r": "E_Q[R] = (p-G)/Z",
+      "L": "Independent reference size",
+      "m": "Fixed number of accepted correction target calls"
+    },
+    "point_estimator": "phat = Ghat + Zhat * mean(R); estimated accuracy = 1 - phat.",
+    "unbiasedness_scope": "Every fixed target function, conditional on any pilot, averaging over fresh reference and correction randomness. The reference bank and correction stream must be independent; the point estimate must not be clipped.",
+    "exact_conditional_variance": "(Z^2 + Var_P(a)/L)*Var_Q(R)/m + Var_P(g + r*a)/L",
+    "unbiased_variance_estimator": "(Zhat^2 - s_a^2/L)*s_R^2/m + s^2_(g + mean(R)*a)/L",
+    "reference_covariance": "Ghat and Zhat may use the same reference bank; their covariance is included in the formula.",
+    "reference_restriction": "The independent reference bank must not fit, tune, normalize, or calibrate g or a. Such adaptation would invalidate the stated proof without additional correction.",
+    "confidence_intervals": {
+      "normal95": "Approximate only.",
+      "bounded_variable95": "Finite-sample Hoeffding/union/product bound with every-target coverage; broad at the tested budgets.",
+      "universal_variance_domination_of_mc": false
+    },
+    "linear_controls": {
+      "oracle_residual_variance": "p*(1-p)*(1-R^2)",
+      "pilot_adjusted_ideal_gain": "(1-k/n)/(1-R^2)",
+      "coefficient_estimation_penalty": "E[(betahat-beta_star)^T Cov(e) (betahat-beta_star)]",
+      "required_R2_for_5x_with_20_percent_pilot": 0.84,
+      "required_R2_for_10x_with_20_percent_pilot": 0.92,
+      "source_error_mean": "1 - source accuracy",
+      "scalar_accuracy_predictor": "An input-independent scalar cancels exactly in a uniform difference estimator and produces no variance reduction."
+    },
+    "posterior_predictive_residual_is_bound": {
+      "notation": "u(x)=E_theta[f_theta(x)|pilot], v(x)=u(x)*(1-u(x)), sigma_p^2=Var_theta(p_theta|pilot).",
+      "optimal_control": "g=u, up to an additive multiple of the proposal density ratio that cancels in the estimator.",
+      "optimal_density_ratio": "rho proportional to sqrt(v)",
+      "optimal_average_variance_numerator": "(integral sqrt(v) dP)^2 - sigma_p^2",
+      "uniform_residual_variance_numerator": "integral v dP - sigma_p^2",
+      "average_crude_mc_variance_numerator": "bar_p*(1-bar_p) - sigma_p^2, where bar_p=integral u dP",
+      "arbitrary_surrogate_squared_risk": "E_theta[(f_theta-g)^2|pilot] = u*(1-u)+(u-g)^2",
+      "proposal_for_arbitrary_surrogate": "Proportional to the square root of its conditional squared residual risk.",
+      "raw_error_is_proposal": "Without a control, the population-optimal density is proportional to sqrt(u).",
+      "scope": "Sharp within independent residual importance sampling with exact predictive quantities and exact integrals. Not a lower bound for all stratification, Sobol, or adaptive procedures.",
+      "atypical_target_support": "Defensive positive support is necessary for the every-fixed-target guarantee and carries a variance cost."
+    },
+    "active_probe_criterion": {
+      "notation": "K(x,z)=Cov_theta(f_theta(x),f_theta(z)|pilot); v(z)=u(z)*(1-u(z)).",
+      "expected_uniform_residual_variance_reduction_from_binary_probe_z": "Var_X[K(X,z)]/v(z), for v(z)>0",
+      "scalar_accuracy_bayes_risk_reduction": "Cov_theta(p_theta,f_theta(z)|pilot)^2/v(z)",
+      "objective_note": "Probe entropy alone is not the relevant objective for residual correction.",
+      "benchmarked_here": false
+    },
+    "plain_population_mean_size_law": {
+      "assumptions": "M independent source functions and an independent target from the same prior, with exact source means.",
+      "expected_residual_variance": "(1+1/M)*(integral u*(1-u) dP - Var_theta(p_theta))",
+      "consequence": "Moving from M=1024 to M=10000 changes the plain-mean residual variance by less than 0.1%. A larger population must help conditional structure or rare-type coverage to matter substantially."
+    },
+    "nonlinear_family_example": {
+      "family": "f_a(x)=1{x<=a}, x and a in [0,1]",
+      "probe_effect": "Binary search localizes a to an interval of width 2^(-k) after k probes.",
+      "residual_is_variance_scaling": "Proportional to 4^(-k)",
+      "scope": "Illustrative derivation showing that no universal 3-5x bound follows from the estimator framework. This is not an empirical finding about these RNNs."
+    },
+    "frozen_pool_caveat": "Reusing a fixed iid pool may be unbiased jointly over the original pool draw for a fixed independent target, but introduces a common finite-pool error floor. Replicates that only resample the same pool miss that uncertainty.",
+    "combining_methods": "Conditioning/integration contracts residual variance, but its target evaluation cost must be charged. Control, integration, and Sobol gains cannot simply be multiplied."
+  },
+  "recorded_implementation_checks": {
+    "recovery_note": "These checks were reported in the prior session; they were not rerun during artifact recovery.",
+    "numpy_float64_forward_vs_supplied_evaluator_max_difference": 0,
+    "float32_vs_float64_predictions_compared": 131072,
+    "float32_vs_float64_prediction_disagreements": 0,
+    "float32_vs_float64_max_absolute_logit_difference": 0.000338,
+    "constrained_self_exclusion_vs_physical_deletion_max_difference": 1.67e-16,
+    "independent_toy_reference_covariance_audit": {
+      "replicates": 5000,
+      "reported_bias": 0.000033,
+      "standard_error_of_mean": 0.000259,
+      "mean_variance_estimate_over_empirical_variance": 0.983
+    },
+    "instrumented_standalone_target_budget": {
+      "requested": 64,
+      "pilot": 16,
+      "executed_target_forwards": 64
+    },
+    "all_zero_argmax_ties_checked": true,
+    "cuda_path_executed": false,
+    "cuda_qualification": "Optional CUDA code was reviewed, not executed in the available environment."
+  },
+  "practical_conclusions": [
+    "The demonstrated median gain is approximately twofold under a target-query metric.",
+    "The experiments do not establish a gain above the supplied task-only method's reported 2.5-4x efficiency.",
+    "Finish and assess the current 1024 at convergence before committing to 10000.",
+    "Use held-out entire training lineages, including exclusion of earlier same-seed snapshots, for confirmatory method selection.",
+    "Measure source-dictionary size curves and deployable target-budget performance before expanding the population.",
+    "Investigate functional boundary parameters and mechanism-specific probes rather than a neuron's index alone.",
+    "Population controls for last-input integrated error probabilities are a plausible next experiment, but their combined efficiency remains unmeasured."
+  ]
+}

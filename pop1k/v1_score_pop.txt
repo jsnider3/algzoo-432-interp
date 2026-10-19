@@ -1,0 +1,8 @@
+
+n=2^12, 16 scrambles; efficiency p(1-p)/(n cost Var) under full / incremental cost (>1 beats plain sampling); S-line cost 5.46 / 4.55 fwd, 6.9 pieces (median)
+  plain      median 1.23/1.23 (p10-p90 0.80-1.87 full)   max |bias|/SE 4.3
+  Sobol      median 1.81/1.81 (p10-p90 1.24-2.84 full)   max |bias|/SE 4.0
+  Sobol+x10  median 1.27/3.28 (p10-p90 0.77-1.99 full)   max |bias|/SE 2.4
+  S          median 0.67/0.81 (p10-p90 0.39-1.40 full)   max |bias|/SE 3.5
+  Sobol+S    median 1.25/1.51 (p10-p90 0.79-2.51 full)   max |bias|/SE 2.4
+  S-free Sobol+S median 1.38/1.68 (p10-p90 0.88-2.50 full)   max |bias|/SE 2.7
