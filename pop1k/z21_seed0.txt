@@ -1,0 +1,10 @@
+16 population networks (every 64th) + 6 zoo; MF4 accuracy by tensor Gauss-Jacobi outer rules, K = 64 S points per line
+  reference E[I0] at 2^22 sampled configurations: pop median 0.9117; SE about 0.014 points
+  order 1 (  1 outer nodes, about     9,300 forwards): error RMS 3.604 points (median +3.429)   sampling at that cost 0.284   zoo +2.357 +3.021 +3.548 +2.851 +3.720 +3.540
+  order 2 (  8 outer nodes, about    74,400 forwards): error RMS 1.272 points (median +1.218)   sampling at that cost 0.100   zoo +1.300 +1.250 +1.363 +1.418 +1.555 +1.358
+  order 3 ( 27 outer nodes, about   251,100 forwards): error RMS 0.182 points (median -0.056)   sampling at that cost 0.055   zoo -0.204 -0.062 -0.118 -0.239 -0.279 -0.153
+  order 4 ( 64 outer nodes, about   595,200 forwards): error RMS 0.216 points (median +0.170)   sampling at that cost 0.035   zoo +0.324 +0.146 +0.142 +0.359 +0.352 +0.186
+  order 5 (125 outer nodes, about 1,162,500 forwards): error RMS 0.060 points (median +0.048)   sampling at that cost 0.025   zoo +0.026 +0.050 +0.022 +0.061 +0.059 -0.013
+  order 6 (216 outer nodes, about 2,008,800 forwards): error RMS 0.054 points (median +0.051)   sampling at that cost 0.019   zoo +0.055 +0.027 +0.020 +0.114 +0.089 -0.020
+  order 7 (343 outer nodes, about 3,189,900 forwards): error RMS 0.076 points (median +0.066)   sampling at that cost 0.015   zoo +0.093 +0.017 +0.045 +0.086 +0.061 +0.030
+  order 8 (512 outer nodes, about 4,761,600 forwards): error RMS 0.055 points (median +0.048)   sampling at that cost 0.013   zoo +0.046 +0.028 +0.017 +0.100 +0.089 -0.014

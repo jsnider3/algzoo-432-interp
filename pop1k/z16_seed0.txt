@@ -1,0 +1,12 @@
+mean anchor; population networks; first-order sign errors 435991, ordinary draws 1048576
+ share of draws in which ...
+  no gate or rival differs (exactly additive)    sign errors 0.056   ordinary draws 0.390
+  some gate is flipped by >= 2 one-input runs    sign errors 0.644   ordinary draws 0.333
+  some gate flips only jointly                   sign errors 0.470   ordinary draws 0.243
+  some one-input flip is undone jointly          sign errors 0.775   ordinary draws 0.434
+  the winning rival differs                      sign errors 0.304   ordinary draws 0.117
+  shared flips only (no new gate, same rival)    sign errors 0.221   ordinary draws 0.164
+ among sign errors: truth right / model wrong share 0.573
+ first step with a shared flip (sign errors): [     0  88000  59409  36527  24388  19188  16039  13647  12456  11114 155223]
+ first step with a shared flip (ordinary)   : [     0  92744  79094  49128  33272  24323  20096  16991  17023  16179 699726]
+ number of neurons with a shared flip (sign errors): [155223 106418  59101  36977  25426  17538  12610   9082]

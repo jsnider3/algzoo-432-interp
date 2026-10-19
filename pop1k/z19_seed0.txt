@@ -1,0 +1,15 @@
+mean anchor; 64 population networks; gate flips counted per (draw, step, neuron)
+  role          neurons  single flips  shared flips  shared flips
+                           (ordinary)    (ordinary) (sign errors)
+  dead            0.000         0.000         0.000         0.000
+  always-on       0.411         0.300         0.342         0.320
+  event-ptr       0.027         0.041         0.006         0.004
+  late-ptr        0.008         0.017         0.009         0.008
+  max-det         0.054         0.034         0.005         0.010
+  late-marker     0.011         0.012         0.005         0.006
+  comparator      0.184         0.158         0.061         0.092
+  other           0.306         0.438         0.572         0.559
+  by phase (prefix / middle / late):
+    single_ord  0.544 / 0.271 / 0.185
+    shared_ord  0.384 / 0.332 / 0.285
+    shared_err  0.361 / 0.292 / 0.347

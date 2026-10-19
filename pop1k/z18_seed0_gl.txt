@@ -1,0 +1,95 @@
+64 population networks (every 16th) + 6 zoo; 4096 configurations, 128 draws each; q = 8 (Gauss-Legendre nodes); 1009 rows per configuration
+ pairs kept per configuration: PA 15.00, PA_beforeS 5.07, PA_gap1 3.00, PA_gap2 5.67, PA_beforeS_gap2 2.72
+  P1m  local MSE / p(1-p)                      pop median 0.0109 [p10 0.0068, p90 0.0173]  RMS 0.0123  zoo 0.0084 0.0123 0.0117 0.0148 0.0091 0.0165
+  PA   local MSE / p(1-p)                      pop median 0.0052 [p10 0.0034, p90 0.0079]  RMS 0.0061  zoo 0.0036 0.0062 0.0067 0.0070 0.0047 0.0057
+  PA_beforeS local MSE / p(1-p)                pop median 0.0061 [p10 0.0038, p90 0.0094]  RMS 0.0067  zoo 0.0041 0.0079 0.0077 0.0081 0.0047 0.0054
+  PA_gap1 local MSE / p(1-p)                   pop median 0.0046 [p10 0.0031, p90 0.0073]  RMS 0.0053  zoo 0.0039 0.0071 0.0052 0.0069 0.0038 0.0041
+  PA_gap2 local MSE / p(1-p)                   pop median 0.0030 [p10 0.0019, p90 0.0046]  RMS 0.0034  zoo 0.0020 0.0047 0.0033 0.0047 0.0028 0.0033
+  PA_beforeS_gap2 local MSE / p(1-p)           pop median 0.0043 [p10 0.0029, p90 0.0074]  RMS 0.0053  zoo 0.0031 0.0071 0.0056 0.0070 0.0036 0.0038
+  P1m  bias, points                            pop median -0.151 [p10 -0.304, p90 -0.062]  RMS +0.200  zoo -0.151 -0.253 -0.230 -0.204 -0.159 -0.204
+  PA   bias, points                            pop median +0.054 [p10 +0.005, p90 +0.127]  RMS +0.094  zoo +0.037 +0.022 -0.037 +0.084 +0.079 +0.047
+  PA_beforeS bias, points                      pop median -0.007 [p10 -0.095, p90 +0.076]  RMS +0.090  zoo -0.009 -0.073 -0.117 +0.032 +0.002 +0.031
+  PA_gap1 bias, points                         pop median -0.031 [p10 -0.116, p90 +0.047]  RMS +0.077  zoo -0.055 -0.108 -0.089 -0.031 -0.038 -0.006
+  PA_gap2 bias, points                         pop median +0.022 [p10 -0.024, p90 +0.087]  RMS +0.079  zoo -0.004 -0.005 +0.010 +0.040 -0.000 +0.050
+  PA_beforeS_gap2 bias, points                 pop median -0.020 [p10 -0.082, p90 +0.063]  RMS +0.089  zoo -0.033 -0.079 -0.075 -0.007 -0.012 +0.017
+  PA - P1m, points (noise-free)                pop median +0.205 [p10 +0.127, p90 +0.364]  RMS +0.266  zoo +0.189 +0.275 +0.192 +0.288 +0.238 +0.251
+  PA_beforeS - P1m, points (noise-free)        pop median +0.159 [p10 +0.063, p90 +0.301]  RMS +0.196  zoo +0.142 +0.180 +0.113 +0.236 +0.161 +0.235
+  PA_gap1 - P1m, points (noise-free)           pop median +0.119 [p10 +0.060, p90 +0.228]  RMS +0.158  zoo +0.096 +0.145 +0.141 +0.174 +0.121 +0.198
+  PA_gap2 - P1m, points (noise-free)           pop median +0.183 [p10 +0.104, p90 +0.330]  RMS +0.233  zoo +0.147 +0.248 +0.240 +0.244 +0.159 +0.253
+  PA_beforeS_gap2 - P1m, points (noise-free)   pop median +0.149 [p10 +0.078, p90 +0.286]  RMS +0.190  zoo +0.119 +0.174 +0.155 +0.197 +0.147 +0.221
+64 population networks (every 16th) + 6 zoo; 4096 configurations, 128 draws each; q = 12 (Gauss-Legendre nodes); 2233 rows per configuration
+ pairs kept per configuration: PA 15.00, PA_beforeS 5.07, PA_gap1 3.00, PA_gap2 5.67, PA_beforeS_gap2 2.72
+  P1m  local MSE / p(1-p)                      pop median 0.0106 [p10 0.0064, p90 0.0167]  RMS 0.0120  zoo 0.0088 0.0115 0.0113 0.0143 0.0088 0.0156
+  PA   local MSE / p(1-p)                      pop median 0.0051 [p10 0.0032, p90 0.0078]  RMS 0.0058  zoo 0.0035 0.0054 0.0060 0.0067 0.0045 0.0052
+  PA_beforeS local MSE / p(1-p)                pop median 0.0056 [p10 0.0037, p90 0.0087]  RMS 0.0064  zoo 0.0038 0.0069 0.0069 0.0072 0.0045 0.0050
+  PA_gap1 local MSE / p(1-p)                   pop median 0.0044 [p10 0.0030, p90 0.0074]  RMS 0.0051  zoo 0.0042 0.0068 0.0049 0.0068 0.0037 0.0038
+  PA_gap2 local MSE / p(1-p)                   pop median 0.0028 [p10 0.0018, p90 0.0043]  RMS 0.0031  zoo 0.0020 0.0044 0.0028 0.0044 0.0027 0.0030
+  PA_beforeS_gap2 local MSE / p(1-p)           pop median 0.0042 [p10 0.0027, p90 0.0070]  RMS 0.0051  zoo 0.0032 0.0065 0.0052 0.0063 0.0036 0.0035
+  P1m  bias, points                            pop median -0.161 [p10 -0.312, p90 -0.083]  RMS +0.206  zoo -0.153 -0.246 -0.240 -0.210 -0.164 -0.209
+  PA   bias, points                            pop median +0.054 [p10 +0.002, p90 +0.122]  RMS +0.085  zoo +0.048 +0.023 -0.031 +0.085 +0.076 +0.024
+  PA_beforeS bias, points                      pop median -0.009 [p10 -0.097, p90 +0.082]  RMS +0.086  zoo -0.004 -0.069 -0.121 +0.030 -0.002 +0.016
+  PA_gap1 bias, points                         pop median -0.037 [p10 -0.130, p90 +0.050]  RMS +0.078  zoo -0.059 -0.100 -0.099 -0.036 -0.045 -0.025
+  PA_gap2 bias, points                         pop median +0.021 [p10 -0.030, p90 +0.083]  RMS +0.071  zoo +0.005 -0.001 +0.011 +0.036 -0.001 +0.028
+  PA_beforeS_gap2 bias, points                 pop median -0.022 [p10 -0.082, p90 +0.076]  RMS +0.085  zoo -0.027 -0.074 -0.079 -0.010 -0.015 -0.002
+  PA - P1m, points (noise-free)                pop median +0.216 [p10 +0.132, p90 +0.375]  RMS +0.268  zoo +0.201 +0.270 +0.209 +0.295 +0.240 +0.233
+  PA_beforeS - P1m, points (noise-free)        pop median +0.160 [p10 +0.064, p90 +0.307]  RMS +0.198  zoo +0.149 +0.177 +0.119 +0.239 +0.162 +0.225
+  PA_gap1 - P1m, points (noise-free)           pop median +0.118 [p10 +0.066, p90 +0.233]  RMS +0.158  zoo +0.094 +0.146 +0.141 +0.174 +0.119 +0.184
+  PA_gap2 - P1m, points (noise-free)           pop median +0.184 [p10 +0.111, p90 +0.336]  RMS +0.235  zoo +0.158 +0.246 +0.251 +0.245 +0.163 +0.237
+  PA_beforeS_gap2 - P1m, points (noise-free)   pop median +0.149 [p10 +0.078, p90 +0.292]  RMS +0.192  zoo +0.126 +0.173 +0.161 +0.200 +0.149 +0.207
+64 population networks (every 16th) + 6 zoo; 4096 configurations, 128 draws each; q = 16 (Gauss-Legendre nodes); 3937 rows per configuration
+ pairs kept per configuration: PA 15.00, PA_beforeS 5.07, PA_gap1 3.00, PA_gap2 5.67, PA_beforeS_gap2 2.72
+  P1m  local MSE / p(1-p)                      pop median 0.0105 [p10 0.0064, p90 0.0170]  RMS 0.0119  zoo 0.0085 0.0115 0.0116 0.0141 0.0089 0.0153
+  PA   local MSE / p(1-p)                      pop median 0.0052 [p10 0.0032, p90 0.0076]  RMS 0.0057  zoo 0.0034 0.0051 0.0062 0.0066 0.0044 0.0051
+  PA_beforeS local MSE / p(1-p)                pop median 0.0055 [p10 0.0037, p90 0.0087]  RMS 0.0064  zoo 0.0037 0.0067 0.0071 0.0072 0.0044 0.0048
+  PA_gap1 local MSE / p(1-p)                   pop median 0.0044 [p10 0.0030, p90 0.0073]  RMS 0.0051  zoo 0.0040 0.0067 0.0050 0.0064 0.0038 0.0038
+  PA_gap2 local MSE / p(1-p)                   pop median 0.0028 [p10 0.0018, p90 0.0043]  RMS 0.0030  zoo 0.0020 0.0043 0.0029 0.0041 0.0024 0.0029
+  PA_beforeS_gap2 local MSE / p(1-p)           pop median 0.0041 [p10 0.0027, p90 0.0068]  RMS 0.0050  zoo 0.0032 0.0064 0.0053 0.0062 0.0033 0.0034
+  P1m  bias, points                            pop median -0.162 [p10 -0.315, p90 -0.086]  RMS +0.208  zoo -0.153 -0.248 -0.256 -0.217 -0.163 -0.213
+  PA   bias, points                            pop median +0.050 [p10 -0.000, p90 +0.120]  RMS +0.082  zoo +0.050 +0.016 -0.040 +0.073 +0.074 +0.032
+  PA_beforeS bias, points                      pop median -0.009 [p10 -0.097, p90 +0.080]  RMS +0.086  zoo -0.006 -0.073 -0.129 +0.018 -0.005 +0.020
+  PA_gap1 bias, points                         pop median -0.038 [p10 -0.127, p90 +0.049]  RMS +0.079  zoo -0.058 -0.108 -0.103 -0.042 -0.046 -0.025
+  PA_gap2 bias, points                         pop median +0.018 [p10 -0.031, p90 +0.071]  RMS +0.069  zoo +0.006 -0.009 +0.002 +0.031 -0.004 +0.030
+  PA_beforeS_gap2 bias, points                 pop median -0.025 [p10 -0.084, p90 +0.071]  RMS +0.086  zoo -0.030 -0.080 -0.086 -0.016 -0.019 +0.000
+  PA - P1m, points (noise-free)                pop median +0.221 [p10 +0.129, p90 +0.379]  RMS +0.267  zoo +0.203 +0.264 +0.217 +0.290 +0.237 +0.245
+  PA_beforeS - P1m, points (noise-free)        pop median +0.164 [p10 +0.066, p90 +0.310]  RMS +0.198  zoo +0.148 +0.175 +0.127 +0.235 +0.157 +0.233
+  PA_gap1 - P1m, points (noise-free)           pop median +0.117 [p10 +0.067, p90 +0.229]  RMS +0.158  zoo +0.095 +0.140 +0.153 +0.175 +0.117 +0.188
+  PA_gap2 - P1m, points (noise-free)           pop median +0.188 [p10 +0.114, p90 +0.336]  RMS +0.234  zoo +0.159 +0.239 +0.258 +0.248 +0.159 +0.242
+  PA_beforeS_gap2 - P1m, points (noise-free)   pop median +0.149 [p10 +0.080, p90 +0.288]  RMS +0.192  zoo +0.124 +0.168 +0.170 +0.201 +0.144 +0.213
+64 population networks (every 16th) + 6 zoo; 4096 configurations, 128 draws each; q = 4 (Gauss-Legendre nodes); 265 rows per configuration
+ pairs kept per configuration: PA 15.00, PA_beforeS 5.07, PA_gap1 3.00, PA_gap2 5.67, PA_beforeS_gap2 2.72
+  P1m  local MSE / p(1-p)                      pop median 0.0140 [p10 0.0086, p90 0.0219]  RMS 0.0154  zoo 0.0116 0.0174 0.0175 0.0187 0.0108 0.0220
+  PA   local MSE / p(1-p)                      pop median 0.0083 [p10 0.0061, p90 0.0136]  RMS 0.0099  zoo 0.0066 0.0109 0.0124 0.0127 0.0068 0.0098
+  PA_beforeS local MSE / p(1-p)                pop median 0.0085 [p10 0.0059, p90 0.0142]  RMS 0.0101  zoo 0.0064 0.0131 0.0119 0.0116 0.0068 0.0095
+  PA_gap1 local MSE / p(1-p)                   pop median 0.0069 [p10 0.0046, p90 0.0101]  RMS 0.0076  zoo 0.0064 0.0114 0.0092 0.0102 0.0053 0.0073
+  PA_gap2 local MSE / p(1-p)                   pop median 0.0054 [p10 0.0036, p90 0.0080]  RMS 0.0059  zoo 0.0049 0.0090 0.0074 0.0077 0.0039 0.0072
+  PA_beforeS_gap2 local MSE / p(1-p)           pop median 0.0070 [p10 0.0046, p90 0.0106]  RMS 0.0077  zoo 0.0059 0.0116 0.0098 0.0091 0.0048 0.0080
+  P1m  bias, points                            pop median -0.114 [p10 -0.245, p90 -0.008]  RMS +0.165  zoo -0.092 -0.133 -0.209 -0.166 -0.133 -0.132
+  PA   bias, points                            pop median +0.079 [p10 +0.007, p90 +0.199]  RMS +0.117  zoo +0.093 +0.063 -0.091 +0.123 +0.089 +0.054
+  PA_beforeS bias, points                      pop median +0.019 [p10 -0.071, p90 +0.138]  RMS +0.101  zoo +0.033 -0.018 -0.167 +0.072 +0.016 +0.072
+  PA_gap1 bias, points                         pop median -0.009 [p10 -0.075, p90 +0.114]  RMS +0.084  zoo -0.012 -0.005 -0.088 +0.008 -0.015 +0.044
+  PA_gap2 bias, points                         pop median +0.045 [p10 -0.002, p90 +0.151]  RMS +0.107  zoo +0.046 +0.082 -0.009 +0.081 +0.027 +0.074
+  PA_beforeS_gap2 bias, points                 pop median +0.008 [p10 -0.047, p90 +0.129]  RMS +0.102  zoo +0.011 +0.005 -0.098 +0.035 +0.014 +0.058
+  PA - P1m, points (noise-free)                pop median +0.196 [p10 +0.105, p90 +0.360]  RMS +0.246  zoo +0.185 +0.196 +0.118 +0.289 +0.222 +0.186
+  PA_beforeS - P1m, points (noise-free)        pop median +0.138 [p10 +0.037, p90 +0.282]  RMS +0.182  zoo +0.125 +0.115 +0.042 +0.237 +0.149 +0.204
+  PA_gap1 - P1m, points (noise-free)           pop median +0.122 [p10 +0.052, p90 +0.243]  RMS +0.154  zoo +0.080 +0.128 +0.121 +0.174 +0.118 +0.176
+  PA_gap2 - P1m, points (noise-free)           pop median +0.168 [p10 +0.096, p90 +0.314]  RMS +0.224  zoo +0.138 +0.215 +0.200 +0.246 +0.160 +0.206
+  PA_beforeS_gap2 - P1m, points (noise-free)   pop median +0.129 [p10 +0.062, p90 +0.273]  RMS +0.183  zoo +0.103 +0.137 +0.110 +0.201 +0.147 +0.190
+64 population networks (every 16th) + 6 zoo; 4096 configurations, 128 draws each; q = 6 (Gauss-Legendre nodes); 577 rows per configuration
+ pairs kept per configuration: PA 15.00, PA_beforeS 5.07, PA_gap1 3.00, PA_gap2 5.67, PA_beforeS_gap2 2.72
+  P1m  local MSE / p(1-p)                      pop median 0.0118 [p10 0.0071, p90 0.0182]  RMS 0.0127  zoo 0.0088 0.0129 0.0131 0.0147 0.0096 0.0167
+  PA   local MSE / p(1-p)                      pop median 0.0060 [p10 0.0038, p90 0.0090]  RMS 0.0069  zoo 0.0045 0.0064 0.0079 0.0075 0.0053 0.0056
+  PA_beforeS local MSE / p(1-p)                pop median 0.0066 [p10 0.0043, p90 0.0109]  RMS 0.0075  zoo 0.0047 0.0084 0.0088 0.0078 0.0055 0.0054
+  PA_gap1 local MSE / p(1-p)                   pop median 0.0052 [p10 0.0034, p90 0.0079]  RMS 0.0058  zoo 0.0041 0.0079 0.0062 0.0069 0.0045 0.0044
+  PA_gap2 local MSE / p(1-p)                   pop median 0.0035 [p10 0.0023, p90 0.0052]  RMS 0.0039  zoo 0.0028 0.0055 0.0046 0.0047 0.0031 0.0037
+  PA_beforeS_gap2 local MSE / p(1-p)           pop median 0.0049 [p10 0.0032, p90 0.0082]  RMS 0.0058  zoo 0.0039 0.0079 0.0067 0.0067 0.0041 0.0042
+  P1m  bias, points                            pop median -0.145 [p10 -0.291, p90 -0.028]  RMS +0.187  zoo -0.132 -0.231 -0.234 -0.209 -0.148 -0.213
+  PA   bias, points                            pop median +0.062 [p10 +0.005, p90 +0.161]  RMS +0.100  zoo +0.068 +0.035 -0.038 +0.078 +0.083 +0.048
+  PA_beforeS bias, points                      pop median -0.000 [p10 -0.086, p90 +0.121]  RMS +0.095  zoo +0.017 -0.062 -0.114 +0.023 +0.002 +0.033
+  PA_gap1 bias, points                         pop median -0.023 [p10 -0.115, p90 +0.075]  RMS +0.078  zoo -0.029 -0.093 -0.082 -0.031 -0.031 -0.009
+  PA_gap2 bias, points                         pop median +0.029 [p10 -0.019, p90 +0.109]  RMS +0.084  zoo +0.033 +0.002 +0.007 +0.042 +0.014 +0.044
+  PA_beforeS_gap2 bias, points                 pop median -0.010 [p10 -0.076, p90 +0.111]  RMS +0.092  zoo -0.001 -0.072 -0.076 -0.005 -0.002 +0.012
+  PA - P1m, points (noise-free)                pop median +0.214 [p10 +0.124, p90 +0.352]  RMS +0.257  zoo +0.200 +0.265 +0.196 +0.287 +0.231 +0.261
+  PA_beforeS - P1m, points (noise-free)        pop median +0.149 [p10 +0.064, p90 +0.291]  RMS +0.188  zoo +0.149 +0.168 +0.120 +0.232 +0.150 +0.246
+  PA_gap1 - P1m, points (noise-free)           pop median +0.120 [p10 +0.065, p90 +0.222]  RMS +0.153  zoo +0.103 +0.138 +0.152 +0.178 +0.117 +0.204
+  PA_gap2 - P1m, points (noise-free)           pop median +0.182 [p10 +0.098, p90 +0.329]  RMS +0.225  zoo +0.165 +0.233 +0.241 +0.251 +0.162 +0.258
+  PA_beforeS_gap2 - P1m, points (noise-free)   pop median +0.148 [p10 +0.073, p90 +0.278]  RMS +0.182  zoo +0.131 +0.159 +0.158 +0.204 +0.146 +0.225

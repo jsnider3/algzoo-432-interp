@@ -1,0 +1,14 @@
+16 population networks (every 64th) + 6 zoo; homogeneous MF4 accuracy by n x n outer rules, K = 128 theta points
+  reference at 2^22 sampled inputs: pop median 0.9126
+  order 1 (  1 outer nodes, about     9,300 forwards): error RMS 5.333 points (median +5.134)   sampling at that cost 0.282   zoo +3.406 +4.744 +5.611 +4.055 +5.145 +6.307
+  order 2 (  4 outer nodes, about    37,200 forwards): error RMS 2.720 points (median +2.856)   sampling at that cost 0.141   zoo +2.259 +2.330 +2.604 +2.587 +3.137 +2.283
+  order 3 (  9 outer nodes, about    83,700 forwards): error RMS 2.808 points (median -2.594)   sampling at that cost 0.094   zoo -1.952 -2.324 -2.894 -2.261 -2.715 -2.759
+  order 4 ( 16 outer nodes, about   148,800 forwards): error RMS 0.677 points (median -0.458)   sampling at that cost 0.071   zoo +0.130 -0.237 -0.475 -0.042 -0.115 -0.453
+  order 5 ( 25 outer nodes, about   232,500 forwards): error RMS 0.221 points (median +0.183)   sampling at that cost 0.056   zoo +0.198 +0.149 +0.138 +0.112 +0.288 +0.030
+  order 6 ( 36 outer nodes, about   334,800 forwards): error RMS 0.337 points (median +0.303)   sampling at that cost 0.047   zoo +0.410 +0.188 +0.420 +0.380 +0.446 +0.098
+  order 7 ( 49 outer nodes, about   455,700 forwards): error RMS 0.116 points (median +0.083)   sampling at that cost 0.040   zoo +0.171 +0.025 +0.131 +0.172 +0.242 -0.037
+  order 8 ( 64 outer nodes, about   595,200 forwards): error RMS 0.459 points (median +0.448)   sampling at that cost 0.035   zoo +0.470 +0.390 +0.463 +0.492 +0.596 +0.308
+  order 9 ( 81 outer nodes, about   753,300 forwards): error RMS 0.349 points (median +0.324)   sampling at that cost 0.031   zoo +0.365 +0.285 +0.375 +0.415 +0.515 +0.205
+  order 10 (100 outer nodes, about   930,000 forwards): error RMS 0.079 points (median +0.014)   sampling at that cost 0.028   zoo +0.095 -0.026 +0.057 +0.097 +0.145 -0.045
+  order 11 (121 outer nodes, about 1,125,300 forwards): error RMS 0.133 points (median +0.094)   sampling at that cost 0.026   zoo +0.180 +0.089 +0.123 +0.193 +0.261 -0.021
+  order 12 (144 outer nodes, about 1,339,200 forwards): error RMS 0.279 points (median +0.257)   sampling at that cost 0.024   zoo +0.305 +0.231 +0.289 +0.345 +0.433 +0.126

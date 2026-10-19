@@ -1,0 +1,11 @@
+16 population networks (every 64th) + 6 zoo; per-arrangement MF4 anchor accuracy, order-5 outer rule, K = 128
+  SD of a_pi across arrangements: pop median 8.05 points
+  variance share explained by (M, S) positions (90 classes)            pop median 0.281  zoo 0.293 0.229 0.326 0.126 0.340 0.276
+  variance share explained by + order of R, Q relative to S and M      pop median 0.410  zoo 0.435 0.357 0.406 0.268 0.519 0.361
+  error of the total when each (M, S) class keeps only a fixed subset of its 56 (R, Q) placements (points):
+    R, Q at the two earliest free positions                                         90 arrangements: RMS 1.289 (median +0.309)   order-5 cost    20,759, sampling there 0.190
+    R, Q at the two latest free positions                                           90 arrangements: RMS 2.133 (median -1.310)   order-5 cost    20,759, sampling there 0.190
+    R, Q in the middle                                                              90 arrangements: RMS 1.197 (median +0.398)   order-5 cost    20,759, sampling there 0.190
+    4 placements: R, Q each early or late                                          360 arrangements: RMS 0.917 (median -0.608)   order-5 cost    83,036, sampling there 0.095
+    8 placements: (f0,f7),(f7,f0),(f2,f5),(f5,f2),(f1,f3),(f3,f1),(f4,f6),(f6,f4)   720 arrangements: RMS 0.265 (median +0.035)   order-5 cost   166,071, sampling there 0.067
+    14 placements: every 4th of the 56                                            1260 arrangements: RMS 0.300 (median +0.084)   order-5 cost   290,625, sampling there 0.051

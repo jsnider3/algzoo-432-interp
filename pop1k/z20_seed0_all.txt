@@ -1,0 +1,4 @@
+1024 population networks (all) + 6 zoo; 2^17 configurations x 16 lower-input draws; points
+  mid16      bias mean -0.015  median -0.011  SD 0.057  RMS 0.059  noise 0.027  noise-subtracted RMS 0.052  zoo +0.011 -0.007 -0.130 -0.031 +0.002 -0.017
+  gl8        bias mean -0.040  median -0.035  SD 0.058  RMS 0.071  noise 0.027  noise-subtracted RMS 0.065  zoo +0.002 -0.046 -0.178 -0.053 -0.022 -0.040
+  raw_mid16  bias mean +0.136  median +0.117  SD 0.101  RMS 0.169  noise 0.055  noise-subtracted RMS 0.160  zoo +0.063 +0.128 +0.034 +0.070 +0.172 +0.150

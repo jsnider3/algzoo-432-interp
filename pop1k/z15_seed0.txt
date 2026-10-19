@@ -1,0 +1,13 @@
+64 population networks (every 16th) + 6 zoo; 8192 top-4 configurations x 64 lower-input draws; anchor at the mean
+  accuracy on these draws                                  pop median 0.9247 [p10 0.8703, p90 0.9597]  zoo 0.9532 0.9125 0.8823 0.9494 0.9335 0.8915
+  first order in the margin, exact: bias (points)          pop median -0.183 [p10 -0.300, p90 -0.093]  zoo -0.145 -0.240 -0.282 -0.229 -0.091 -0.263
+    truth correct, model wrong (% of draws)                pop median 0.669 [p10 0.392, p90 1.223]  zoo 0.347 0.815 1.267 0.583 0.504 0.950
+    truth wrong, model correct (% of draws)                pop median 0.499 [p10 0.245, p90 1.019]  zoo 0.203 0.575 0.985 0.354 0.413 0.687
+  second order in the margin: bias (points)                pop median -0.075 [p10 -0.159, p90 -0.043]  zoo -0.034 -0.056 -0.165 -0.073 -0.058 -0.073
+    truth correct, model wrong (% of draws)                pop median 0.297 [p10 0.153, p90 0.607]  zoo 0.125 0.285 0.608 0.259 0.248 0.355
+    truth wrong, model correct (% of draws)                pop median 0.213 [p10 0.097, p90 0.450]  zoo 0.091 0.229 0.443 0.186 0.191 0.282
+    share of first-order sign errors fixed by second order pop median 0.902 [p10 0.882, p90 0.925]  zoo 0.930 0.890 0.885 0.909 0.909 0.904
+    new sign errors made by second order (% of draws)      pop median 0.403 [p10 0.201, p90 0.787]  zoo 0.178 0.360 0.793 0.360 0.356 0.480
+  residual m - m1: mean                                    pop median +0.0038 [p10 -0.0091, p90 +0.0175]  zoo -0.0142 +0.0079 +0.0070 -0.0002 -0.0251 +0.0080
+  residual m - m1: RMS                                     pop median 0.6096 [p10 0.4577, p90 0.7487]  zoo 0.7648 0.7610 0.7512 0.7315 0.5164 0.6735
+  residual m - m2: mean |.|                                pop median 0.0766 [p10 0.0434, p90 0.1276]  zoo 0.0792 0.0755 0.1209 0.0991 0.0636 0.0809

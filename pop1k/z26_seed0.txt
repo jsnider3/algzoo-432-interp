@@ -1,0 +1,5 @@
+16 population networks (every 64th) + 6 zoo; 40 arrangements, 2^15 value draws each (lower inputs at mu(Q))
+  distinct activation patterns seen    pop median 457 [p10 163, p90 693]  zoo 714 289 374 875 564 220
+  mass of the most common pattern      pop median 0.199 [p10 0.133, p90 0.351]  zoo 0.159 0.173 0.259 0.105 0.201 0.240
+  mass of the 10 most common           pop median 0.665 [p10 0.503, p90 0.815]  zoo 0.535 0.633 0.690 0.476 0.633 0.722
+  mass of the 100 most common          pop median 0.953 [p10 0.897, p90 0.992]  zoo 0.896 0.963 0.962 0.867 0.932 0.978

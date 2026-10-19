@@ -279,3 +279,53 @@ z13 (8,192 configurations x 256 lower-input draws; every 16th network + zoo) giv
 Reversals cover 2.0% of configurations (p(c) ≈ 0.55 there) and carry 65% of P̂'s local error, so P̂'s ~0 integrated bias is a cancellation. The margin-additive model is locally 12x better and continuous across the boundary, but it is biased −0.09/−0.13/−0.15 points at q = 8/12/16 (negative in 61/64 networks). z14: per-rival additivity is worse, at −0.42. The source of the margin bias is open; pair terms in the margin would be the next test.
 
 Fixed: lines.trace_line ties now follow the lowest-index argmax rule; z11 exact mode raises on overflow.
+
+## The margin model's bias (z15-z19; 2026-10-19)
+
+- z15 (draw by draw, exact one-input effects): first order in the margin is −0.18 (p10 −0.30, p90 −0.09).
+  - Sign errors: 0.67% of draws false-wrong, 0.50% false-right.
+  - The residual is mean-zero and 39% of draws are exactly additive, but it opposes large Σd.
+  - The median anchor gives the same, −0.179.
+  - Second order at the draws: −0.075.
+- z16: shared gate flips (≥2 one-input runs) carry 79% of the net bias; rival change 52%; neither 5%.
+- z19: shared flips sit in clock-like "other" and always-on neurons (88% vs 72% of neurons), not in comparators or pointers. Pair-interaction energy is 62% at gaps 1–2 and 64% in pairs both before S.
+- z17: sampled first-order ANOVA (K = 32 common backgrounds) gives +0.06. K < pool without common backgrounds is just noise.
+- z18: second-order cut terms projected onto one-input functions keep the exact convolution.
+  - All pairs over-correct (+0.05).
+  - Pairs ≤ 2 apart are best: held out +0.02, noise-subtracted RMS 0.042 (dev 0.073), local MSE 0.003·p(1−p).
+  - The clamped indicator model on the same footing: local 0.12. Its RMS is barely resolved, because its per-network noise is 0.15–0.20.
+  - All 1,024 networks (2,048 configurations): pairs ≤ 2 apart +0.026, RMS 0.048; indicator −0.044, RMS 0.03 (0–0.05). So the two are comparable in total; the margin model's gain is local only.
+  - Gauss–Legendre nodes in the CDF converge by q ≈ 6–8; midpoints had not converged by q = 16 (that was z13's "bias grows with q").
+  - Cost about 240 (q = 6) to 410 (q = 8) rows per configuration.
+
+## The top-4 integral, measured (z20-z23; 2026-10-19)
+
+- z20 resolves the clamped indicator model's total (256 networks, 2^18 configurations, noise 0.019).
+  - q=16 midpoints: −0.019 mean, RMS 0.053.
+  - GL8: −0.044, RMS 0.067.
+  - Unclamped: +0.125, RMS 0.144.
+  - On all 1,024 networks (2^17 configurations, noise 0.027): q=16 midpoints −0.015 / RMS 0.052; GL8 −0.040 / RMS 0.065; unclamped +0.136 / RMS 0.160.
+  - So the indicator and pair-margin models are comparable in total, at about 0.05.
+- z21: the MF4 anchor integral E[I0] by a tensor Gauss–Jacobi outer rule in CDF coordinates, brute-force S grid, all 5,040 arrangements. Cost is taken as about 9,300 forwards per node (ChatGPT's exact-S tree).
+  - K=64, orders 1–4: RMS 3.6 / 1.27 / 0.18 / 0.22 against sampling's 0.28 / 0.10 / 0.055 / 0.035.
+  - K=256, orders 4/5/6: RMS 0.18 / 0.039 / 0.030 against sampling's 0.035 / 0.025 / 0.019. The K=64 floor near +0.05 was the S grid.
+- z23: homogeneous coordinates (scale out, 2-D outer, θ arcs) converge erratically: 5.3, 2.7, 2.8, 0.68, 0.22, 0.34, 0.12, 0.46, 0.35, 0.079, 0.13, 0.28 at orders 1–12. The kinks come from the θ domain splitting where u3 < −R. No gain.
+- z22: the lower-input penalty is not boundary-local. Of the first-order margin model's −0.54 points, −0.36 (68%) sits on S-lines where the anchor never changes its answer.
+  - The two-term (mean shift + smearing) formula has the wrong sign (+0.78), because crossings sit at near-ties at the line ends.
+  - Freezing the law at crossings recovers only −0.19.
+- The correction inside the enumeration costs about 5,040 × 4 S-points × 240 rows ≈ 4.8M forwards per outer node. The only decomposable version (unclamped) is biased +0.14 (all 1,024; +0.125 on every 4th).
+- z21 at K=512 with a 2^26 reference: order 6 0.031 (sampling 0.019), order 7 0.032 (0.015), order 8 0.026 (0.013). The error falls more slowly than sampling's, so the MSE ratio rises from 2.4 to 4–4.5 beyond 2M.
+- z24: per-arrangement anchor accuracy has SD 8 points across arrangements.
+  - (M, S) positions explain 28% of its variance, or 41% with the R/Q order relations.
+  - Additive in the 4 positions: 18%; all pairwise position interactions: 48%.
+  - Fixed R/Q-placement subsets are 4–10× sampling's RMS at the reduced cost.
+- z25 (closed form, one exact linear logit map per activation pattern, patterns taken at K grid points per arrangement):
+
+  | K | build cost (forwards) | coverage | error, nearest map | error, exact where covered | sampling at that cost |
+  |---|---|---|---|---|---|
+  | 1 | 5k | 17% | 2.7 | 2.7 | 0.37 |
+  | 16 | 81k | 50% | 1.2 | 0.83 | 0.093 |
+  | 81 | 408k | 67% | 1.0 | 0.48 | 0.041 |
+  | 256 | 1.3M | 76% | 0.76 | 0.33 | 0.023 |
+
+- z26: an arrangement's value space holds a median of 460 linear regions (160–700). The top 1 / 10 / 100 patterns carry 20% / 67% / 95% of the mass.
