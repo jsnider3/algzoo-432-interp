@@ -1,5 +1,30 @@
-16 population networks (every 64th) + 6 zoo; 40 arrangements, 2^15 value draws each (lower inputs at mu(Q))
-  distinct activation patterns seen    pop median 457 [p10 163, p90 693]  zoo 714 289 374 875 564 220
-  mass of the most common pattern      pop median 0.199 [p10 0.133, p90 0.351]  zoo 0.159 0.173 0.259 0.105 0.201 0.240
-  mass of the 10 most common           pop median 0.665 [p10 0.503, p90 0.815]  zoo 0.535 0.633 0.690 0.476 0.633 0.722
-  mass of the 100 most common          pop median 0.953 [p10 0.897, p90 0.992]  zoo 0.896 0.963 0.962 0.867 0.932 0.978
+16 population networks (every 64th) + 6 zoo; 40 arrangements, 2^16 value draws each (lower inputs at mu(Q))
+  distinct activation patterns seen    pop median 560 [p10 192, p90 871]  zoo 904 339 461 1123 705 258
+  mass of the most common pattern      pop median 0.199 [p10 0.132, p90 0.350]  zoo 0.158 0.173 0.259 0.105 0.201 0.241
+  mass of the 10 most common           pop median 0.664 [p10 0.502, p90 0.815]  zoo 0.534 0.633 0.690 0.475 0.633 0.722
+  mass of the 100 most common          pop median 0.953 [p10 0.896, p90 0.992]  zoo 0.896 0.963 0.962 0.867 0.931 0.978
+  coverage by the K most common patterns (seen mass; Good-Turing unseen mass subtracted below):
+    K =     1: pop median 0.1990 [p10 0.1317, p90 0.3502]
+    K =     3: pop median 0.3933 [p10 0.2784, p90 0.5958]
+    K =    10: pop median 0.6633 [p10 0.4998, p90 0.8144]
+    K =    30: pop median 0.8485 [p10 0.7177, p90 0.9366]
+    K =   100: pop median 0.9501 [p10 0.8927, p90 0.9914]
+    K =   300: pop median 0.9870 [p10 0.9702, p90 0.9988]
+    K =  1000: pop median 0.9971 [p10 0.9932, p90 0.9993]
+  Good-Turing estimate of mass in patterns never seen: pop median 0.0023
+  oracle closed form, guaranteed (error <= uncovered mass):
+    K =     1: build     5,040 forwards, error <= 80.103 points; sampling at that cost 0.373
+    K =     3: build    15,120 forwards, error <= 60.671 points; sampling at that cost 0.215
+    K =    10: build    50,400 forwards, error <= 33.667 points; sampling at that cost 0.118
+    K =    30: build   151,200 forwards, error <= 15.146 points; sampling at that cost 0.068
+    K =   100: build   504,000 forwards, error <= 4.989 points; sampling at that cost 0.037
+    K =   300: build 1,512,000 forwards, error <= 1.299 points; sampling at that cost 0.022
+    K =  1000: build 5,040,000 forwards, error <= 0.291 points; sampling at that cost 0.012
+  oracle closed form, with z25's fallback error rate (1.4% of uncovered mass):
+    K =     1: build     5,040 forwards, error <= 1.121 points; sampling at that cost 0.373
+    K =     3: build    15,120 forwards, error <= 0.849 points; sampling at that cost 0.215
+    K =    10: build    50,400 forwards, error <= 0.471 points; sampling at that cost 0.118
+    K =    30: build   151,200 forwards, error <= 0.212 points; sampling at that cost 0.068
+    K =   100: build   504,000 forwards, error <= 0.070 points; sampling at that cost 0.037
+    K =   300: build 1,512,000 forwards, error <= 0.018 points; sampling at that cost 0.022
+    K =  1000: build 5,040,000 forwards, error <= 0.004 points; sampling at that cost 0.012

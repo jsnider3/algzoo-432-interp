@@ -1,0 +1,6 @@
+16 population networks (every 64th) + 6 zoo; homogeneous MF4 accuracy, outer domain split into 9 smooth pieces, n x n Gauss-Legendre per piece, K = 256 theta points per arc; reference 2^24 sampled inputs (SE about 0.007 points)
+  order 4 ( 144 outer nodes, about  1,339,200 forwards): error RMS 0.176 points (median -0.171)   sampling at that cost 0.024   zoo -0.145 -0.205 -0.180 -0.224 -0.247 -0.213
+  order 5 ( 225 outer nodes, about  2,092,500 forwards): error RMS 0.041 points (median -0.007)   sampling at that cost 0.019   zoo -0.027 -0.035 +0.012 -0.015 -0.001 -0.045
+  order 6 ( 324 outer nodes, about  3,013,200 forwards): error RMS 0.052 points (median +0.021)   sampling at that cost 0.016   zoo -0.014 -0.004 +0.037 -0.004 +0.003 +0.028
+  order 7 ( 441 outer nodes, about  4,101,300 forwards): error RMS 0.035 points (median +0.022)   sampling at that cost 0.013   zoo -0.017 +0.036 +0.041 +0.026 +0.054 +0.033
+  error ~ nodes^-0.19 over the last three orders (sampling: nodes^-0.50)

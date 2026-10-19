@@ -329,3 +329,9 @@ Fixed: lines.trace_line ties now follow the lowest-index argmax rule; z11 exact 
   | 256 | 1.3M | 76% | 0.76 | 0.33 | 0.023 |
 
 - z26: an arrangement's value space holds a median of 460 linear regions (160–700). The top 1 / 10 / 100 patterns carry 20% / 67% / 95% of the mass.
+- z26 rerun at 2^16 draws: 560 patterns seen (median), 460 at 2^15.
+  - Coverage by the top K = 1 / 10 / 30 / 100 / 300 / 1000 patterns: 20% / 66% / 85% / 95% / 98.7% / 99.7%; Good–Turing unseen mass 0.23%.
+  - Oracle closed form with z25's 1.4% fallback rate: 0.47 at 50k forwards (sampling 0.12), 0.21 at 151k (0.068), parity near K = 300 (1.5M).
+- z21 rate: from order 5 to 8, error falls as nodes^−0.25, so the MSE ratio rises 2.5 → 4.6.
+- z28: Smolyak sparse grids of the same rules give 0.83 / 0.32 / 0.38 / 0.46 at levels 5–8 (260k–4M). They do not converge.
+- z27 (homogeneous, 9 smooth pieces): with 64 θ-points per arc, orders 4–7 give 0.145 / 0.045 / 0.076 / 0.067 (θ floor). With 256 points per arc: 0.176 / 0.041 / 0.052 / 0.035 (rate nodes^−0.19). No better than the CDF tensor rule.

@@ -1,0 +1,8 @@
+16 population networks (every 64th) + 6 zoo; MF4 anchor accuracy by Smolyak sparse grids of Gauss-Jacobi rules, K = 256; reference 2^26
+  level  3 (   1 distinct outer nodes, about      9,300 forwards): error RMS 3.567 points (median +3.389)   sampling at that cost 0.284
+  level  4 (   7 distinct outer nodes, about     65,100 forwards): error RMS 1.796 points (median +1.683)   sampling at that cost 0.107
+  level  5 (  28 distinct outer nodes, about    260,400 forwards): error RMS 0.829 points (median +0.708)   sampling at that cost 0.054
+  level  6 (  83 distinct outer nodes, about    771,900 forwards): error RMS 0.320 points (median -0.019)   sampling at that cost 0.031
+  level  7 ( 203 distinct outer nodes, about  1,887,900 forwards): error RMS 0.380 points (median -0.141)   sampling at that cost 0.020
+  level  8 ( 434 distinct outer nodes, about  4,036,200 forwards): error RMS 0.457 points (median +0.206)   sampling at that cost 0.014
+  error ~ nodes^0.22 over the last three levels (sampling: nodes^-0.50)
