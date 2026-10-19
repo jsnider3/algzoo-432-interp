@@ -8,7 +8,7 @@ and project the whole model onto one-input terms (ANOVA), which keeps P(m > 0) a
   h_j(a) = d_j(a) + sum_{pairs (j,l)} E_l D_jl(a, .) + sum_{triples (j,k,l)} E_{k,l} T_jkl(a, ., .)
 Scored against each configuration's conditional accuracy (nin draws) on 2^lc configurations, so that per-network noise
 is about 0.007 points.  q = 6 Gauss-Legendre nodes in the CDF variable.  Every 16th population network + the zoo, or
---holdout (every 16th from 8).  Usage: python z32.py [log2 configurations, default 17] [nin, default 64] [--holdout]
+--holdout (every 16th from 8).  Usage: python z32.py [log2 configurations, default 17] [nin, default 64] [span, default 2] [--holdout]
 """
 import sys, itertools, numpy as np, torch as th
 from batch_train import forward, target
@@ -16,14 +16,14 @@ from z2 import load
 from z10 import mu_below
 from seeds_clocks import load as zload
 args=[a for a in sys.argv[1:] if not a.startswith('--')]; hold='--holdout' in sys.argv
-dev='cuda'; lc=int(args[0]) if len(args)>0 else 17; nin=int(args[1]) if len(args)>1 else 64; q=6
+dev='cuda'; lc=int(args[0]) if len(args)>0 else 17; nin=int(args[1]) if len(args)>1 else 64; q=6; SPAN=int(args[2]) if len(args)>2 else 2
 P,_=load('pop1k/seed0.npz'); P=[w[8 if hold else 0::16] for w in P]
 Z=[zload(n) for n in ["weights.npz"]+[f"weights_seed{i}.npz" for i in range(5)]]
 Wz=[th.tensor(np.stack([z[i] for z in Z]),dtype=th.float32) for i in range(3)]
 W=[th.cat([a,b]).to(dev) for a,b in zip(P,Wz)]; N=W[0].shape[0]; pop=slice(0,N-6)
 ug,wg=np.polynomial.legendre.leggauss(q); U=th.tensor((ug+1)/2,dtype=th.float32,device=dev); w=th.tensor(wg/2,dtype=th.float32,device=dev)
 w2=(w[:,None]*w[None,:]).flatten(); w3=(w[:,None,None]*w[None,:,None]*w[None,None,:])
-PAIRS=list(itertools.combinations(range(6),2)); TRI=list(itertools.combinations(range(6),3)); TS=4      # triple slots per configuration
+PAIRS=list(itertools.combinations(range(6),2)); TRI=list(itertools.combinations(range(6),3)); TS={2:4,3:10}.get(SPAN,20)      # triple slots per configuration
 def margin(L,y):
     yy=y[None,:,None,None].expand(*L.shape[:-1],1)
     return (L.gather(-1,yy)-L.scatter(-1,yy,-1e30).max(-1,keepdim=True).values)[...,0]
@@ -51,7 +51,7 @@ with th.no_grad():
             r=base[:,None].repeat(1,q*q,1); r.scatter_(-1,lp[:,None,j:j+1].expand(b,q*q,1),na); r.scatter_(-1,lp[:,None,l:l+1].expand(b,q*q,1),nb); rows.append(r)
         # triple slots: triples whose positions span at most 2 (sorted positions consecutive), up to TS per configuration
         span=th.stack([lp[:,list(t)].max(1).values-lp[:,list(t)].min(1).values for t in TRI],1)          # (b, 20)
-        okt=span<=2; slot=th.full((b,TS),-1,dtype=th.long,device=dev)
+        okt=span<=SPAN; slot=th.full((b,TS),-1,dtype=th.long,device=dev)
         for s_ in range(b):
             idx=th.nonzero(okt[s_])[:,0][:TS]; slot[s_,:len(idx)]=idx
         ntri+=float((slot>=0).sum())
@@ -95,9 +95,9 @@ with th.no_grad():
             e=(out[k]-p).double(); S1[k]+=e.sum(1); S2[k]+=(e*e).sum(1)
 n=len(x)
 print(f"{N-6} population networks (every 16th{' from 8, held out' if hold else ''}) + 6 zoo; 2^{lc} configurations x {nin} draws; q = {q} Gauss-Legendre;"
-      f" {ntri/n:.2f} adjacent triples per configuration; points")
+      f" {ntri/n:.2f} triples spanning <= {SPAN} positions per configuration; points")
 for k in keys:
     bb=(S1[k]/n).cpu().numpy(); se2=((S2[k]/n).cpu().numpy()-bb**2)/n; bp=100*bb[pop]
     print(f"  {k:8s} bias mean {bp.mean():+.4f}  median {np.median(bp):+.4f}  RMS {np.sqrt((bp**2).mean()):.4f}  noise {100*np.sqrt(se2[pop].mean()):.4f}"
           f"  noise-subtracted RMS {np.sqrt(max(0,(bp**2).mean()-1e4*se2[pop].mean())):.4f}  zoo "+" ".join(f"{100*v:+.3f}" for v in bb[-6:]))
-np.savez(f"pop1k/seed0_z32{'_holdout' if hold else ''}.npz",**{k:(S1[k]/n).cpu().numpy() for k in keys},**{k+'_m2':(S2[k]/n).cpu().numpy() for k in keys},n=n)
+np.savez(f"pop1k/seed0_z32{'_span'+str(SPAN) if SPAN!=2 else ''}{'_holdout' if hold else ''}.npz",**{k:(S1[k]/n).cpu().numpy() for k in keys},**{k+'_m2':(S2[k]/n).cpu().numpy() for k in keys},n=n)

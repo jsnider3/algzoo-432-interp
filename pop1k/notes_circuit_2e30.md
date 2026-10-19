@@ -353,3 +353,5 @@ Fixed: lines.trace_line ties now follow the lowest-index argmax rule; z11 exact 
 - z37 (other k): MF2 anchor bias 5.7 RMS, its integral 0.03 at 1.7k (sampling 0.67). MF3 anchor bias 0.68 RMS, its integral 0.127 / 0.074 / 0.073 at 24k / 55k / 98k (sampling 0.178 / 0.119 / 0.089), so it beats sampling for the anchor. The correction is the obstacle: per configuration, inside 720 arrangements, at least about 41k per node; first-order MF3 model 0.156.
 - z38 (end-to-end deterministic estimate, MF3 outer × first-order correction at every configuration): 5.8 / 3.2 / 2.1 / 0.63 / 0.34 points at 84k / 334k / 668k / 3.0M / 10.5M forwards. Sampling gives 0.096 / 0.048 / 0.034 / 0.016 / 0.009.
 - z39 (event decomposition): the event anchor (records exact, neither at the mean below the running 2nd max) is +1.93 mean, RMS 2.04. Keeping the last 1 / 2 neither exact gives RMS 1.41 / 1.00. Worse than MF4 (0.42).
+- z32 span 3 (3.7 triples per configuration, 2^16 × 64, noise 0.010): PT_gap2 0.074, PT_gap1 0.101, PA_gap1 0.075, PA_gap2 0.077. That is at the ideal additive floor (0.074).
+- z33: tensor orders 1–2 (9k, 74k) are its only settings under 10^5 forwards.
