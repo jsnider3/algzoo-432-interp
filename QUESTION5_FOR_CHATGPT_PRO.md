@@ -69,7 +69,7 @@ ARC's estimation challenge: they would "consider it a major research breakthroug
 
 1. **Is there a decomposition, or a description of the network, in which both the integral and the correction are cheap?**
    - Every route above either integrates the anchor better than sampling but leaves a large, expensive correction (MF2, MF3), or is accurate but costs 10–160× sampling's MSE in 10³–10⁵ forwards (MF4). The crux is a deterministic way to do the correction: the 6–8-dimensional, discontinuous, non-local integral over the smaller inputs.
-   - Candidates we have not tried include the integral in ages and event values (each step's relative rank is uniform and independent, so the event sequence has a product law), or along the trajectory of the running max and 2nd max.
+   - One alternative frame has been tried: decomposing by events (new max, new 2nd max, neither), whose sequence has a product law. Its mean-field anchor (records exact, each "neither" input at its mean below the running 2nd max) is 1.9 points off the truth (RMS 2.0), far worse than the top-4 anchor (`z39`). Integrals along the trajectory of the running max and 2nd max, or in ages, are untried.
    - If you propose one, please measure it the way the table above does: error across networks against √(mean p(1−p)/C) at the method's own cost.
 2. **If you think no deterministic method of the allowed kind can match sampling here, give the strongest argument you can.**
    - For example, a lower bound on the cost of any weight-based method in terms of something measurable, such as the number of linear regions with non-negligible mass, or the non-locality of the lower-input correction.
