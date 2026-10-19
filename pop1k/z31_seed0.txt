@@ -1,0 +1,5 @@
+16 population networks (every 64th) + 6 zoo; MF4 anchor accuracy by adaptive box refinement, K = 256; reference 2^26
+    144 nodes (15 boxes, about  1,339,200 forwards): error RMS 1.463 points (median -1.398)   sampling at that cost 0.024
+    216 nodes (22 boxes, about  2,008,800 forwards): error RMS 1.625 points (median -1.636)   sampling at that cost 0.019
+    432 nodes (43 boxes, about  4,017,600 forwards): error RMS 0.368 points (median -0.356)   sampling at that cost 0.014
+    864 nodes (85 boxes, about  8,035,200 forwards): error RMS 0.063 points (median +0.033)   sampling at that cost 0.010

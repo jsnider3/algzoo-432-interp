@@ -335,3 +335,13 @@ Fixed: lines.trace_line ties now follow the lowest-index argmax rule; z11 exact 
 - z21 rate: from order 5 to 8, error falls as nodes^−0.25, so the MSE ratio rises 2.5 → 4.6.
 - z28: Smolyak sparse grids of the same rules give 0.83 / 0.32 / 0.38 / 0.46 at levels 5–8 (260k–4M). They do not converge.
 - z27 (homogeneous, 9 smooth pieces): with 64 θ-points per arc, orders 4–7 give 0.145 / 0.045 / 0.076 / 0.067 (θ floor). With 256 points per arc: 0.176 / 0.041 / 0.052 / 0.035 (rate nodes^−0.19). No better than the CDF tensor rule.
+- z29 (clock-state simplification): no neuron is always on (the most active is on 94.8% of steps, median).
+  - Making the 7 neurons active ≥ 90% linear: bias 2.3 RMS, 1.8% of answers change, 232 regions per arrangement left.
+  - Making 10 neurons (≥ 80%) linear: bias 16 points, 104 regions.
+- z30 (measured oracle closed form, 100 arrangements, noise removed):
+  - Greedy selection: K = 3 / 10 / 30 / 100 give 0.33 / 0.17 / 0.11 / 0.04, against sampling's 0.215 / 0.118 / 0.068 / 0.037.
+  - Selection by mass: 1.22 / 0.93 / 0.54 / 0.21.
+  - The oracle costs about 80M forwards per network, and this is the anchor only.
+- z31 (adaptive boxes, GL2 + centre): 1.46 / 1.63 / 0.37 points at 144 / 216 / 432 nodes, far worse than the tensor rule.
+- z21 orders 9–10 (K = 256): 0.022 at 6.8M (4.0× MSE) and 0.011 at 9.3M (1.5×). The order 5–8 'rate −0.25' was a plateau; over orders 5–10 the rate is −0.50, the same as sampling's. So the anchor reaches parity near 10^7, but there the lower-input models (0.05) are far above sampling's 0.009.
+- z31 at 864 nodes: 0.063 (sampling 0.010).

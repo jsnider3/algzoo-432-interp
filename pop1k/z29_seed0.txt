@@ -1,0 +1,6 @@
+16 population networks (every 64th) + 6 zoo; MF4 anchor at 2^20 sampled configurations; neurons active on >= f of steps made linear
+  f = 1.00: neurons made linear 0 (pop median; most active neuron's rate 0.948); bias RMS 0.000 points (median +0.000); answers changed 0.00%; regions per arrangement 358, top 10 0.664, top 100 0.954
+  f = 0.99: neurons made linear 0 (pop median; most active neuron's rate 0.948); bias RMS 0.000 points (median +0.000); answers changed 0.00%; regions per arrangement 360, top 10 0.664, top 100 0.954
+  f = 0.95: neurons made linear 0 (pop median; most active neuron's rate 0.948); bias RMS 0.000 points (median +0.000); answers changed 0.00%; regions per arrangement 360, top 10 0.665, top 100 0.954
+  f = 0.90: neurons made linear 7 (pop median; most active neuron's rate 0.948); bias RMS 2.273 points (median -0.205); answers changed 1.77%; regions per arrangement 232, top 10 0.717, top 100 0.975
+  f = 0.80: neurons made linear 10 (pop median; most active neuron's rate 0.948); bias RMS 15.989 points (median -4.077); answers changed 9.07%; regions per arrangement 104, top 10 0.858, top 100 0.998

@@ -1,0 +1,13 @@
+16 population networks (every 64th) + 6 zoo; 100 arrangements, 2^14 training and 2^14 held-out draws each; oracle-chosen patterns
+  patterns chosen by mass:
+    K =    1: build     5,040 forwards; disagreement 6.87%; net error RMS 2.078 (arrangement noise 0.832, removed 1.904) points; sampling at that cost 0.373
+    K =    3: build    15,120 forwards; disagreement 4.98%; net error RMS 1.303 (arrangement noise 0.463, removed 1.218) points; sampling at that cost 0.215
+    K =   10: build    50,400 forwards; disagreement 3.02%; net error RMS 0.961 (arrangement noise 0.241, removed 0.930) points; sampling at that cost 0.118
+    K =   30: build   151,200 forwards; disagreement 1.47%; net error RMS 0.555 (arrangement noise 0.113, removed 0.544) points; sampling at that cost 0.068
+    K =  100: build   504,000 forwards; disagreement 0.51%; net error RMS 0.214 (arrangement noise 0.035, removed 0.211) points; sampling at that cost 0.037
+  patterns chosen by greedy:
+    K =    1: build     5,040 forwards; disagreement 3.60%; net error RMS 1.326 (arrangement noise 0.282, removed 1.296) points; sampling at that cost 0.373
+    K =    3: build    15,120 forwards; disagreement 2.10%; net error RMS 0.350 (arrangement noise 0.130, removed 0.325) points; sampling at that cost 0.215
+    K =   10: build    50,400 forwards; disagreement 1.29%; net error RMS 0.187 (arrangement noise 0.078, removed 0.170) points; sampling at that cost 0.118
+    K =   30: build   151,200 forwards; disagreement 0.91%; net error RMS 0.125 (arrangement noise 0.062, removed 0.109) points; sampling at that cost 0.068
+    K =  100: build   504,000 forwards; disagreement 0.63%; net error RMS 0.036 (arrangement noise 0.042, removed 0.000) points; sampling at that cost 0.037
