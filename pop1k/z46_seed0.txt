@@ -1,0 +1,11 @@
+inputs built: 2s
+networks 0-206: 10s
+networks 206-412: 18s
+networks 412-618: 25s
+networks 618-824: 33s
+networks 824-1030: 40s
+46080 cells x 2 feature rows (92160 forwards per network); targets 32 draws per cell
+check, mean cell target vs reference accuracy (a stratified sampling estimate): RMS 0.0335 mean +0.0185 points
+  uncalibrated mean I4 (box-centre MF4 rule): RMS 3.941 mean +3.858
+  uncalibrated mean I3 (box-centre MF3 rule): RMS 3.829 mean +3.741
+exit 0

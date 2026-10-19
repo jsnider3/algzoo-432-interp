@@ -1,0 +1,13 @@
+  fold 0 done
+  fold 1 done
+  fold 2 done
+  fold 3 done
+  fold 4 done
+  fold 5 done
+  fold 6 done
+  fold 7 done
+720 cells, 1440 forwards per network; sampling RMS 0.6927; weights on; seed 48; 8-fold cross-fitting
+  all 1,024   RMS 0.6178 mean +0.0869  MSE/sampling 0.80
+  dev 0::16   RMS 0.6946 mean +0.1045  MSE/sampling 1.01
+  held 8::16  RMS 0.5398 mean +0.1267  MSE/sampling 0.61
+  zoo errors +1.898 +0.678 -0.122 -0.014 +0.285 +0.940  RMS 0.917  MSE/sampling 1.75

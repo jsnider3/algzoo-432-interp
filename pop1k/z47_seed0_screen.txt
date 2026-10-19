@@ -1,0 +1,12 @@
+  step 0/1890 loss 0.7038 0s
+  step 315/1890 loss 0.1815 3s
+  step 630/1890 loss 0.1778 6s
+  step 945/1890 loss 0.1779 9s
+  step 1260/1890 loss 0.1771 12s
+  step 1575/1890 loss 0.1761 15s
+46080 cells, 645120 forwards per network; sampling RMS at that cost 0.0327 points; context on; screening per cell; 3 epochs
+  oracle: mean sampled cell accuracy (check)   dev RMS 0.0339 mean +0.0207  held RMS 0.0334 mean +0.0231  MSE/sampling    1.1  zoo -0.005 +0.043 -0.030 +0.034 +0.041 +0.017
+  uncalibrated mean I4 over cells              dev RMS 3.9922 mean +3.9052  held RMS 3.9787 mean +3.9087  MSE/sampling 14828.4  zoo +3.050 +3.963 +4.381 +3.565 +3.874 +4.183
+  network-level calibration of mean I4, I3     dev RMS 0.6435 mean -0.0280  held RMS 0.5509 mean +0.0552  MSE/sampling  335.0  zoo -0.463 -0.203 +0.253 -0.144 +0.182 -0.201
+  learned cell model                           dev RMS 0.2419 mean +0.0011  held RMS 0.2245 mean -0.0079  MSE/sampling   50.8  zoo +0.257 -0.449 +0.187 -0.048 -0.054 -0.019
+  learned cell model, then network-level calibration dev RMS 0.2429 mean -0.0250  held RMS 0.2281 mean -0.0334  MSE/sampling   51.8  zoo +0.237 -0.477 +0.156 -0.070 -0.078 -0.049

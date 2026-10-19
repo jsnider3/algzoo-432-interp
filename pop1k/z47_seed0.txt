@@ -1,0 +1,18 @@
+  step 0/1890 loss 0.7189 0s
+  step 315/1890 loss 0.1850 3s
+  step 630/1890 loss 0.1809 6s
+  step 945/1890 loss 0.1814 8s
+  step 1260/1890 loss 0.1805 11s
+  step 1575/1890 loss 0.1799 14s
+46080 cells, 92160 forwards per network; sampling RMS at that cost 0.0866 points; context on; screening none; 3 epochs
+  oracle: mean sampled cell accuracy (check)   dev RMS 0.0339 mean +0.0207  held RMS 0.0334 mean +0.0231  MSE/sampling    0.2  zoo -0.005 +0.043 -0.030 +0.034 +0.041 +0.017
+  uncalibrated mean I4 over cells              dev RMS 3.9922 mean +3.9052  held RMS 3.9787 mean +3.9087  MSE/sampling 2118.3  zoo +3.050 +3.963 +4.381 +3.565 +3.874 +4.183
+  network-level calibration of mean I4, I3     dev RMS 0.6435 mean -0.0280  held RMS 0.5509 mean +0.0552  MSE/sampling   47.9  zoo -0.463 -0.203 +0.253 -0.144 +0.182 -0.201
+  learned cell model                           dev RMS 0.3347 mean -0.0135  held RMS 0.3625 mean +0.0274  MSE/sampling   16.2  zoo +0.296 -0.832 +0.202 -0.169 -0.202 +0.025
+  learned cell model, then network-level calibration dev RMS 0.3356 mean -0.0274  held RMS 0.3622 mean +0.0140  MSE/sampling   16.3  zoo +0.286 -0.848 +0.185 -0.181 -0.215 +0.008
+  where the learned model's network-level error sits (test networks; residual g - sampled cell accuracy; points):
+    total residual RMS 0.3485 (includes cell-target noise)
+    by box (bits Q,R,M half: 0 low, 1 high): 000 0.091  100 0.099  010 0.069  110 0.092  001 0.069  101 0.045  011 0.028  111 0.031
+    by S slice (low to high): 0.157 0.083 0.048 0.035 0.033 0.035 0.043 0.119
+    by anchor bits (I4,I3) = (0,0) (0,1) (1,0) (1,1): 0.051 0.029 0.029 0.350   mean -0.001 -0.005 +0.001 -0.010
+    largest (M pos, S pos) classes: (9,8) 0.035  (9,0) 0.034  (9,7) 0.030  (9,1) 0.029  (9,2) 0.029  (9,3) 0.029  (9,6) 0.027  (9,4) 0.026

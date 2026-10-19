@@ -1,0 +1,5 @@
+t= 3: dev median distinct histories 476, unseen test mass 0.21%; zoo unseen % 0.3 0.2 0.2 0.2 0.2 0.2
+t= 5: dev median distinct histories 8798, unseen test mass 10.02%; zoo unseen % 7.4 7.7 8.2 11.6 8.4 8.4
+t= 7: dev median distinct histories 29765, unseen test mass 41.25%; zoo unseen % 38.8 25.1 25.3 46.2 33.7 23.1
+t= 9: dev median distinct histories 48555, unseen test mass 71.72%; zoo unseen % 68.0 45.1 47.5 73.9 66.6 39.5
+t=10: dev median distinct histories 54520, unseen test mass 81.91%; zoo unseen % 77.3 53.8 59.3 81.6 79.6 46.8

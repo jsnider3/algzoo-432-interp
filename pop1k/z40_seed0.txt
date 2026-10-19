@@ -1,0 +1,11 @@
+1024 population networks + 6 zoo, 2^20 shared inputs (seed 20261019); points
+  true accuracy: mean 92.393, SD 3.434, percentiles 5/50/95 86.00 93.18 96.37; mean p(1-p) 0.06910; SE 0.0252
+  agreement with acc_2e20: RMS diff 0.0488
+  MF2 leakage (anchor - truth): mean +4.805  SD 2.136  RMS 5.259  SE per network 0.0252  zoo +3.051 +4.972 +6.358 +3.613 +4.246 +6.553
+  MF3 leakage (anchor - truth): mean +0.252  SD 0.511  RMS 0.569  SE per network 0.0217  zoo +0.004 +0.087 +1.379 -0.003 -0.245 -0.096
+  MF4 leakage (anchor - truth): mean +0.307  SD 0.286  RMS 0.420  SE per network 0.0174  zoo +0.157 +0.307 +0.749 +0.227 +0.092 +0.224
+  zoo true accuracy: mystery 0.95305 (0.0207)  seed0 0.90981 (0.0280)  seed1 0.88036 (0.0317)  seed2 0.94842 (0.0216)  seed3 0.93202 (0.0246)  seed4 0.88977 (0.0306)
+
+real	1m38.520s
+user	1m38.804s
+sys	0m0.724s

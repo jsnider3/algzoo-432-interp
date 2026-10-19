@@ -1,0 +1,2625 @@
+ROUND 6 — DETERMINISTIC MECHANISTIC ACCURACY ESTIMATION FOR THE ALGZOO RNN
+19 October 2026
+
+Finding
+=======
+
+I did not find sampling parity. A deterministic two-level rule substantially
+improves the matched z38 baseline: its interpolated-anchor version has about
+6.28 times lower MSE with 8.92% less counted work. The development-selected
+exact-S version has RMS error 0.225373 percentage points on development and
+0.249308 on held-out networks. Its held-out MSE is about 222 times sampling's
+under the declared arithmetic convention. Even the pure matrix-operation
+lower bound for this implementation gives a ratio of 219.893.
+
+The contribution is a reproducible improvement, a direct measurement of how
+much correction amortization can lose, negative tests of low-budget rules and
+a point/mean state recursion, and an explicit fixed-dimension lower bound for
+a restricted Boolean-oracle model. None establishes impossibility for methods
+with direct access to the 432 weights or for the average trained population.
+
+Evaluation protocol and cost interpretation
+==========================================
+
+Development: population indices 0,16,...,1008. Held out: 8,24,...,1016.
+Each has 64 networks. Every complete estimator also evaluates the six zoo
+models, in order mystery, seed0, seed1, seed2, seed3, seed4. The larger
+gate-history diagnostic uses eight development networks and the six zoo.
+All numerical errors are estimate minus pop1k/reference.npz, in percentage
+points. No new claimed score is over all 1,024 population members.
+
+Correction settings and the selected high-compute combination were recorded
+before held-out scoring in r6_results/correction_frozen.json. The held-out
+curves pair the same methods selected on development. They are not a separate
+held-out optimum. A later z38-combination exploratory check was confined to
+development and did not improve the frozen choice.
+
+Every estimator is deterministic on its own network's weights. Its nodes are
+Gauss-Jacobi/Gauss-Legendre nodes, exact line pieces, or fixed arrangement
+designs. There is no random or quasi-random estimator, accuracy regression,
+calibration, importance sampling, or sampled correction. Random inputs occur
+only in explicitly labeled diagnostics and verification.
+
+One forward equivalent is 2,880 multiply-adds. For a constant cost C, the
+sampling comparator in points is 100*sqrt(mean(p*(1-p))/C). When the measured
+line-trace cost C_i varies by network, I instead use
+100*sqrt(mean(p_i*(1-p_i)/C_i)). Mean C_i is shown on the horizontal axis.
+This is the matched per-network-budget comparison, which need not equal
+substitution of mean C_i into the constant-cost formula.
+
+There are three kinds of cost in this report:
+
+* Exact S-line anchors: the actual matrix/readout work counted by the supplied
+  lines.trace_line. Scalar root finding, sorting and normal CDF work are not
+  included. These are lower bounds for the implemented computation.
+* Prefix-shared interpolation and event propagation: actual dense recurrent
+  work plus an explicit scalar allowance, including 200 scalar equivalents
+  per interval for root/CDF processing. This is an arithmetic convention,
+  not a measured hardware upper bound.
+* Correction grids: every actually evaluated forward row, plus a declared
+  1% allowance for scalar processing. No hypothetical prefix speedup is used.
+
+An exact-anchor combination includes that 1% correction allowance, so its
+TOTAL reported count is an optimistic accounting estimate, not itself a
+proved lower bound. The final JSON also gives a separate pure-MAC lower
+bound, obtained by adding raw correction rows to exact-anchor MACs. For the
+selected rule, the development/held pure-MAC costs are 2,468,385.792 and
+2,474,720.588; sampling RMS upper bounds are 0.0172629 and 0.0168124 points;
+the corresponding MSE-ratio lower bounds are 170.442 and 219.893. These bound
+this implementation's work, not every possible optimized implementation.
+
+1. Short audit
+==============
+
+z21 and z37 calculate dense S grids but attach the cost of an optimized exact
+prefix-tree integrator absent from the archive. Their numerical integrals
+can be useful; their advertised speed is conditional on that implementation.
+At K=256, z21 actually evaluates 5,040*K rows per outer node versus its 9,300
+charge, a factor 138.7. z37's corresponding factor is 120.6. Also, the MF2
+path is curved because its smaller inputs change as mu(S); it cannot inherit
+an affine MF3 S-line cost merely by arrangement-count scaling.
+
+z18 has no factor-of-two error in its projected pair contribution. Its
+symmetric pair tensor and factor one half are consistent. At q=8, a genuine
+adjacent-pair implementation averages 241 forward rows, separation at most
+two averages 411 2/3 (range 241-625), and all 15 pairs cost 1,009. The script
+evaluates all pairs before masking, so those subset charges require actually
+omitting the unwanted rows. Its additive-margin convolution also performs
+weight-dependent threshold searches omitted from a forward-row-only count.
+
+z38's row count and sampling comparator are consistent. Its failure remains
+after the matched rerun reported below.
+
+The reference RMS standard error is 0.02643 points on development and
+0.02580 on held out. At 10^7 forwards, reference noise alone contributes a
+raw MSE/sampling ratio near 10^7/2^20=9.54. A close parity claim there needs
+a larger reference or an explicit reference-noise comparison. At the present
+0.25-point errors, that noise is about 1% of squared error and cannot explain
+the observed gap. Shared reference inputs correlate network errors, so the
+64 networks do not automatically give 64 independent noise observations.
+
+2. Arrangement amortization
+==========================
+
+I measured true-minus-anchor corrections using 256 independent draws in every
+one of the 5,040 MF4 arrangements: 1,290,240 inputs per network, each evaluated
+at truth, MF3 and MF4. The diagnostic therefore evaluates 3,870,720 forward
+rows per network, before its scalar analysis. These draws do not enter an
+estimator. Pooling seven appropriate MF4 strata supplies 1,792 draws for each
+MF3 arrangement. Measurement variances retain the stratification.
+
+After subtracting measurement variance, the median arrangement SD is 3.939
+points for true-minus-MF3 and 2.048 for true-minus-MF4. Network 10th-90th
+percentiles are 2.508-5.414 and 1.147-3.079. M,S positions explain median
+21.9% and 16.9% of that variance; adding relative rank order explains 45.3%
+and 34.9%. Thus the small fraction of total integrand variance attributed to
+arrangements does not imply correction means agree within 0.05-0.1 points.
+
+Noise-corrected RMS error of ideal subset averages versus all arrangements:
+
+  MF3, 1 R position/class, 90 arrangements:   0.582 points, measurement SE .052
+  MF3, 2 R positions/class, 180 arrangements: 0.281 points, measurement SE .035
+  MF3, 4 R positions/class, 360 arrangements: 0.228 points, measurement SE .020
+  MF4, 4 R,Q pairs/class, 360 arrangements:   0.266 points, measurement SE .058
+  MF4, 8 R,Q pairs/class, 720 arrangements:   0.110 points, measurement SE .040
+  MF4 arrangement coordinates, true-minus-MF3,
+        8 pairs/class, 720 arrangements:     0.186 points, measurement SE .049
+
+These are measurements granting exact value integration, not deployable
+accuracy estimators and not lower bounds on all arrangement designs. The
+0.110-point result does not resolve a sharp 0.100-point threshold.
+
+The eight balanced pairs, expressed as ranks among the eight free positions
+after fixing M and S, are (0,7),(7,0),(1,3),(3,1),(2,5),(5,2),(4,6),(6,4).
+Each free position appears once as R and once as Q. Full zoo deviations,
+their measurement errors, and per-network class results are in the JSON
+appendix and the result bundle.
+
+3. Two-level deterministic integration
+=====================================
+
+Let I_3 and I_4 denote correctness at their mean-field anchors. At an MF4
+configuration define E_j as the q-node integral with only smaller input j
+varied. The first-order indicator approximation is
+
+  F_4 = clip(I_4 + sum_j(E_j-I_4), 0, 1).
+
+The new estimator is
+
+  p_hat = Q_fine^MF3(I_3) + Q_coarse^MF4(F_4-I_3).
+
+The fine anchor is integrated over all 720 MF3 arrangements. In the selected
+version it uses a 6x6 Beta outer rule and exact Gaussian S-line integration.
+The preplanned companion uses the same outer rule with 32 S interpolation
+segments. Its logit interpolant is affine in physical S; correctness is
+integrated exactly for that interpolant. It is not an exact network trace.
+Its recurrent work is shared over identical input prefixes using a token DAG.
+
+The coarse correction uses the MF4 Beta coordinates, order two in each of
+three outer dimensions, eight conditional-CDF S midpoints, eight lower-input
+Gauss-Legendre nodes, and the eight balanced R,Q placements in every M,S
+class. Every configuration evaluates 49 F_4 rows and one separate I_3 row.
+The correction count is exactly
+
+  8 outer nodes * 8 S points * 720 arrangements * 50 rows = 2,304,000 rows.
+
+The declared correction charge is 2,327,040 after the 1% allowance. The
+anchor is added separately. No final clipping is needed for these estimates.
+
+The main table below provides all required statistics. The selected exact-S
+rule gives RMS .225373 development / .249308 held out; the companion gives
+.247840 / .247615. The direct z38 n3/K8/q8 baseline gives .621258 / .620461.
+The companion's MSE is 6.28 times smaller than z38's at 8.92% less declared
+cost; its MSE relative to sampling improves by roughly 6.9 times.
+
+To isolate integration of the correction, I also grant a free reference
+anchor. These are diagnostic advantages, not complete estimator scores:
+
+  MF3 n1/K8/q4/all720: 167,040 rows; RMS .455/.468 development/held.
+  MF3 n2/K16/q8/all720: 2,626,560 rows; RMS .360/.341.
+  MF4 n1/K8/q8/all5040 minus MF4: 2,016,000 rows; RMS .162/.137.
+
+The last row charges the extra I_3 diagnostic row actually evaluated. The
+15.7-fold MF3 cost increase produces little improvement. Pure MF4 correction
+is easier, but even it misses the requested 0.1-point partial result. The
+full correction-statistic tables include means, sampling comparators, MSE
+ratios and six zoo errors.
+
+4. Distribution propagation and error geometry
+==============================================
+
+For the time recursion I implemented a deterministic point/mean component
+law. It carries the full 16-dimensional hidden vector, M,S and both positions.
+The max position is needed for a future handoff. At every represented state
+the three event branches have their exact Gaussian probabilities. Branches
+use either their exact truncated mean or a two-node conditional-CDF Gauss
+rule. Optional merging groups by positions and CDF bins of M,S, replacing the
+joint hidden vector by its weighted mean. The final input is integrated by
+an exact gate sweep, including changes in the true second-max target.
+
+At 200.6 counted forwards, the coarsest recursion has development/held RMS
+4.983/5.090, against sampling 1.911/1.865. Without merging, the one-node rule
+uses 18,394.9 forwards and still has RMS 5.256/5.057. Two nodes and eight
+value bins cost 3,199.8 with RMS 5.579/5.260. Keeping more components did not
+repair this closure. I stopped this implementation.
+
+This is not the proposed exact affine-component law. I did not complete a
+law that preserves every past-input dependency within an activation pattern.
+The results reject the implemented point/mean closure; they do not refute
+correlated affine mixtures or readout-aware merging.
+
+As a feasibility diagnostic, 65,536 iid inputs per network were divided into
+32,768 discovery and 32,768 independent coverage observations. On eight
+development networks, median observed complete gate histories grow from
+474 at time 3 to 7,774 at time 5, 20,980 at time 7, 38,936 at time 9 and
+46,867 at time 10. The median test mass in unseen histories at time 10 is
+68.84%; the top 1,024 discovery histories cover 12.76%. Keeping sixteen per
+age pair covers 6.77%, and sixteen per event history covers 8.83%.
+
+Fixing a gate pattern, the two true top positions and the predicted position
+gives a particular convex polyhedral error-cone partition. There are a median
+5,846 observed error fragments, yet 97.29% of independent test errors lie in
+fragments absent from discovery. For the zoo, the unseen error-fragment
+fractions are 97.52%,88.77%,86.83%,98.37%,98.38%,76.40%.
+
+These measured fragments are not maximal convex error pieces. The request to
+count all such maximal pieces needs a convention: even the union
+{x<=0} union {y<=0} has continuously many maximal convex subcones
+{a*x+b*y<=0}, a,b>0. A finite chosen partition, minimum convex cover or stated
+merging algorithm is a well-defined alternative. I did not integrate the
+full Gaussian masses of a merged error-cone cover, and do not assign the
+diagnostic a fictitious accuracy-estimator cost or score.
+
+5. The low-budget end and full curve
+====================================
+
+I evaluated six fixed MF2 product-Beta rules and six fixed MF3 prefix-shared
+interpolation rules, along with the event recursions. MF2 n1/q2 costs 95.8
+and has development/held RMS 7.770/7.413, against 2.765/2.699 for sampling.
+MF3 n1/K2 costs 683.1 and gives 2.484/2.251, against 1.036/1.011. MF3
+n2/K4 costs 5,448.7 and gives 1.174/1.232, against .367/.358. No measured
+low-budget rule reaches parity. Pure anchors eventually retain their
+mean-field bias even when their own integrals are accurate.
+
+The included plot and frontier table select only by development error and
+cost, then pair the held-out results. The measured range is about 48 to
+3 million forwards. The sampling comparator extends to 10^7, but no new
+algorithmic performance is extrapolated there. The original higher-cost
+z38 measurements remain in the supplied archive. Every tested fixed rule
+and all 72 preplanned anchor/correction combinations per split are retained.
+
+6. Restricted lower bound and limits of the supplied floor arguments
+===================================================================
+
+The full proof follows in the appendix. For Boolean membership queries only,
+consider one arbitrary polyhedral error cone in R^10 with Gaussian mass at
+most q*=(1-sqrt(1-4*.069))/2=.074559052276. Its number of facets is unbounded.
+Let G(r)=P[X_10 >= ||X_1:9||/r] and choose R=1.901649869866 with G(R)=q*.
+Any deterministic adaptive N-query algorithm has worst-case absolute error
+at least
+
+  L_N = (2/5)*(G(R)-G(R*cos((256/(175*N))^(1/8)))).
+
+This follows by constructing two indistinguishable inscribed polytopes in a
+projective cross-section of the cone. The cap-union argument leaves four
+fifths of directions with an unresolved radial shell. Half the resulting
+Gaussian-mass gap is unavoidable. The lower bound is asymptotic to
+.0397228583*N^(-1/4) in probability units, so worst-case MSE is Omega(N^-1/2).
+This is a lower bound, not a matching rate theorem. Sampling MSE on the
+same class is at most .069/N. At 10^4,10^5,10^6,10^7 queries the lower
+bounds are .391097,.221534,.125048,.070462 points. Whole label-only affine
+segment traces obey the same bound with N replaced by twice the number
+of segments. Logits, activation masks and region coefficients are excluded.
+
+A lower bound for a large class containing these RNNs does not lower-bound
+the smaller RNN family: the minimax inequality goes in the opposite direction.
+Nor does worst case imply the requested average over trained networks. The
+theorem is consequently an obstruction to conic Boolean-oracle quadrature,
+not a solution to the white-box impossibility question. No novelty claim
+relative to the volume-estimation literature is needed for its use here.
+
+Three narrower corrections are also useful:
+
+* z34's first-order ANOVA margin projection error is not a universal additive
+  accuracy floor. For iid Gaussian X,Y,Z let
+  m=|X+Y|-|X-Y|+2|Z|. Its additive L2 projection is m_A=2|Z|, whose sign
+  probability is one; m has sign probability 5/6. The different additive
+  margin X+sqrt(3)|Z| has exactly that 5/6 sign probability. This analytic
+  counterexample is continuous, positively homogeneous and piecewise linear.
+  It does not supply an allowed calibrated estimator for these trained RNNs.
+  A scheme converging to that particular ANOVA projection does inherit its
+  sign-probability bias if there is no atom at zero, as the appendix proves.
+* A certified unexplained mass u gives uncertainty interval [a,a+u] and
+  optimal worst-case radius u/2. It does not force actual error u/2 on a
+  known network. z26's tails are estimates, not certified masses, and its
+  pattern counts on the nonlinear MF4 surface are not convex-piece counts.
+* z22 establishes nonlocality for its margin proxy and finite S-grid test.
+  Omitting a known correction contribution gives exactly its signed integral
+  as truncation error. It does not turn the reported proxy contribution into
+  a lower bound on every estimator of actual RNN accuracy.
+
+7. Verdict and one next experiment
+==================================
+
+The requested breakthrough is still open. The new two-level computation
+improves z38 materially and generalizes to the held-out cohort, but its cost
+is roughly two orders of magnitude too high for its error. Neither the
+0.1-point/10-times-anchor partial result nor a general white-box impossibility
+theorem was obtained. Exact correlated state propagation and integration of
+a compact merged error-cone cover remain untested possibilities here.
+
+The single next experiment I would prioritize is exact S-integration of the
+two-level correction. At each MF4 outer configuration, trace correctness
+intervals for the 49 first-order streams and the MF3 baseline. Take the union
+of every interval endpoint. Between adjacent endpoints the complete clamped
+correction is constant, so its S-integral is an exact sum of Gaussian CDF
+differences. Clipping must happen on each common interval; separately
+integrating the streams and clipping their averages is a different model.
+This includes off-boundary correction on constant-anchor lines and isolates
+the unresolved error from the eight-point S grid.
+
+I would freeze eight development networks and the same outer/arrangement
+rule for a pilot. Continue only if exact S either reduces correction RMS by
+at least 0.10 points or reduces charged correction work by at least fourfold.
+Then use the requested partial-success gate: held-out correction RMS <=0.10
+points at fully counted correction cost <=10 times the anchor. Full sampling
+parity remains a separate end-to-end gate. This is a proposed experiment,
+not a claimed achievable speedup or a prediction that it will bridge 220x.
+
+Reproduction and evidence
+=========================
+
+The result bundle includes the original extracted repository, the new Python
+modules, every result array and JSON, the frozen manifest, detailed audit,
+geometry and correction notes, full lower-bound proof, and reproduction
+commands. The original archive's files are preserved; R6_REPRODUCE.txt lists
+which r6 files belong to this round. In particular, the archive's old r6.sh
+is unrelated. New code is also printed below so it survives loss of file
+links. CPU NumPy/SciPy is sufficient; exact line tracing additionally uses
+Numba. The provided lines.py is reused and is already in the user's archive.
+
+Validation covers prefix sharing versus dense logits, exact final-input
+integration versus the supplied line tracer, its lowest-index all-zero tie,
+and forced-overflow retries. The S-line overflow recovery charges discarded
+attempts. The report postprocessor now replaces NPZ files atomically. One
+incomplete diagnostic archive was regenerated, reproducing all its earlier
+saved metrics exactly; all delivered NPZ archives pass their integrity check.
+
+Background sources, used only for the general research framing:
+ARC, Competing with sampling (18 November 2025),
+https://www.alignment.org/blog/competing-with-sampling/
+Bárány and Füredi, Computing the Volume is Difficult (1987),
+https://www.math.cmu.edu/~af1p/Teaching/MCC17/Papers/BF.pdf
+The explicit fixed-dimension constants and counterexamples in this report
+are justified by the self-contained proof appendix, not attributed to those
+sources.
+
+
+
+Numerical appendix A: complete estimator results
+================================================
+
+All errors and sampling RMS values are percentage points. Exact-anchor pure MAC bounds are separate fields in the JSON. The main count for an exact-anchor combination is an optimistic accounting estimate including the 1% correction allowance.
+| Method | Split | Counted forwards | RMS | Mean | Sampling RMS | MSE ratio | Zoo errors |
+|---|---|---:|---:|---:|---:|---:|---|
+| low:1::1: | dev | 47.908 | 8.091598 | +7.478263 | 3.910670 | 4.281 | +4.69522, +9.01947, +11.96365, +5.15776, +6.79760, +11.02314 |
+| low:1::2: | dev | 95.806 | 7.769549 | +7.210747 | 2.765422 | 7.893 | +4.69522, +9.01947, +10.19332, +5.15776, +6.79760, +11.02314 |
+| low:2::2: | dev | 191.611 | 7.826408 | +7.256970 | 1.955448 | 16.019 | +4.65052, +8.97476, +9.78889, +5.15776, +6.08758, +11.02314 |
+| low:2::4: | dev | 383.200 | 6.944789 | +6.498411 | 1.382751 | 25.225 | +4.27056, +8.13742, +7.93983, +4.06372, +5.47157, +8.91870 |
+| low:3::4: | dev | 574.800 | 6.771170 | +6.307134 | 1.129011 | 35.969 | +4.04307, +7.67303, +8.61084, +4.31506, +5.83274, +9.28191 |
+| low:4::8: | dev | 1532.756 | 5.748027 | +5.328487 | 0.691385 | 69.119 | +3.33187, +5.25844, +6.60159, +3.91161, +4.87580, +6.68071 |
+| event:::1:1 | dev | 200.622 | 4.983206 | +4.275044 | 1.911029 | 6.800 | +2.04557, +6.28596, +7.40973, +3.62370, +3.64888, +6.16022 |
+| event:::1:2 | dev | 326.244 | 6.136563 | +5.728818 | 1.498598 | 16.768 | +3.37298, +7.01456, +8.36082, +4.13544, +4.96690, +8.71590 |
+| event:::1:4 | dev | 454.150 | 6.116520 | +5.716935 | 1.270156 | 23.190 | +3.38680, +6.82875, +8.48969, +4.19492, +4.92843, +8.67800 |
+| event:::1:8 | dev | 648.400 | 5.970577 | +5.585511 | 1.063005 | 31.547 | +3.35201, +6.76979, +8.20616, +4.17325, +4.78123, +8.39524 |
+| event:::1:0 | dev | 18394.911 | 5.256192 | +4.967688 | 0.199576 | 693.628 | +3.34546, +6.15289, +4.86593, +4.00253, +4.48077, +6.95217 |
+| event:::2:2 | dev | 713.067 | 5.604064 | +5.134479 | 1.013658 | 30.565 | +2.76456, +6.71554, +7.78251, +3.25363, +4.18594, +8.16469 |
+| event:::2:4 | dev | 1742.617 | 5.780833 | +5.351903 | 0.648419 | 79.482 | +2.96628, +6.55972, +8.18132, +3.54335, +4.26613, +8.08332 |
+| event:::2:8 | dev | 3199.839 | 5.579310 | +5.166568 | 0.478512 | 135.949 | +2.77664, +6.37955, +7.71317, +3.42197, +4.12030, +7.61780 |
+| anchors:1:1:: | dev | 343.633 | 8.934662 | -7.572366 | 1.460189 | 37.440 | -5.81928, -3.44644, -10.45494, -19.32819, -6.38177, -7.83959 |
+| anchors:1:2:: | dev | 683.144 | 2.484216 | +0.424068 | 1.035620 | 5.754 | +0.24224, +2.38687, +0.29384, -5.84707, +0.86330, +2.05290 |
+| anchors:2:4:: | dev | 5448.667 | 1.173910 | +0.204823 | 0.366701 | 10.248 | +0.11360, +1.14499, +0.97655, -2.79843, +0.10984, +0.81180 |
+| anchors:3:8:: | dev | 24481.900 | 0.820344 | -0.328529 | 0.172995 | 22.487 | -0.69395, -0.06704, +0.67374, -2.27482, -1.24501, -0.26504 |
+| anchors:4:16:: | dev | 86980.800 | 0.588373 | +0.152068 | 0.091779 | 41.097 | -0.05328, +0.17626, +1.06233, -0.70434, -0.22989, -0.15517 |
+| anchors:6:32:: | dev | 391265.200 | 0.571236 | +0.159690 | 0.043273 | 174.257 | -0.12693, +0.09573, +1.23685, -0.40364, -0.36154, -0.13268 |
+| exact_anchor:3::: | dev | 45574.970 | 0.665592 | +0.137092 | 0.135463 | 24.142 | -0.30097, -0.01702, +1.30447, -0.46874, -0.76929, -0.16000 |
+| exact_anchor:4::: | dev | 69278.809 | 0.667009 | +0.359735 | 0.108491 | 37.798 | +0.14708, +0.18069, +1.27081, +0.13655, -0.04491, -0.13040 |
+| exact_anchor:6::: | dev | 164385.792 | 0.603043 | +0.234207 | 0.070884 | 72.378 | -0.06229, +0.09321, +1.28753, -0.07977, -0.31666, -0.12787 |
+| anchors3:correction_k3_n1_K8_q4_keep1 | dev | 45570.700 | 1.396934 | -1.047143 | 0.126798 | 121.374 | -0.90531, -1.61599, -2.10720, -2.69451, -2.59168, +0.55321 |
+| anchors3:correction_k3_n1_K8_q4_keep2 | dev | 66659.500 | 1.111631 | -0.826156 | 0.104840 | 112.427 | -0.66226, -0.44300, -0.69560, -2.35031, -2.01648, -1.14673 |
+| anchors3:correction_k3_n1_K8_q4_keep4 | dev | 108837.100 | 0.922443 | -0.634017 | 0.082048 | 126.399 | -0.43505, -0.13574, -2.14792, -2.13747, -1.33413, -0.52172 |
+| anchors3:correction_k3_n1_K8_q4_keep8 | dev | 193192.300 | 0.973885 | -0.766585 | 0.061583 | 250.088 | -0.61470, -0.50676, -2.16228, -2.33485, -1.63379, -0.69458 |
+| anchors3:correction_k3_n2_K16_q8_keep1 | dev | 356085.100 | 1.541450 | -1.297770 | 0.045361 | 1154.781 | -1.68545, -1.45106, -2.58220, -2.88939, -1.54034, +0.39107 |
+| anchors3:correction_k3_n2_K16_q8_keep2 | dev | 687688.300 | 1.130746 | -0.920694 | 0.032641 | 1200.075 | -0.56210, +0.43163, -0.47301, -2.52242, -1.36555, -0.66503 |
+| anchors3:correction_k3_n2_K16_q8_keep4 | dev | 1350894.700 | 0.959249 | -0.709461 | 0.023289 | 1696.565 | -0.70368, -0.55893, -1.66078, -1.99506, -1.15929, -0.63573 |
+| anchors3:correction_k3_n2_K16_q8_keep8 | dev | 2677307.500 | 1.052580 | -0.873323 | 0.016543 | 4048.510 | -0.86824, -0.54417, -1.75131, -2.39535, -1.31940, -0.44572 |
+| anchors3:correction_k4_n1_K8_q8_keep4 | dev | 169921.900 | 0.825593 | -0.364668 | 0.065665 | 158.077 | -0.60441, +0.17735, -1.21171, -1.90086, -1.82081, +0.12234 |
+| anchors3:correction_k4_n1_K8_q8_keep8 | dev | 315361.900 | 0.797521 | -0.454900 | 0.048201 | 273.766 | -0.69040, +0.28169, -1.21552, -1.98161, -1.53482, -0.19607 |
+| anchors3:correction_k4_n1_K8_q8_keep56 | dev | 2060641.900 | 0.785818 | -0.465951 | 0.018856 | 1736.734 | -0.65570, -0.04296, -1.02925, -2.15169, -1.41654, -0.36807 |
+| anchors3:correction_k4_n2_K8_q8_keep8 | dev | 2351521.900 | 0.804778 | -0.507231 | 0.017652 | 2078.683 | -0.60834, +0.19257, -0.54459, -1.83459, -1.07739, +0.05413 |
+| anchors4:correction_k3_n1_K8_q4_keep1 | dev | 108069.600 | 0.920262 | -0.566546 | 0.082339 | 124.915 | -0.26464, -1.37269, -1.71861, -1.12403, -1.57657, +0.66308 |
+| anchors4:correction_k3_n1_K8_q4_keep2 | dev | 129158.400 | 0.745725 | -0.345559 | 0.075317 | 98.032 | -0.02158, -0.19970, -0.30701, -0.77983, -1.00137, -1.03686 |
+| anchors4:correction_k3_n1_K8_q4_keep4 | dev | 171336.000 | 0.601532 | -0.153420 | 0.065393 | 84.616 | +0.20562, +0.10756, -1.75933, -0.56699, -0.31901, -0.41185 |
+| anchors4:correction_k3_n1_K8_q4_keep8 | dev | 255691.200 | 0.527472 | -0.285989 | 0.053530 | 97.096 | +0.02597, -0.26346, -1.77369, -0.76437, -0.61867, -0.58471 |
+| anchors4:correction_k3_n2_K16_q8_keep1 | dev | 418584.000 | 1.022799 | -0.817173 | 0.041837 | 597.654 | -1.04478, -1.20776, -2.19361, -1.31891, -0.52523, +0.50094 |
+| anchors4:correction_k3_n2_K16_q8_keep2 | dev | 750187.200 | 0.625014 | -0.440097 | 0.031252 | 399.978 | +0.07857, +0.67493, -0.08442, -0.95194, -0.35044, -0.55516 |
+| anchors4:correction_k3_n2_K16_q8_keep4 | dev | 1413393.600 | 0.485587 | -0.228864 | 0.022768 | 454.866 | -0.06301, -0.31563, -1.27220, -0.42458, -0.14418, -0.52586 |
+| anchors4:correction_k3_n2_K16_q8_keep8 | dev | 2739806.400 | 0.498030 | -0.392726 | 0.016353 | 927.508 | -0.22757, -0.30087, -1.36273, -0.82487, -0.30429, -0.33584 |
+| anchors4:correction_k4_n1_K8_q8_keep4 | dev | 232420.800 | 0.544803 | +0.115929 | 0.056146 | 94.154 | +0.03627, +0.42066, -0.82312, -0.33038, -0.80570, +0.23221 |
+| anchors4:correction_k4_n1_K8_q8_keep8 | dev | 377860.800 | 0.438434 | +0.025697 | 0.044034 | 99.135 | -0.04973, +0.52499, -0.82694, -0.41113, -0.51971, -0.08620 |
+| anchors4:correction_k4_n1_K8_q8_keep56 | dev | 2123140.800 | 0.403648 | +0.014646 | 0.018577 | 472.141 | -0.01503, +0.20035, -0.64067, -0.58121, -0.40142, -0.25820 |
+| anchors4:correction_k4_n2_K8_q8_keep8 | dev | 2414020.800 | 0.341123 | -0.026634 | 0.017422 | 383.398 | +0.03233, +0.43587, -0.15600, -0.26411, -0.06228, +0.16400 |
+| anchors6:correction_k3_n1_K8_q4_keep1 | dev | 412354.000 | 0.899157 | -0.558924 | 0.042152 | 455.018 | -0.33828, -1.45322, -1.54409, -0.82333, -1.70822, +0.68558 |
+| anchors6:correction_k3_n1_K8_q4_keep2 | dev | 433442.800 | 0.733611 | -0.337937 | 0.041114 | 318.383 | -0.09523, -0.28023, -0.13249, -0.47913, -1.13302, -1.01437 |
+| anchors6:correction_k3_n1_K8_q4_keep4 | dev | 475620.400 | 0.558777 | -0.145798 | 0.039249 | 202.686 | +0.13198, +0.02703, -1.58480, -0.26628, -0.45066, -0.38936 |
+| anchors6:correction_k3_n1_K8_q4_keep8 | dev | 559975.600 | 0.488026 | -0.278366 | 0.036172 | 182.029 | -0.04767, -0.34399, -1.59916, -0.46367, -0.75032, -0.56222 |
+| anchors6:correction_k3_n2_K16_q8_keep1 | dev | 722868.400 | 1.005188 | -0.809551 | 0.031837 | 996.874 | -1.11842, -1.28829, -2.01908, -1.01821, -0.65688, +0.52344 |
+| anchors6:correction_k3_n2_K16_q8_keep2 | dev | 1054471.600 | 0.599112 | -0.432475 | 0.026360 | 516.581 | +0.00493, +0.59440, +0.09011, -0.65124, -0.48209, -0.53266 |
+| anchors6:correction_k3_n2_K16_q8_keep4 | dev | 1717678.000 | 0.428098 | -0.221242 | 0.020653 | 429.650 | -0.13666, -0.39616, -1.09767, -0.12387, -0.27583, -0.50337 |
+| anchors6:correction_k3_n2_K16_q8_keep8 | dev | 3044090.800 | 0.452935 | -0.385104 | 0.015514 | 852.344 | -0.30121, -0.38140, -1.18820, -0.52416, -0.43594, -0.31335 |
+| anchors6:correction_k4_n1_K8_q8_keep4 | dev | 536705.200 | 0.501146 | +0.123551 | 0.036948 | 183.971 | -0.03738, +0.34012, -0.64860, -0.02968, -0.93735, +0.25470 |
+| anchors6:correction_k4_n1_K8_q8_keep8 | dev | 682145.200 | 0.384157 | +0.033319 | 0.032773 | 137.398 | -0.12337, +0.44446, -0.65241, -0.11043, -0.65136, -0.06371 |
+| anchors6:correction_k4_n1_K8_q8_keep56 | dev | 2427425.200 | 0.341182 | +0.022268 | 0.017373 | 385.660 | -0.08867, +0.11981, -0.46614, -0.28051, -0.53307, -0.23571 |
+| anchors6:correction_k4_n2_K8_q8_keep8 | dev | 2718305.200 | 0.247840 | -0.019012 | 0.016418 | 227.891 | -0.04131, +0.35534, +0.01853, +0.03659, -0.19393, +0.18649 |
+| exact_anchor3:correction_k3_n1_K8_q4_keep1 | dev | 66663.770 | 0.976533 | -0.581522 | 0.108712 | 80.691 | -0.51233, -1.56598, -1.47647, -0.88843, -2.11597, +0.65825 |
+| exact_anchor3:correction_k3_n1_K8_q4_keep2 | dev | 87752.570 | 0.803035 | -0.360535 | 0.093637 | 73.548 | -0.26927, -0.39299, -0.06487, -0.54423, -1.54077, -1.04169 |
+| exact_anchor3:correction_k3_n1_K8_q4_keep4 | dev | 129930.170 | 0.590362 | -0.168396 | 0.076189 | 60.042 | -0.04206, -0.08572, -1.51718, -0.33138, -0.85841, -0.41668 |
+| exact_anchor3:correction_k3_n1_K8_q4_keep8 | dev | 214285.370 | 0.562429 | -0.300965 | 0.058932 | 91.083 | -0.22171, -0.45675, -1.53154, -0.52877, -1.15807, -0.58954 |
+| exact_anchor3:correction_k3_n2_K16_q8_keep1 | dev | 377178.170 | 1.076208 | -0.832149 | 0.044254 | 591.408 | -1.29246, -1.40104, -1.95146, -1.08331, -1.06463, +0.49611 |
+| exact_anchor3:correction_k3_n2_K16_q8_keep2 | dev | 708781.370 | 0.685965 | -0.455073 | 0.032217 | 453.338 | -0.16912, +0.48164, +0.15772, -0.71634, -0.88984, -0.55999 |
+| exact_anchor3:correction_k3_n2_K16_q8_keep4 | dev | 1371987.770 | 0.502918 | -0.243840 | 0.023133 | 472.650 | -0.31070, -0.50892, -1.03005, -0.18897, -0.68358, -0.53070 |
+| exact_anchor3:correction_k3_n2_K16_q8_keep8 | dev | 2698400.570 | 0.549035 | -0.407702 | 0.016486 | 1109.043 | -0.47526, -0.49416, -1.12058, -0.58926, -0.84369, -0.34068 |
+| exact_anchor3:correction_k4_n1_K8_q8_keep4 | dev | 191014.970 | 0.572700 | +0.100953 | 0.062490 | 83.990 | -0.21142, +0.22737, -0.58098, -0.09478, -1.34510, +0.22738 |
+| exact_anchor3:correction_k4_n1_K8_q8_keep8 | dev | 336454.970 | 0.465228 | +0.010721 | 0.046882 | 98.474 | -0.29741, +0.33170, -0.58479, -0.17553, -1.05911, -0.09104 |
+| exact_anchor3:correction_k4_n1_K8_q8_keep56 | dev | 2081734.970 | 0.429247 | -0.000330 | 0.018773 | 522.812 | -0.26272, +0.00706, -0.39852, -0.34561, -0.94082, -0.26303 |
+| exact_anchor3:correction_k4_n2_K8_q8_keep8 | dev | 2372614.970 | 0.338737 | -0.041610 | 0.017583 | 371.135 | -0.21535, +0.24258, +0.08615, -0.02851, -0.60168, +0.15917 |
+| exact_anchor4:correction_k3_n1_K8_q4_keep1 | dev | 90367.609 | 0.787166 | -0.358879 | 0.093295 | 71.189 | -0.06428, -1.36827, -1.51013, -0.28314, -1.39158, +0.68785 |
+| exact_anchor4:correction_k3_n1_K8_q4_keep2 | dev | 111456.409 | 0.709946 | -0.137892 | 0.083230 | 72.760 | +0.17878, -0.19527, -0.09852, +0.06106, -0.81639, -1.01209 |
+| exact_anchor4:correction_k3_n1_K8_q4_keep4 | dev | 153634.009 | 0.590607 | +0.054247 | 0.070236 | 70.709 | +0.40598, +0.11199, -1.55084, +0.27390, -0.13403, -0.38708 |
+| exact_anchor4:correction_k3_n1_K8_q4_keep8 | dev | 237989.209 | 0.456398 | -0.078321 | 0.056027 | 66.358 | +0.22633, -0.25903, -1.56520, +0.07652, -0.43369, -0.55994 |
+| exact_anchor4:correction_k3_n2_K16_q8_keep1 | dev | 400882.009 | 0.847948 | -0.609506 | 0.042976 | 389.295 | -0.84442, -1.20333, -1.98512, -0.47802, -0.34025, +0.52571 |
+| exact_anchor4:correction_k3_n2_K16_q8_keep2 | dev | 732485.209 | 0.491649 | -0.232430 | 0.031712 | 240.358 | +0.27893, +0.67935, +0.12407, -0.11105, -0.16546, -0.53039 |
+| exact_anchor4:correction_k3_n2_K16_q8_keep4 | dev | 1395691.609 | 0.386164 | -0.021197 | 0.022943 | 283.296 | +0.13735, -0.31121, -1.06371, +0.41631, +0.04081, -0.50110 |
+| exact_anchor4:correction_k3_n2_K16_q8_keep8 | dev | 2722104.409 | 0.315565 | -0.185059 | 0.016417 | 369.469 | -0.02721, -0.29645, -1.15424, +0.01602, -0.11931, -0.31108 |
+| exact_anchor4:correction_k4_n1_K8_q8_keep4 | dev | 214718.809 | 0.585471 | +0.323596 | 0.059063 | 98.262 | +0.23663, +0.42508, -0.61463, +0.51051, -0.62072, +0.25698 |
+| exact_anchor4:correction_k4_n1_K8_q8_keep8 | dev | 360158.809 | 0.461779 | +0.233364 | 0.045372 | 103.583 | +0.15063, +0.52942, -0.61845, +0.42976, -0.33473, -0.06144 |
+| exact_anchor4:correction_k4_n1_K8_q8_keep56 | dev | 2105438.809 | 0.420651 | +0.222313 | 0.018671 | 507.578 | +0.18533, +0.20477, -0.43218, +0.25968, -0.21644, -0.23343 |
+| exact_anchor4:correction_k4_n2_K8_q8_keep8 | dev | 2396318.809 | 0.293244 | +0.181033 | 0.017499 | 280.812 | +0.23269, +0.44029, +0.05249, +0.57678, +0.12271, +0.18877 |
+| exact_anchor6:correction_k3_n1_K8_q4_keep1 | dev | 185474.592 | 0.854665 | -0.484407 | 0.066028 | 167.546 | -0.27365, -1.45574, -1.49341, -0.49946, -1.66333, +0.69038 |
+| exact_anchor6:correction_k3_n1_K8_q4_keep2 | dev | 206563.392 | 0.723535 | -0.263420 | 0.062093 | 135.779 | -0.03060, -0.28275, -0.08180, -0.15526, -1.08813, -1.00956 |
+| exact_anchor6:correction_k3_n1_K8_q4_keep4 | dev | 248740.992 | 0.556649 | -0.071281 | 0.056016 | 98.749 | +0.19661, +0.02452, -1.53412, +0.05758, -0.40578, -0.38455 |
+| exact_anchor6:correction_k3_n1_K8_q4_keep8 | dev | 333096.192 | 0.464830 | -0.203849 | 0.047894 | 94.194 | +0.01696, -0.34651, -1.54848, -0.13980, -0.70544, -0.55741 |
+| exact_anchor6:correction_k3_n2_K16_q8_keep1 | dev | 495988.992 | 0.946597 | -0.735034 | 0.038916 | 591.657 | -1.05379, -1.29081, -1.96840, -0.69434, -0.61199, +0.52824 |
+| exact_anchor6:correction_k3_n2_K16_q8_keep2 | dev | 827592.192 | 0.553884 | -0.357957 | 0.029954 | 341.925 | +0.06956, +0.59188, +0.14079, -0.32737, -0.43720, -0.52786 |
+| exact_anchor6:correction_k3_n2_K16_q8_keep4 | dev | 1490798.592 | 0.392018 | -0.146725 | 0.022245 | 310.555 | -0.07202, -0.39868, -1.04699, +0.19999, -0.23094, -0.49857 |
+| exact_anchor6:correction_k3_n2_K16_q8_keep8 | dev | 2817211.392 | 0.391653 | -0.310586 | 0.016155 | 587.770 | -0.23658, -0.38392, -1.13752, -0.20030, -0.39105, -0.30855 |
+| exact_anchor6:correction_k4_n1_K8_q8_keep4 | dev | 309825.792 | 0.518840 | +0.198068 | 0.049769 | 108.680 | +0.02726, +0.33761, -0.59792, +0.29419, -0.89246, +0.25951 |
+| exact_anchor6:correction_k4_n1_K8_q8_keep8 | dev | 455265.792 | 0.396318 | +0.107837 | 0.040678 | 94.924 | -0.05874, +0.44194, -0.60173, +0.21344, -0.60647, -0.05890 |
+| exact_anchor6:correction_k4_n1_K8_q8_keep56 | dev | 2200545.792 | 0.350811 | +0.096786 | 0.018288 | 367.969 | -0.02404, +0.11730, -0.41546, +0.04336, -0.48819, -0.23090 |
+| exact_anchor6:correction_k4_n2_K8_q8_keep8 | dev | 2491425.792 | 0.225373 | +0.055505 | 0.017183 | 172.039 | +0.02332, +0.35282, +0.06921, +0.36046, -0.14904, +0.19130 |
+| z38 | dev | 2984428.800 | 0.621258 | +0.512445 | 0.015668 | 1572.140 | +0.52172, +0.55571, +0.20352, +0.16719, +0.22872, +0.56521 |
+| low:1::1: | held | 47.908 | 7.787655 | +7.250054 | 3.817040 | 4.163 | +4.69522, +9.01947, +11.96365, +5.15776, +6.79760, +11.02314 |
+| low:1::2: | held | 95.806 | 7.412980 | +6.978134 | 2.699212 | 7.542 | +4.69522, +9.01947, +10.19332, +5.15776, +6.79760, +11.02314 |
+| low:2::2: | held | 191.611 | 7.308008 | +6.909570 | 1.908631 | 14.661 | +4.65052, +8.97476, +9.78889, +5.15776, +6.08758, +11.02314 |
+| low:2::4: | held | 383.200 | 6.661947 | +6.293140 | 1.349645 | 24.365 | +4.27056, +8.13742, +7.93983, +4.06372, +5.47157, +8.91870 |
+| low:3::4: | held | 574.800 | 6.551599 | +6.161816 | 1.101980 | 35.347 | +4.04307, +7.67303, +8.61084, +4.31506, +5.83274, +9.28191 |
+| low:4::8: | held | 1532.756 | 5.754597 | +5.411235 | 0.674832 | 72.717 | +3.33187, +5.25844, +6.60159, +3.91161, +4.87580, +6.68071 |
+| event:::1:1 | held | 200.622 | 5.089972 | +4.605321 | 1.865275 | 7.446 | +2.04557, +6.28596, +7.40973, +3.62370, +3.64888, +6.16022 |
+| event:::1:2 | held | 326.244 | 5.829020 | +5.531215 | 1.462718 | 15.881 | +3.37298, +7.01456, +8.36082, +4.13544, +4.96690, +8.71590 |
+| event:::1:4 | held | 454.150 | 5.823802 | +5.520681 | 1.239746 | 22.067 | +3.38680, +6.82875, +8.48969, +4.19492, +4.92843, +8.67800 |
+| event:::1:8 | held | 648.400 | 5.698030 | +5.407488 | 1.037554 | 30.160 | +3.35201, +6.76979, +8.20616, +4.17325, +4.78123, +8.39524 |
+| event:::1:0 | held | 18394.911 | 5.057349 | +4.856657 | 0.194798 | 674.030 | +3.34546, +6.15289, +4.86593, +4.00253, +4.48077, +6.95217 |
+| event:::2:2 | held | 713.067 | 5.417203 | +5.066496 | 0.989389 | 29.979 | +2.76456, +6.71554, +7.78251, +3.25363, +4.18594, +8.16469 |
+| event:::2:4 | held | 1742.617 | 5.443527 | +5.098768 | 0.632895 | 73.977 | +2.96628, +6.55972, +8.18132, +3.54335, +4.26613, +8.08332 |
+| event:::2:8 | held | 3199.839 | 5.260020 | +4.922906 | 0.467055 | 126.835 | +2.77664, +6.37955, +7.71317, +3.42197, +4.12030, +7.61780 |
+| anchors:1:1:: | held | 343.633 | 8.709693 | -7.275007 | 1.425229 | 37.345 | -5.81928, -3.44644, -10.45494, -19.32819, -6.38177, -7.83959 |
+| anchors:1:2:: | held | 683.144 | 2.250636 | +0.595984 | 1.010825 | 4.957 | +0.24224, +2.38687, +0.29384, -5.84707, +0.86330, +2.05290 |
+| anchors:2:4:: | held | 5448.667 | 1.231646 | +0.278878 | 0.357921 | 11.841 | +0.11360, +1.14499, +0.97655, -2.79843, +0.10984, +0.81180 |
+| anchors:3:8:: | held | 24481.900 | 0.794040 | -0.289954 | 0.168853 | 22.114 | -0.69395, -0.06704, +0.67374, -2.27482, -1.24501, -0.26504 |
+| anchors:4:16:: | held | 86980.800 | 0.610200 | +0.190775 | 0.089582 | 46.398 | -0.05328, +0.17626, +1.06233, -0.70434, -0.22989, -0.15517 |
+| anchors:6:32:: | held | 391265.200 | 0.578133 | +0.179649 | 0.042237 | 187.353 | -0.12693, +0.09573, +1.23685, -0.40364, -0.36154, -0.13268 |
+| exact_anchor:3::: | held | 47523.417 | 0.645220 | +0.151435 | 0.125658 | 26.366 | -0.30097, -0.01702, +1.30447, -0.46874, -0.76929, -0.16000 |
+| exact_anchor:4::: | held | 72131.245 | 0.656704 | +0.383148 | 0.101049 | 42.235 | +0.14708, +0.18069, +1.27081, +0.13655, -0.04491, -0.13040 |
+| exact_anchor:6::: | held | 170720.588 | 0.598354 | +0.246474 | 0.066002 | 82.188 | -0.06229, +0.09321, +1.28753, -0.07977, -0.31666, -0.12787 |
+| anchors3:correction_k3_n1_K8_q4_keep1 | held | 45570.700 | 1.184300 | -0.906990 | 0.123763 | 91.568 | -0.90531, -1.61599, -2.10720, -2.69451, -2.59168, +0.55321 |
+| anchors3:correction_k3_n1_K8_q4_keep2 | held | 66659.500 | 1.118503 | -0.702941 | 0.102330 | 119.473 | -0.66226, -0.44300, -0.69560, -2.35031, -2.01648, -1.14673 |
+| anchors3:correction_k3_n1_K8_q4_keep4 | held | 108837.100 | 0.914795 | -0.622727 | 0.080084 | 130.485 | -0.43505, -0.13574, -2.14792, -2.13747, -1.33413, -0.52172 |
+| anchors3:correction_k3_n1_K8_q4_keep8 | held | 193192.300 | 0.923524 | -0.729999 | 0.060109 | 236.060 | -0.61470, -0.50676, -2.16228, -2.33485, -1.63379, -0.69458 |
+| anchors3:correction_k3_n2_K16_q8_keep1 | held | 356085.100 | 1.335125 | -1.069897 | 0.044275 | 909.354 | -1.68545, -1.45106, -2.58220, -2.88939, -1.54034, +0.39107 |
+| anchors3:correction_k3_n2_K16_q8_keep2 | held | 687688.300 | 1.151623 | -0.815563 | 0.031859 | 1306.615 | -0.56210, +0.43163, -0.47301, -2.52242, -1.36555, -0.66503 |
+| anchors3:correction_k3_n2_K16_q8_keep4 | held | 1350894.700 | 0.926693 | -0.678851 | 0.022731 | 1661.990 | -0.70368, -0.55893, -1.66078, -1.99506, -1.15929, -0.63573 |
+| anchors3:correction_k3_n2_K16_q8_keep8 | held | 2677307.500 | 0.981436 | -0.804966 | 0.016147 | 3694.515 | -0.86824, -0.54417, -1.75131, -2.39535, -1.31940, -0.44572 |
+| anchors3:correction_k4_n1_K8_q8_keep4 | held | 169921.900 | 0.767991 | -0.373066 | 0.064093 | 143.581 | -0.60441, +0.17735, -1.21171, -1.90086, -1.82081, +0.12234 |
+| anchors3:correction_k4_n1_K8_q8_keep8 | held | 315361.900 | 0.744948 | -0.465428 | 0.047047 | 250.724 | -0.69040, +0.28169, -1.21552, -1.98161, -1.53482, -0.19607 |
+| anchors3:correction_k4_n1_K8_q8_keep56 | held | 2060641.900 | 0.742912 | -0.470726 | 0.018405 | 1629.344 | -0.65570, -0.04296, -1.02925, -2.15169, -1.41654, -0.36807 |
+| anchors3:correction_k4_n2_K8_q8_keep8 | held | 2351521.900 | 0.737004 | -0.492392 | 0.017229 | 1829.886 | -0.60834, +0.19257, -0.54459, -1.83459, -1.07739, +0.05413 |
+| anchors4:correction_k3_n1_K8_q4_keep1 | held | 108069.600 | 0.838873 | -0.426261 | 0.080368 | 108.951 | -0.26464, -1.37269, -1.71861, -1.12403, -1.57657, +0.66308 |
+| anchors4:correction_k3_n1_K8_q4_keep2 | held | 129158.400 | 0.850744 | -0.222212 | 0.073514 | 133.923 | -0.02158, -0.19970, -0.30701, -0.77983, -1.00137, -1.03686 |
+| anchors4:correction_k3_n1_K8_q4_keep4 | held | 171336.000 | 0.635097 | -0.141998 | 0.063828 | 99.007 | +0.20562, +0.10756, -1.75933, -0.56699, -0.31901, -0.41185 |
+| anchors4:correction_k3_n1_K8_q4_keep8 | held | 255691.200 | 0.555804 | -0.249270 | 0.052249 | 113.161 | +0.02597, -0.26346, -1.77369, -0.76437, -0.61867, -0.58471 |
+| anchors4:correction_k3_n2_K16_q8_keep1 | held | 418584.000 | 0.925138 | -0.589168 | 0.040836 | 513.252 | -1.04478, -1.20776, -2.19361, -1.31891, -0.52523, +0.50094 |
+| anchors4:correction_k3_n2_K16_q8_keep2 | held | 750187.200 | 0.739553 | -0.334834 | 0.030503 | 587.820 | +0.07857, +0.67493, -0.08442, -0.95194, -0.35044, -0.55516 |
+| anchors4:correction_k3_n2_K16_q8_keep4 | held | 1413393.600 | 0.497937 | -0.198122 | 0.022223 | 502.051 | -0.06301, -0.31563, -1.27220, -0.42458, -0.14418, -0.52586 |
+| anchors4:correction_k3_n2_K16_q8_keep8 | held | 2739806.400 | 0.494710 | -0.324237 | 0.015961 | 960.629 | -0.22757, -0.30087, -1.36273, -0.82487, -0.30429, -0.33584 |
+| anchors4:correction_k4_n1_K8_q8_keep4 | held | 232420.800 | 0.564723 | +0.107663 | 0.054802 | 106.189 | +0.03627, +0.42066, -0.82312, -0.33038, -0.80570, +0.23221 |
+| anchors4:correction_k4_n1_K8_q8_keep8 | held | 377860.800 | 0.464652 | +0.015301 | 0.042980 | 116.875 | -0.04973, +0.52499, -0.82694, -0.41113, -0.51971, -0.08620 |
+| anchors4:correction_k4_n1_K8_q8_keep56 | held | 2123140.800 | 0.434605 | +0.010003 | 0.018132 | 574.517 | -0.01503, +0.20035, -0.64067, -0.58121, -0.40142, -0.25820 |
+| anchors4:correction_k4_n2_K8_q8_keep8 | held | 2414020.800 | 0.334174 | -0.011662 | 0.017004 | 386.209 | +0.03233, +0.43587, -0.15600, -0.26411, -0.06228, +0.16400 |
+| anchors6:correction_k3_n1_K8_q4_keep1 | held | 412354.000 | 0.848702 | -0.437387 | 0.041143 | 425.516 | -0.33828, -1.45322, -1.54409, -0.82333, -1.70822, +0.68558 |
+| anchors6:correction_k3_n1_K8_q4_keep2 | held | 433442.800 | 0.803594 | -0.233338 | 0.040130 | 400.997 | -0.09523, -0.28023, -0.13249, -0.47913, -1.13302, -1.01437 |
+| anchors6:correction_k3_n1_K8_q4_keep4 | held | 475620.400 | 0.594590 | -0.153124 | 0.038309 | 240.897 | +0.13198, +0.02703, -1.58480, -0.26628, -0.45066, -0.38936 |
+| anchors6:correction_k3_n1_K8_q4_keep8 | held | 559975.600 | 0.517400 | -0.260396 | 0.035306 | 214.762 | -0.04767, -0.34399, -1.59916, -0.46367, -0.75032, -0.56222 |
+| anchors6:correction_k3_n2_K16_q8_keep1 | held | 722868.400 | 0.919450 | -0.600295 | 0.031074 | 875.489 | -1.11842, -1.28829, -2.01908, -1.01821, -0.65688, +0.52344 |
+| anchors6:correction_k3_n2_K16_q8_keep2 | held | 1054471.600 | 0.664439 | -0.345960 | 0.025729 | 666.931 | +0.00493, +0.59440, +0.09011, -0.65124, -0.48209, -0.53266 |
+| anchors6:correction_k3_n2_K16_q8_keep4 | held | 1717678.000 | 0.433585 | -0.209248 | 0.020159 | 462.621 | -0.13666, -0.39616, -1.09767, -0.12387, -0.27583, -0.50337 |
+| anchors6:correction_k3_n2_K16_q8_keep8 | held | 3044090.800 | 0.429021 | -0.335363 | 0.015143 | 802.692 | -0.30121, -0.38140, -1.18820, -0.52416, -0.43594, -0.31335 |
+| anchors6:correction_k4_n1_K8_q8_keep4 | held | 536705.200 | 0.513655 | +0.096536 | 0.036063 | 202.869 | -0.03738, +0.34012, -0.64860, -0.02968, -0.93735, +0.25470 |
+| anchors6:correction_k4_n1_K8_q8_keep8 | held | 682145.200 | 0.407814 | +0.004175 | 0.031988 | 162.531 | -0.12337, +0.44446, -0.65241, -0.11043, -0.65136, -0.06371 |
+| anchors6:correction_k4_n1_K8_q8_keep56 | held | 2427425.200 | 0.356008 | -0.001124 | 0.016957 | 440.760 | -0.08867, +0.11981, -0.46614, -0.28051, -0.53307, -0.23571 |
+| anchors6:correction_k4_n2_K8_q8_keep8 | held | 2718305.200 | 0.247615 | -0.022789 | 0.016024 | 238.773 | -0.04131, +0.35534, +0.01853, +0.03659, -0.19393, +0.18649 |
+| exact_anchor3:correction_k3_n1_K8_q4_keep1 | held | 68612.217 | 0.920246 | -0.465602 | 0.102948 | 79.905 | -0.51233, -1.56598, -1.47647, -0.88843, -2.11597, +0.65825 |
+| exact_anchor3:correction_k3_n1_K8_q4_keep2 | held | 89701.017 | 0.814459 | -0.261553 | 0.089447 | 82.909 | -0.26927, -0.39299, -0.06487, -0.54423, -1.54077, -1.04169 |
+| exact_anchor3:correction_k3_n1_K8_q4_keep4 | held | 131878.617 | 0.613560 | -0.181339 | 0.073354 | 69.963 | -0.04206, -0.08572, -1.51718, -0.33138, -0.85841, -0.41668 |
+| exact_anchor3:correction_k3_n1_K8_q4_keep8 | held | 216233.817 | 0.560700 | -0.288611 | 0.057068 | 96.534 | -0.22171, -0.45675, -1.53154, -0.52877, -1.15807, -0.58954 |
+| exact_anchor3:correction_k3_n2_K16_q8_keep1 | held | 379126.617 | 0.980982 | -0.628509 | 0.043007 | 520.297 | -1.29246, -1.40104, -1.95146, -1.08331, -1.06463, +0.49611 |
+| exact_anchor3:correction_k3_n2_K16_q8_keep2 | held | 710729.817 | 0.710660 | -0.374175 | 0.031375 | 513.060 | -0.16912, +0.48164, +0.15772, -0.71634, -0.88984, -0.55999 |
+| exact_anchor3:correction_k3_n2_K16_q8_keep4 | held | 1373936.217 | 0.511452 | -0.237463 | 0.022553 | 514.299 | -0.31070, -0.50892, -1.03005, -0.18897, -0.68358, -0.53070 |
+| exact_anchor3:correction_k3_n2_K16_q8_keep8 | held | 2700349.017 | 0.512103 | -0.363577 | 0.016082 | 1013.963 | -0.47526, -0.49416, -1.12058, -0.58926, -0.84369, -0.34068 |
+| exact_anchor3:correction_k4_n1_K8_q8_keep4 | held | 192963.417 | 0.535733 | +0.068322 | 0.060451 | 78.540 | -0.21142, +0.22737, -0.58098, -0.09478, -1.34510, +0.22738 |
+| exact_anchor3:correction_k4_n1_K8_q8_keep8 | held | 338403.417 | 0.448476 | -0.024040 | 0.045535 | 97.003 | -0.29741, +0.33170, -0.58479, -0.17553, -1.05911, -0.09104 |
+| exact_anchor3:correction_k4_n1_K8_q8_keep56 | held | 2083683.417 | 0.398009 | -0.029338 | 0.018310 | 472.532 | -0.26272, +0.00706, -0.39852, -0.34561, -0.94082, -0.26303 |
+| exact_anchor3:correction_k4_n2_K8_q8_keep8 | held | 2374563.417 | 0.360732 | -0.051003 | 0.017151 | 442.392 | -0.21535, +0.24258, +0.08615, -0.02851, -0.60168, +0.15917 |
+| exact_anchor4:correction_k3_n1_K8_q4_keep1 | held | 93220.045 | 0.795760 | -0.233888 | 0.088106 | 81.574 | -0.06428, -1.36827, -1.51013, -0.28314, -1.39158, +0.68785 |
+| exact_anchor4:correction_k3_n1_K8_q4_keep2 | held | 114308.845 | 0.792676 | -0.029839 | 0.079192 | 100.192 | +0.17878, -0.19527, -0.09852, +0.06106, -0.81639, -1.01209 |
+| exact_anchor4:correction_k3_n1_K8_q4_keep4 | held | 156486.445 | 0.604436 | +0.050375 | 0.067361 | 80.515 | +0.40598, +0.11199, -1.55084, +0.27390, -0.13403, -0.38708 |
+| exact_anchor4:correction_k3_n1_K8_q4_keep8 | held | 240841.645 | 0.489480 | -0.056897 | 0.054097 | 81.870 | +0.22633, -0.25903, -1.56520, +0.07652, -0.43369, -0.55994 |
+| exact_anchor4:correction_k3_n2_K16_q8_keep1 | held | 403734.445 | 0.820008 | -0.396795 | 0.041687 | 386.930 | -0.84442, -1.20333, -1.98512, -0.47802, -0.34025, +0.52571 |
+| exact_anchor4:correction_k3_n2_K16_q8_keep2 | held | 735337.645 | 0.595540 | -0.142461 | 0.030850 | 372.664 | +0.27893, +0.67935, +0.12407, -0.11105, -0.16546, -0.53039 |
+| exact_anchor4:correction_k3_n2_K16_q8_keep4 | held | 1398544.045 | 0.390277 | -0.005749 | 0.022355 | 304.787 | +0.13735, -0.31121, -1.06371, +0.41631, +0.04081, -0.50110 |
+| exact_anchor4:correction_k3_n2_K16_q8_keep8 | held | 2724956.845 | 0.325796 | -0.131864 | 0.016010 | 414.103 | -0.02721, -0.29645, -1.15424, +0.01602, -0.11931, -0.31108 |
+| exact_anchor4:correction_k4_n1_K8_q8_keep4 | held | 217571.245 | 0.584185 | +0.300035 | 0.056955 | 105.206 | +0.23663, +0.42508, -0.61463, +0.51051, -0.62072, +0.25698 |
+| exact_anchor4:correction_k4_n1_K8_q8_keep8 | held | 363011.245 | 0.471459 | +0.207674 | 0.043979 | 114.923 | +0.15063, +0.52942, -0.61845, +0.42976, -0.33473, -0.06144 |
+| exact_anchor4:correction_k4_n1_K8_q8_keep56 | held | 2108291.245 | 0.419444 | +0.202375 | 0.018203 | 530.945 | +0.18533, +0.20477, -0.43218, +0.25968, -0.21644, -0.23343 |
+| exact_anchor4:correction_k4_n2_K8_q8_keep8 | held | 2399171.245 | 0.312221 | +0.180710 | 0.017063 | 334.814 | +0.23269, +0.44029, +0.05249, +0.57678, +0.12271, +0.18877 |
+| exact_anchor6:correction_k3_n1_K8_q4_keep1 | held | 191809.388 | 0.839897 | -0.370562 | 0.061938 | 183.882 | -0.27365, -1.45574, -1.49341, -0.49946, -1.66333, +0.69038 |
+| exact_anchor6:correction_k3_n1_K8_q4_keep2 | held | 212898.188 | 0.784746 | -0.166513 | 0.058561 | 179.571 | -0.03060, -0.28275, -0.08180, -0.15526, -1.08813, -1.00956 |
+| exact_anchor6:correction_k3_n1_K8_q4_keep4 | held | 255075.788 | 0.587127 | -0.086299 | 0.053218 | 121.715 | +0.19661, +0.02452, -1.53412, +0.05758, -0.40578, -0.38455 |
+| exact_anchor6:correction_k3_n1_K8_q4_keep8 | held | 339430.988 | 0.499106 | -0.193571 | 0.045870 | 118.391 | +0.01696, -0.34651, -1.54848, -0.13980, -0.70544, -0.55741 |
+| exact_anchor6:correction_k3_n2_K16_q8_keep1 | held | 502323.788 | 0.889752 | -0.533469 | 0.037531 | 562.025 | -1.05379, -1.29081, -1.96840, -0.69434, -0.61199, +0.52824 |
+| exact_anchor6:correction_k3_n2_K16_q8_keep2 | held | 833926.988 | 0.614811 | -0.279135 | 0.029036 | 448.331 | +0.06956, +0.59188, +0.14079, -0.32737, -0.43720, -0.52786 |
+| exact_anchor6:correction_k3_n2_K16_q8_keep4 | held | 1497133.388 | 0.398927 | -0.142423 | 0.021632 | 340.081 | -0.07202, -0.39868, -1.04699, +0.19999, -0.23094, -0.49857 |
+| exact_anchor6:correction_k3_n2_K16_q8_keep8 | held | 2823546.188 | 0.375688 | -0.268538 | 0.015737 | 569.881 | -0.23658, -0.38392, -1.13752, -0.20030, -0.39105, -0.30855 |
+| exact_anchor6:correction_k4_n1_K8_q8_keep4 | held | 316160.588 | 0.522512 | +0.163362 | 0.047585 | 120.573 | +0.02726, +0.33761, -0.59792, +0.29419, -0.89246, +0.25951 |
+| exact_anchor6:correction_k4_n1_K8_q8_keep8 | held | 461600.588 | 0.415538 | +0.071000 | 0.039183 | 112.470 | -0.05874, +0.44194, -0.60173, +0.21344, -0.60647, -0.05890 |
+| exact_anchor6:correction_k4_n1_K8_q8_keep56 | held | 2206880.588 | 0.354048 | +0.065702 | 0.017806 | 395.361 | -0.02404, +0.11730, -0.41546, +0.04336, -0.48819, -0.23090 |
+| exact_anchor6:correction_k4_n2_K8_q8_keep8 | held | 2497760.588 | 0.249308 | +0.044037 | 0.016735 | 221.945 | +0.02332, +0.35282, +0.06921, +0.36046, -0.14904, +0.19130 |
+| z38 | held | 2984428.800 | 0.620461 | +0.522291 | 0.015293 | 1645.982 | +0.52172, +0.55571, +0.20352, +0.16719, +0.22872, +0.56521 |
+
+
+Numerical appendix B: correction-only diagnostics with free reference anchors
+=============================================================================
+
+These rows isolate correction error; they are not end-to-end estimators. The table charges the rows actually evaluated, plus the declared 1% allowance.
+| Method | Split | Counted forwards | RMS | Mean | Sampling RMS | MSE ratio | Zoo errors |
+|---|---|---:|---:|---:|---:|---:|---|
+| correction_dev_k3_n1_K8_q4_keep1:correction_with_reference_anchor | dev | 21088.800 | 0.828567 | -0.440576 | 0.186394 | 19.760 | -0.20783, -1.46198, -1.40221, -0.42284, -1.59148, +0.72241 |
+| correction_dev_k3_n1_K8_q4_keep2:correction_with_reference_anchor | dev | 42177.600 | 0.718076 | -0.219589 | 0.131800 | 29.683 | +0.03523, -0.28899, +0.00939, -0.07864, -1.01628, -0.97754 |
+| correction_dev_k3_n1_K8_q4_keep4:correction_with_reference_anchor | dev | 84355.200 | 0.559629 | -0.027450 | 0.093197 | 36.058 | +0.26243, +0.01828, -1.44293, +0.13421, -0.33393, -0.35253 |
+| correction_dev_k3_n1_K8_q4_keep8:correction_with_reference_anchor | dev | 168710.400 | 0.455324 | -0.160019 | 0.065900 | 47.739 | +0.08278, -0.35275, -1.45729, -0.06318, -0.63359, -0.52539 |
+| correction_dev_k3_n2_K16_q8_keep1:correction_with_reference_anchor | dev | 331603.200 | 0.910745 | -0.691203 | 0.047005 | 375.404 | -0.98797, -1.29705, -1.87721, -0.61772, -0.54014, +0.56027 |
+| correction_dev_k3_n2_K16_q8_keep2:correction_with_reference_anchor | dev | 663206.400 | 0.532516 | -0.314127 | 0.033238 | 256.685 | +0.13538, +0.58564, +0.23198, -0.25075, -0.36536, -0.49583 |
+| correction_dev_k3_n2_K16_q8_keep4:correction_with_reference_anchor | dev | 1326412.800 | 0.377714 | -0.102894 | 0.023503 | 258.280 | -0.00620, -0.40492, -0.95579, +0.27662, -0.15909, -0.46654 |
+| correction_dev_k3_n2_K16_q8_keep8:correction_with_reference_anchor | dev | 2652825.600 | 0.359834 | -0.266756 | 0.016619 | 468.814 | -0.17076, -0.39016, -1.04633, -0.12367, -0.31920, -0.27652 |
+| correction_dev_k3_n3_K8_q8_keep8:correction_with_reference_anchor | dev | 2984428.800 | 0.307348 | -0.224024 | 0.015668 | 384.776 | -0.02772, -0.24447, -0.62705, -0.08487, -0.24176, -0.29153 |
+| correction_dev_k4_n1_K8_q8_keep4:correction_with_reference_anchor | dev | 145440.000 | 0.534818 | +0.241899 | 0.070977 | 56.778 | +0.09308, +0.33137, -0.50672, +0.37081, -0.82062, +0.29153 |
+| correction_dev_k4_n1_K8_q8_keep4:correction_with_reference_mf4 | dev | 145440.000 | 0.347658 | +0.034541 | 0.070977 | 23.992 | +0.00394, +0.06517, +0.56515, +0.18464, +0.03658, -0.36035 |
+| correction_dev_k4_n1_K8_q8_keep56:correction_with_reference_anchor | dev | 2036160.000 | 0.364840 | +0.140616 | 0.018969 | 369.916 | +0.04178, +0.11106, -0.32427, +0.11998, -0.41634, -0.19888 |
+| correction_dev_k4_n1_K8_q8_keep56:correction_with_reference_mf4 | dev | 2036160.000 | 0.162451 | +0.005144 | 0.018969 | 73.340 | +0.03449, -0.00881, -0.23454, +0.06527, -0.13702, -0.00006 |
+| correction_dev_k4_n1_K8_q8_keep8:correction_with_reference_anchor | dev | 290880.000 | 0.406220 | +0.151667 | 0.050188 | 65.512 | +0.00708, +0.43570, -0.51054, +0.29006, -0.53462, -0.02688 |
+| correction_dev_k4_n1_K8_q8_keep8:correction_with_reference_mf4 | dev | 290880.000 | 0.250873 | -0.013373 | 0.050188 | 24.987 | -0.04733, -0.02146, -0.11575, +0.06917, -0.05938, -0.21001 |
+| correction_dev_k4_n2_K8_q8_keep8:correction_with_reference_anchor | dev | 2327040.000 | 0.234378 | +0.099336 | 0.017744 | 174.472 | +0.08914, +0.34658, +0.16040, +0.43708, -0.07719, +0.22332 |
+| correction_dev_k4_n2_K8_q8_keep8:correction_with_reference_mf4 | dev | 2327040.000 | 0.189133 | -0.065808 | 0.017744 | 113.612 | -0.10377, +0.10659, -0.24200, -0.15310, +0.10048, +0.05488 |
+| correction_held_k3_n1_K8_q4_keep1:correction_with_reference_anchor | held | 21088.800 | 0.816015 | -0.326352 | 0.181931 | 20.118 | -0.20783, -1.46198, -1.40221, -0.42284, -1.59148, +0.72241 |
+| correction_held_k3_n1_K8_q4_keep2:correction_with_reference_anchor | held | 42177.600 | 0.769682 | -0.122303 | 0.128645 | 35.796 | +0.03523, -0.28899, +0.00939, -0.07864, -1.01628, -0.97754 |
+| correction_held_k3_n1_K8_q4_keep4:correction_with_reference_anchor | held | 84355.200 | 0.563412 | -0.042089 | 0.090965 | 38.362 | +0.26243, +0.01828, -1.44293, +0.13421, -0.33393, -0.35253 |
+| correction_held_k3_n1_K8_q4_keep8:correction_with_reference_anchor | held | 168710.400 | 0.467991 | -0.149361 | 0.064322 | 52.936 | +0.08278, -0.35275, -1.45729, -0.06318, -0.63359, -0.52539 |
+| correction_held_k3_n2_K16_q8_keep1:correction_with_reference_anchor | held | 331603.200 | 0.861700 | -0.489259 | 0.045880 | 352.749 | -0.98797, -1.29705, -1.87721, -0.61772, -0.54014, +0.56027 |
+| correction_held_k3_n2_K16_q8_keep2:correction_with_reference_anchor | held | 663206.400 | 0.602452 | -0.234925 | 0.032442 | 344.850 | +0.13538, +0.58564, +0.23198, -0.25075, -0.36536, -0.49583 |
+| correction_held_k3_n2_K16_q8_keep4:correction_with_reference_anchor | held | 1326412.800 | 0.372424 | -0.098213 | 0.022940 | 263.566 | -0.00620, -0.40492, -0.95579, +0.27662, -0.15909, -0.46654 |
+| correction_held_k3_n2_K16_q8_keep8:correction_with_reference_anchor | held | 2652825.600 | 0.340966 | -0.224328 | 0.016221 | 441.842 | -0.17076, -0.39016, -1.04633, -0.12367, -0.31920, -0.27652 |
+| correction_held_k3_n3_K8_q8_keep8:correction_with_reference_anchor | held | 2984428.800 | 0.275986 | -0.217953 | 0.015293 | 325.665 | -0.02772, -0.24447, -0.62705, -0.08487, -0.24176, -0.29153 |
+| correction_held_k4_n1_K8_q8_keep4:correction_with_reference_anchor | held | 145440.000 | 0.520082 | +0.207572 | 0.069277 | 56.359 | +0.09308, +0.33137, -0.50672, +0.37081, -0.82062, +0.29153 |
+| correction_held_k4_n1_K8_q8_keep4:correction_with_reference_mf4 | held | 145440.000 | 0.283676 | +0.038378 | 0.069277 | 16.767 | +0.00394, +0.06517, +0.56515, +0.18464, +0.03658, -0.36035 |
+| correction_held_k4_n1_K8_q8_keep56:correction_with_reference_anchor | held | 2036160.000 | 0.343277 | +0.109912 | 0.018515 | 343.745 | +0.04178, +0.11106, -0.32427, +0.11998, -0.41634, -0.19888 |
+| correction_held_k4_n1_K8_q8_keep56:correction_with_reference_mf4 | held | 2036160.000 | 0.136803 | +0.014774 | 0.018515 | 54.593 | +0.03449, -0.00881, -0.23454, +0.06527, -0.13702, -0.00006 |
+| correction_held_k4_n1_K8_q8_keep8:correction_with_reference_anchor | held | 290880.000 | 0.404824 | +0.115210 | 0.048986 | 68.294 | +0.00708, +0.43570, -0.51054, +0.29006, -0.53462, -0.02688 |
+| correction_held_k4_n1_K8_q8_keep8:correction_with_reference_mf4 | held | 290880.000 | 0.216953 | +0.009764 | 0.048986 | 19.615 | -0.04733, -0.02146, -0.11575, +0.06917, -0.05938, -0.21001 |
+| correction_held_k4_n2_K8_q8_keep8:correction_with_reference_anchor | held | 2327040.000 | 0.251171 | +0.088247 | 0.017319 | 210.319 | +0.08914, +0.34658, +0.16040, +0.43708, -0.07719, +0.22332 |
+| correction_held_k4_n2_K8_q8_keep8:correction_with_reference_mf4 | held | 2327040.000 | 0.225754 | -0.097534 | 0.017319 | 169.907 | -0.10377, +0.10659, -0.24200, -0.15310, +0.10048, +0.05488 |
+
+
+Numerical appendix C: arrangement subset measurements
+=====================================================
+
+Noise-corrected RMS is descriptive; the zoo values below are raw measured deviations. SE is the RMS per-network measurement SE. No sampling comparator is assigned to these non-estimators.
+| Correction | Keep/class | Arrangements | Noise-corrected RMS | Mean | Measurement SE | Zoo deviations | Zoo SE |
+|---|---:|---:|---:|---:|---:|---|---|
+| mf3 | 1 | 90 | 0.582137 | -0.454213 | 0.051649 | -0.51525, -0.86627, -1.03678, -0.96765, -0.35373, +0.95285 | 0.03495, 0.05738, 0.05943, 0.04502, 0.04997, 0.06029 |
+| mf3 | 2 | 180 | 0.280577 | -0.021052 | 0.034729 | +0.08836, +0.40698, +1.02516, -0.07107, -0.26600, -0.18183 | 0.02591, 0.03888, 0.04165, 0.02959, 0.03263, 0.03861 |
+| mf3 | 4 | 360 | 0.227836 | +0.138429 | 0.020024 | +0.14276, +0.15571, +0.07355, +0.45255, +0.24817, -0.16168 | 0.01494, 0.02223, 0.02342, 0.01733, 0.01899, 0.02242 |
+| mf4 | 4 | 360 | 0.265658 | -0.138587 | 0.058156 | -0.06069, -0.31645, +0.55362, -0.21996, -0.20167, -0.33436 | 0.04011, 0.06359, 0.07060, 0.04724, 0.05524, 0.06290 |
+| mf4 | 8 | 720 | 0.109891 | -0.052070 | 0.040451 | -0.03790, -0.01752, +0.12827, -0.20585, -0.05410, +0.02263 | 0.02767, 0.04493, 0.04897, 0.03256, 0.03741, 0.04511 |
+| mf4_arr_minus_mf3 | 4 | 360 | 0.337961 | -0.063506 | 0.073058 | -0.07595, +0.14021, +0.00767, +0.16516, -0.76513, -0.06262 | 0.05693, 0.08018, 0.08436, 0.06276, 0.07171, 0.08088 |
+| mf4_arr_minus_mf3 | 8 | 720 | 0.186140 | +0.011635 | 0.048999 | -0.01519, +0.12230, +0.16013, +0.19555, -0.23344, +0.04154 | 0.03678, 0.05424, 0.05666, 0.04203, 0.04703, 0.05475 |
+
+
+Full lower-bound proof
+======================
+
+# Restricted lower bounds for the Gaussian accuracy problem
+
+This note gives a self-contained lower bound, plus two smaller
+statements tied to the supplied diagnostics. None is a lower bound on average
+error over the 1,024 trained RNNs. The principal theorem concerns algorithms
+whose information about an unknown classifier consists only of membership
+answers, even if they choose queries adaptively and have unlimited free
+computation between queries. It does not cover direct access to weights,
+logits, activation masks, or affine coefficients.
+
+## 1. The logical limitation must come first
+
+Let F_RNN be the actual 432-parameter family, and let F_cone be a larger family
+of conic classifiers containing F_RNN. A minimax lower bound for F_cone does
+not imply the same bound for F_RNN. Indeed,
+
+\[
+\inf_A\sup_{f\in F_{\rm RNN}}|A(f)-I(f)|
+\;\le\;
+\inf_A\sup_{f\in F_{\rm cone}}|A(f)-I(f)|.
+\]
+
+The inequality goes in the unhelpful direction. Transferring a lower bound
+would require constructing hard members *inside* the actual RNN family,
+with the same access and cost model. Transferring it to the requested average
+over trained networks would require an additional argument about the training
+distribution or that particular finite population. Merely containing all
+observed integrands is insufficient.
+
+The theorem below therefore establishes a real obstruction to uniform
+membership-based quadrature over a natural geometric class. It explains why
+positive homogeneity and a conic description alone cannot supply a uniform
+sampling-beating guarantee. It does not settle the requested white-box task.
+
+## 2. Explicit theorem: one arbitrary polyhedral cone is enough
+
+Let gamma_10 be standard Gaussian probability on R^10. Consider an unknown
+polyhedral **error** cone E. The classifier is incorrect precisely on E; its
+accuracy is 1 - gamma_10(E). Degenerate cones are allowed. Cone boundaries
+have no effect on the integral, and we use closed-cone membership at boundary
+queries.
+
+Put
+
+\[
+q_* = \frac{1-\sqrt{1-4(0.069)}}2
+      =0.074559052276\ldots.
+\]
+
+Restrict the class to cones with gamma_10(E) <= q_*. Every classifier in the
+class then has accuracy at least 92.544 points, and sampling with N independent
+examples has MSE at most 0.069/N. This choice aligns the comparator with the
+population benchmark; it does not assert that the hard cones are trained RNNs.
+
+Define
+
+\[
+G(r)=\Pr\{X_{10}\ge \|X_{1:9}\|/r\},\qquad r>0.
+\]
+
+For alpha = arctan(r), direct spherical integration gives the elementary form
+
+\[
+G(r)=\frac{35\alpha-28\sin(2\alpha)+7\sin(4\alpha)
+ -(4/3)\sin(6\alpha)+(1/8)\sin(8\alpha)}{35\pi}.
+\]
+
+Let R be the unique radius with G(R) = q_*. Numerically,
+R = 1.901649869866. For an integer N >= 1 set
+
+\[
+\theta_N=\left(\frac{256}{175N}\right)^{1/8},\qquad
+L_N=\frac25\,[G(R)-G(R\cos\theta_N)].
+\]
+
+**Theorem.** Any deterministic algorithm using at most N membership queries
+has worst-case absolute error at least L_N on this class. Equivalently, for
+every eta > 0, some admissible polyhedral cone gives error at least L_N - eta.
+The same conclusion holds if the algorithm estimates accuracy rather than
+error probability.
+
+Numerically:
+
+| Membership queries N | Worst-case absolute-error lower bound (points) | Sampling RMS upper bound (points) | Squared lower bound / sampling MSE |
+|---:|---:|---:|---:|
+| 100 | 1.179407 | 2.626785 | 0.202 |
+| 1,000 | 0.685273 | 0.830662 | 0.681 |
+| 10,000 | 0.391097 | 0.262679 | 2.217 |
+| 100,000 | 0.221534 | 0.083066 | 7.113 |
+| 1,000,000 | 0.125048 | 0.026268 | 22.662 |
+| 10,000,000 | 0.070462 | 0.008307 | 71.955 |
+
+These are **minimax bounds for hypothetical members of the stated geometric
+class**, not measured errors or RMS results on development, held-out, or zoo
+networks. One ordinary Boolean correctness query could be supplied by one
+forward pass, but an actual forward also exposes logits. An algorithm that
+uses those extra data is outside the theorem.
+
+As N grows,
+
+\[
+L_N=(0.0397228583\ldots+o(1))N^{-1/4}
+\]
+
+in probability units. Thus its worst-case squared error is Omega(N^-1/2) in this
+oracle model, whereas sampling MSE is at most 0.069/N. No growing
+number K of convex cones is needed: E itself is one convex polyhedral cone.
+Its number of facets is not bounded, which is essential to interpreting the
+result.
+
+### Full proof
+
+**Projective cross-section.** For a compact convex B subset R^9 define
+
+\[
+C(B)=\{t(z,1):t>0,\ z\in B\}\cup\{0\}.
+\]
+
+When B is a polytope, C(B) is a finitely generated polyhedral cone. A Gaussian
+change of variables (y,t) = (tz,t), t > 0, gives
+
+\[
+\gamma_{10}(C(B))
+ =\frac{12}{\pi^5}\int_B(1+\|z\|^2)^{-5}\,dz.
+\tag{1}
+\]
+
+To check the constant, integrate
+(2 pi)^-5 t^9 exp[-t^2(1+||z||^2)/2] over positive t; the result is
+12 pi^-5 (1+||z||^2)^-5. This density depends only on ||z||. If B_r is the
+9-dimensional Euclidean ball of radius r, (1) equals G(r).
+
+The displayed elementary formula for G follows independently by writing the
+Gaussian direction in polar angle alpha from the positive tenth axis:
+
+\[
+G(r)=\frac{128}{35\pi}\int_0^{\arctan r}\sin^8(t)\,dt.
+\]
+
+**An adversarial transcript.** Run the algorithm against membership in the
+circular cone C(B_R). This reference cone is not polyhedral; that is harmless,
+because we will exhibit two polyhedral cones realizing its entire finite
+query transcript. Every positive query with positive tenth coordinate maps
+to a point z_i in B_R. Let
+
+\[
+P_- = \operatorname{conv}(\{0\}\cup\{z_i:\text{positive queries}\}).
+\]
+
+There are at most N nonzero generators. C(P_-) agrees with the transcript:
+it contains every positive queried point and is a subset of C(B_R), so it
+contains no negative queried point. Queries at or below the hyperplane
+x_10 = 0 cause no difficulty: all these cones contain the origin and no other
+point of that hyperplane, and contain no point with x_10 < 0.
+
+**Missing directions.** A spherical cap of angular radius theta on the unit
+sphere S^8 has normalized area
+
+\[
+\frac{35}{32}\int_0^\theta\sin^7(t)\,dt
+\;\le\;\frac{35}{256}\theta^8.
+\tag{2}
+\]
+
+Here theta_N < pi/2 for every N >= 1. Place a cap of radius theta_N around
+the direction of each nonzero z_i. By the union bound and (2), all the caps
+together cover at most
+
+\[
+N\frac{35}{256}\theta_N^8=\frac15
+\]
+
+of S^8. At least four fifths of directions u are consequently at angular
+distance at least theta_N from every z_i. For such u,
+
+\[
+\sup_{z\in P_-}u\cdot z\le R\cos\theta_N.
+\]
+
+Therefore every point ru on that ray with
+R cos(theta_N) < r <= R is outside P_-. Because the density in (1) is radial,
+the omitted cone measure is at least
+
+\[
+\gamma_{10}(C(B_R))-\gamma_{10}(C(P_-))
+\;\ge\;\frac45[G(R)-G(R\cos\theta_N)].
+\tag{3}
+\]
+
+**A second polyhedral realization.** Take increasingly dense finite sets of
+points on the sphere of radius R and let P_+ be their convex hull together
+with P_-. Such an inscribed polytope contains P_-, is contained in B_R, and
+can have cone measure arbitrarily close to G(R). For a concrete dense family,
+normalize all nonzero integer vectors in [-M,M]^9 to length R and let M grow.
+Every finite P_+ is a polytope. It contains all positive queries and, being
+inside B_R, excludes all negative queries. Both resulting error cones have
+mass at most q_*.
+
+For any eta > 0, choose this approximation so that the two legal cones have
+measures differing by at least
+
+\[
+\frac45[G(R)-G(R\cos\theta_N)]-2\eta.
+\]
+
+The algorithm makes the same adaptive queries, receives the same answers,
+and returns the same number on both cones. At least one of the two errors
+is half their measure difference or larger. This proves L_N - eta, and hence
+the stated supremum lower bound. Adaptivity and unlimited intermediate
+computation do not change the argument.
+
+### Whole affine-line traces do not remove this oracle obstruction
+
+Suppose a query reveals the entire correctness function on an affine line,
+or a path containing finitely many affine segments. Count L segments in
+total, including adaptively chosen segments. The theorem holds with N = 2L.
+
+To see this, project the portion of a segment with x_10 > 0 to the hyperplane
+x_10 = 1. It lies on an affine line or is a single point. Its intersection
+with B_R is an interval, possibly empty, and its closure has at most two
+endpoints. Form P_- from all those endpoints and 0. Convexity makes P_-
+contain every positive point of every queried segment. Since it lies in
+B_R, it also excludes every negative point. The same P_+ construction
+preserves all complete segment traces. The missing-cap proof uses at most
+2L endpoint directions.
+
+This is a stronger oracle than isolated correctness evaluation, but it
+still reveals only labels along paths. It does not reveal the network's
+linear maps or activation-region inequalities. The result is in numbers of
+segments, not an independently proved conversion from arithmetic work to
+forward-pass equivalents.
+
+## 3. What a certified region tail really implies
+
+Suppose a method has integrated correctness exactly on a known set U and
+knows that the unclassified remainder has probability u. Let a be the
+known correct mass in U. If it has no further information about the labels
+outside U, the possible total accuracy lies in
+
+\[
+[a,a+u].
+\]
+
+**Certificate proposition.** The smallest possible worst-case absolute
+error based on that information is u/2, attained by a + u/2. No smaller
+uniform guarantee is possible because the two completions "all remaining
+points wrong" and "all remaining points right" produce the same information
+and totals separated by u.
+
+This proposition concerns an information restriction or the radius of an
+uncertainty certificate. It does **not** say that every estimator has actual
+error at least u/2 on the known network. A fallback may guess correctly;
+different signed errors may cancel; the weights may provide a global
+constraint on the unvisited regions. Those cases supply additional
+information or do not require a worst-case guarantee.
+
+The supplied `pop1k/z26_seed0.txt` reports the following estimated median
+tails. If they were exact unexplained tails, their midpoint certificate
+radii would compare with sampling as follows:
+
+| Patterns per arrangement | Assumed build cost | Estimated tail (points) | Midpoint certificate radius (points) | Sampling RMS (points) |
+|---:|---:|---:|---:|---:|
+| 1 | 5,040 | 80.103 | 40.0515 | 0.3700 |
+| 10 | 50,400 | 33.667 | 16.8335 | 0.1170 |
+| 30 | 151,200 | 15.146 | 7.5730 | 0.0676 |
+| 100 | 504,000 | 4.989 | 2.4945 | 0.0370 |
+| 300 | 1,512,000 | 1.299 | 0.6495 | 0.0214 |
+| 1,000 | 5,040,000 | 0.291 | 0.1455 | 0.0117 |
+
+At 1,000 patterns per arrangement, even the optimal interval midpoint has
+an illustrative radius about 12.4 times sampling's RMS. This says that a
+proof consisting only of covering the most massive activation patterns and
+declaring the rest unknown is too weak at the measured coverage. It says
+nothing comparable about the actual error of a good fallback.
+
+Three qualifications are essential:
+
+1. The costs count only the assumed one-forward construction per pattern.
+   Discovery and integration are additional work.
+2. `z26.py` measures 40 arrangements for 16 population networks plus the zoo,
+   using sampled frequencies and a Good–Turing estimate. Its tails are not
+   rigorous certificates, despite the printed label "guaranteed". Nor is a
+   median tail an RMS statistic for all 1,024 networks.
+3. It counts distinct activation bit patterns on the MF4 image. The map
+   setting lower inputs to mu(Q) is nonlinear, so a convex activation cone's
+   preimage in retained-value coordinates need not be convex or connected.
+   The count is not automatically the number of connected pieces of the
+   anchor domain, and it is not a count of convex components of the true
+   error set.
+
+## 4. What non-local correction mass really implies
+
+Write the true conditional correction as
+
+\[
+c(z)=\Pr(\text{correct}\mid z)-I_0(z),
+\]
+
+and let B be a set of top-k configurations discarded by a proposed local
+correction. If its complement is integrated exactly but correction on B is
+set to zero, the accuracy error is exactly
+
+\[
+-\int_B c(z)\,d\nu(z).
+\tag{4}
+\]
+
+Thus a boundary-only truncation needs either a bound on that omitted
+integral, or a mechanism for computing it. Boundary smoothness by itself
+does not control it. Equation (4) is an exact truncation identity, not a
+universal lower bound on every boundary-based estimator: errors on the
+complement might cancel the omission.
+
+In `z22_seed0.txt`, the median contribution on lines with no detected anchor
+crossing is -0.362 points for the *first-order additive-margin proxy*. Dropping
+that contribution while evaluating the proxy on other lines exactly would
+give a +0.362-point median error relative to that proxy's full integral.
+At that error size, the sampling crossover is only
+
+\[
+C=0.069/(0.00362)^2\simeq 5,265
+\]
+
+forwards. This is useful evidence against that particular truncation.
+
+It is not a 0.362-point lower bound for true RNN accuracy. `z22.py` uses the
+first-order margin approximation, and "no crossing" means no sign change
+between 64 midpoint S-grid values. It does not call `lines.trace_line` to
+certify the absence of narrow extra crossings. The supplied "68%" is a
+diagnostic of that sampled proxy calculation, not a theorem about true
+correction mass.
+
+## 5. "Count the maximal convex pieces" needs a definition
+
+Even a union of two polyhedral cones can have infinitely many maximal convex
+subsets. In R^2 take
+
+\[
+E=\{x\le0\}\cup\{y\le0\}.
+\]
+
+For every a,b > 0, the half-plane cone
+
+\[
+H_{a,b}=\{ax+by\le0\}
+\]
+
+is contained in E and is a maximal convex subset of E. To prove maximality,
+take any p in E outside H_{a,b}, so a p_x + b p_y = s > 0. Choose z with both
+coordinates strictly positive and a z_x + b z_y = s/2. Then w = 2z - p lies
+on the boundary of H_{a,b}, but z = (p+w)/2 is outside E. Adding p to a convex
+set containing H_{a,b} would therefore leave E. Varying a/b gives a continuum
+of distinct maximal convex cones.
+
+Useful finite objectives include a specified disjoint polyhedral partition,
+the size and integration cost of a particular convex cover, or a minimum
+convex-cover problem with a stated admissible representation. Greedy merging
+of adjacent cones is another concrete algorithm, but its final number can
+depend on merge order. The activation partition is one canonical starting
+point; its size alone does not lower-bound the best error-set representation.
+
+## 6. The ideal-ANOVA experiment is not a lower bound for additive accuracy estimators
+
+`z34.py` calls its result a bound for every additive lower-input model, because
+the first-order ANOVA projection minimizes squared error of the **margin**.
+That implication is false: minimizing squared margin error does not minimize
+error in the integrated sign probability.
+
+Here is an explicit counterexample with independent standard Gaussian inputs
+and a continuous, piecewise-linear, positively homogeneous margin, so it does
+not rely on discontinuous or non-ReLU-compatible functions. Let
+
+\[
+m(X,Y,Z)=|X+Y|-|X-Y|+2|Z|.
+\]
+
+The first two terms have conditional mean zero given any one coordinate:
+for fixed X, replacing Y by -Y reverses their sign, and vice versa. Therefore
+the first-order ANOVA projection is
+
+\[
+m_A(X,Y,Z)=2|Z|,
+\]
+
+which predicts P(m_A > 0) = 1. On the other hand,
+
+\[
+|X+Y|-|X-Y|
+=2\operatorname{sign}(XY)\min(|X|,|Y|).
+\]
+
+The true margin is negative exactly when XY < 0 and |Z| is smaller than
+both |X| and |Y|. Independent Gaussian signs give the first event probability
+1/2; exchangeable continuous magnitudes give the second probability 1/3,
+independently. Hence P(m > 0) = 5/6.
+
+Now use the additive homogeneous margin
+
+\[
+g(X,Y,Z)=X+\sqrt3|Z|.
+\]
+
+It has P(g > 0) = 5/6 exactly: the incorrect region X <= -sqrt(3)|Z| is a
+wedge of angle pi/3 in the rotationally invariant (X,Z) plane. Thus the
+L2-optimal additive margin has accuracy bias 1/6, while another additive
+margin has zero integrated accuracy bias. All equalities at zero have
+probability zero here.
+
+This does not construct an improved estimator for the supplied RNNs. It
+refutes the proposed general inference from ANOVA optimality. The measured
+0.074-point ANOVA bias is a useful diagnostic of one approximation, not a
+proved floor for all additive lower-input estimators, still less for all
+deterministic mechanistic estimators.
+
+The experiment also approximates the conditional expectations using finitely
+many background draws. Removing variance from the reported scoring statistic
+does not by itself remove the sign-probability bias introduced by noisy
+conditional-mean estimates.
+
+There is a precise restricted statement that *is* true. If g_n converges to
+m_A in L2 and P(m_A = 0) = 0, then P(g_n > 0) converges to P(m_A > 0).
+For every delta > 0,
+
+\[
+|\Pr(g_n>0)-\Pr(m_A>0)|
+\le \Pr(|m_A|\le\delta)
+  +\frac{\mathbb E[(g_n-m_A)^2]}{\delta^2}.
+\]
+
+First take n to infinity, then delta to zero. Thus a refinement scheme
+specifically converging to that projection ultimately inherits its bias.
+This is an asymptotic statement about that target approximation, not a
+lower bound for finite truncations or other additive constructions.
+
+## 7. The fixed-size circuit claim should be softened
+
+The assertion that any white-box lower bound here "would be a concrete
+circuit lower bound" is too categorical. It first needs a computational
+model, allowed primitives, weight precision, and target accuracy. A
+fixed-precision Boolean-circuit formulation is one possible model, not a
+consequence of the question as posed. Restricted arithmetic programs,
+decision trees, region certificates, and path-oracle algorithms give other
+models with different lower-bound questions.
+
+Likewise, exact accuracy need not have a finite expression in a stipulated
+arithmetic instruction set. A region-based method can target arbitrarily
+small certified error, given enough computation; calling every such
+calculation literally exact hides its integration and precision costs.
+
+There is a further obstacle for an unrestricted bound averaged over a fixed
+finite population: with unconstrained offline preprocessing, a lookup table
+can encode all those answers. The question explicitly excludes fitted
+prediction, so that construction is inadmissible here, but a theorem would
+need to formalize the admissible mechanistic computations to enforce the
+exclusion. This is a modeling issue before it is a circuit-complexity claim.
+
+The supportable verdict is consequently narrow but substantive: deterministic
+Boolean-oracle quadrature has a proved obstruction even for single convex
+Gaussian cones; coverage-only certificates are far too loose at the reported
+tails; and the available locality diagnostic does not justify discarding the
+off-boundary correction. None proves the 432-weight white-box population
+challenge impossible.
+
+## Reproduction
+
+`r6_bounds_check.py` uses only Python's standard `math` library to reproduce
+the theorem's constants, numerical table, region-tail comparison, and the
+truncation crossover. It contains no target-network evaluation, data fitting,
+randomness, or use of the population reference as an estimator.
+
+
+
+Detailed source audit
+=====================
+
+# Round 6 audit of z18, z21, z37, and z38
+
+Read-only audit of the supplied programs and logs. The normalization is one full target-network forward = 2,880 MACs: ten recurrent steps at 16 + 16² MACs and a 10 × 16 readout (`batch_train.py:25–30`). GPU batching changes elapsed time, not the per-target arithmetic charge.
+
+## Findings that affect interpretation
+
+1. **The anchor curves use an explicitly assumed acceleration, not the cost of the supplied implementation.** `z21.py:35–45` performs `5040*K` complete forwards per outer node, but `z21.py:65` reports 9,300. At K=256 those are 1,290,240 versus 9,300 (138.74×); at K=512 the ratio is 277.47×. `z37.py:29–37` performs `A*K` complete forwards, but `z37.py:25,69` charges 1,528 for MF3 and 191 for MF2. At K=256 both are 120.63× optimistic relative to the supplied dense-grid implementation. The prompt explicitly discloses the missing optimized tree, so this is a conditional implementation assumption, not a concealed bug. The MF3/MF4 exact-line cost must be reproduced, including preprocessing, before presenting the curves as achieved computational performance. Under the supplied code, the MF3 anchor wins disappear. For example its order-4 cost is 2,949,120 rather than 24,448 forwards, so 0.127 points RMS is about 61× sampling MSE rather than approximately 0.51×. Some accurate MF2 anchor rules can still beat sampling of the original task at much larger actual costs, but they do not estimate true accuracy.
+
+2. **MF2 has an additional invalid cost extrapolation.** In `z37.py:39–42`, all eight lower inputs equal μ(S), which varies nonlinearly as S changes. Thus the input path is not an affine S-line, even inside a fixed activation pattern. The MF3/MF4 affine line tracer does not apply unchanged. Pro-rating the MF3 tree cost by the number of arrangements does not establish a 191-forward MF2 node. A curve/root integrator could handle the μ(S) path, but its implementation and cost need separate accounting.
+
+3. **The population reference is noisy enough to dominate high-budget parity tests.** Reading `pop1k/reference.npz` gives RMS accuracy SE 0.02567 percentage points overall, 0.02643 on development (indices 0 mod 16), and 0.02580 on held out (indices 8 mod 16). Its mean p(1-p) values are respectively 0.0691045, 0.0732678, and 0.0698015. Raw squared error against this reference includes its noise. The reference alone contributes an MSE ratio C/2²⁰ against a nominal C-forward sampling baseline: 0.954 at C=10⁶ and 9.537 at C=10⁷. Report raw MSE and a noise-adjusted estimate `mean((estimate-reference)**2 - se_acc**2)`; alternatively compare raw MSE to `mean(p*(1-p)/C + se_acc**2)`. Close parity at large C needs larger independent references. A common input set correlates network errors, so increasing the number of networks does not provide 1,024 independent reference-noise replicates. This is immaterial to estimates missing by several percentage points.
+
+4. **The old anchor references are adequate for their main conclusions, but not uniform across the table.** `z21.py:47–56` correctly computes the binomial reference SE. The K=64 and K=256 orders 4–6 logs use 2²² inputs (about 0.014 points SE); the K=512 orders 6–8 and order 9–10 logs use 2²⁶ (about 0.003 points). Thus the task summary's blanket 0.003-point description does not apply to all listed rows. `z37.py:46–53` and `z38.py:46–51` use 2²⁴ references, whose noise is too small to change their unfavorable accuracy conclusions. No reference evaluation should be charged to a deployed estimator.
+
+5. **The sampling comparator formulas are correct, with different estimands explicitly separated.** `z21.py:56,65` uses the MF4 anchor's p(1-p), appropriate when scoring its integral against sampled anchor accuracy. `z37.py:53,69` and `z38.py:51,57–59` use true accuracy p(1-p). The latter is correct for the requested accuracy baseline. For an anchor-only claim, note that MF2 is substantially easier even for plain sampling: on the 16-network subset its mean anchor p(1-p) is only 0.4043 of true accuracy's, whereas MF3 and MF4 are 0.9743 and 0.9659. Use each evaluated cohort's mean p(1-p), rather than substituting 0.069 for every cohort. Marginal plug-in bias in p(1-p) is negligible at these reference sizes.
+
+## Rows, convolution, and projection
+
+- **No double counting error in z18's cut-model algebra.** The rows are one anchor, 6q singleton rows, and q² rows for each unordered pair (`z18.py:53–59,63–68`). The symmetric D array stores each pair in both orientations (`z18.py:67`); the division by two in the constant (`z18.py:80`) correctly compensates. For q=8, the all-pair model needs 1,009 rows. Uniformly averaging over the 210 possible sets of six lower positions gives exactly 3 adjacent pairs and 17/3 pairs at distance at most two. Therefore the selected variants need 241 and 411⅔ forward rows on average; the gap≤2 count ranges from 241 to 625. The script evaluates all 15 pairs before masking (`z18.py:56–59,77–83`), so its executed experiment is costlier than a deployed selected-pair implementation. Omitting unused pair rows is a straightforward legitimate optimization. The nin sampled rows (`z18.py:60–61`) are measurement work, not estimator work, and should not be added to its budget.
+- **The 241–412 counts omit target-dependent postprocessing.** `conv_p` (`z18.py:38–45`) has q⁴ threshold queries into a sorted list of q² pair sums. At q=8 that is 4,096 queries (roughly 24,576 binary-search comparisons); at q=16 it is 65,536 (roughly 524,288 comparisons). Counting additions and multiplications as scalar arithmetic operations, its basic arithmetic is approximately `4*q**4 + 4*q**2 - 2`, or 2.89 and 45.69 forward equivalents at 5,760 scalar operations per forward, before sorting, search, indexing, and pair projection. Comparison/search work needs an explicit cost convention or timing; it is not free. This is a modest correction at q=8 but grows quickly with q. Count only the convolution for the chosen estimator, not all six compared variants.
+- **The convolution is exact for the stated finite additive model.** Pairing into A, B, C and using `searchsorted(..., right=True)` computes P(m>0), with the product atom weights correctly restored. It does not make the cut-model approximation exact for the actual network. Strict positive margin also excludes ties where the target is the lowest tied index; retained implementations should handle ties consistently if they occur at quadrature atoms. No measured conclusion-changing tie case was found in this audit.
+- **z18's conditional sampling-noise correction is correct.** `p_hat*(1-p_hat)/(nin-1)` (`z18.py:85,90`) is an unbiased estimator of the variance of the binomial conditional mean. The reported 0.048-point integrated RMS is a noise-subtracted measurement of the integrated model error, not the result of a deterministic outer integrator. The appended all-population log gives raw RMS 0.064 and estimated measurement noise 0.043 points. Its generating postprocessing and per-configuration saved arrays are absent, so that last subtraction cannot be independently reconstructed from the included program alone.
+- **z38's estimator forward count is internally correct.** `z38.py:38–45,57` uses exactly one base row plus 7q singleton rows per arrangement and S-node, yielding `n*n*720*K*(1+7*q)`. No extra factor of seven, duplicate anchor, or charged reference is present. Weight-dependent aggregation is small and only raises the cost. Its reported failure by thousands in MSE therefore survives the audit.
+
+## Geometry/Markov observation for follow-up
+
+Exact propagation of `(h_t,M_t,S_t,pos(S_t))` shares prefixes but does not automatically merge distributions. Different old inputs with equal ages and events generally induce different hidden-state laws. A mixture component should therefore preserve joint affine dependence on old inputs and its truncation/gating domain; moment-only merging needs a new approximation analysis. One promising tractable diagnostic is to partition the next-input axis by *every gate threshold plus M and S* at each deterministic state, and integrate each interval analytically or by a very low-order positive Gaussian-CDF rule. This preserves correlations within each propagated point and shares time prefixes. However, point representatives reset affine dependence and component counts can grow exponentially, so its budget/error curve is an experiment, not a proved replacement for the suggested affine-state recursion.
+
+For error-cone enumeration, counting activation regions is insufficient: neighboring activation regions with the same affine or compatible error decision can merge, while one activation region can have several task/output pieces. Any measured lower-bound surrogate must count error-relevant pieces and their mass, or constrain the algorithm to a particular region representation. The 0.074-point error of the ideal first-order ANOVA *margin* projection is not a lower bound on the integrated accuracy error of every additive margin model: it minimizes squared margin error, not the signed accuracy functional.
+
+
+
+Detailed geometry diagnostic
+============================
+
+# Gate histories and error-cone fragments: measurement diagnostic
+
+`r6_geometry.py` is a guarded NumPy program using at most two BLAS threads. The run in `r6_geometry.json` uses 65,536 independent standard-Gaussian sequences, the eight development networks 0, 128, ..., 896, and the six zoo models. The first 32,768 sequences discover patterns and rank them by frequency; the remaining 32,768 measure their coverage independently. All work is measurement, not a proposed deterministic accuracy estimator. No target accuracy or population calibration is fitted.
+
+## Prefix proliferation
+
+Medians over the eight development networks:
+
+| Time | Observed gate histories | Test mass in previously unseen histories | Test mass captured by the 1,024 most frequent discovery histories |
+|---|---:|---:|---:|
+| 3 | 474 | 0.18% | 99.82% |
+| 5 | 7,774 | 8.90% | 77.73% |
+| 7 | 20,980 | 27.76% | 46.22% |
+| 9 | 38,936 | 55.74% | 19.65% |
+| 10 | 46,867 | 68.84% | 12.76% |
+
+At time 10, individual networks have 22,548–58,256 observed histories. The 90 ordered max/second-max age pairs do not make those histories interchangeable: selecting the 16 most frequent histories within each age pair captures a median 6.77% of test input mass. Selecting 16 within each exact event history captures 8.83%. There are 6,450 observed event histories in the common input set. These grouped figures restrict the number retained per group; the ungrouped top-1,024 list allocates its capacity differently, so its greater coverage is consistent.
+
+This is evidence against a recursion that retains only a small finite list of complete gate histories. It does not bound a method that merges histories with equivalent future behavior, or approximates their joint state distributions successfully. Merely counting gate histories can overcount distinct current affine maps and error-relevant states.
+
+## Error-cone partition
+
+For a fixed full activation pattern, all recurrent states and final logits are linear in the ten inputs. Also fix the positions of the largest and second-largest inputs and the network's predicted position. The gate conditions, the top-two conditions, and all output comparisons are homogeneous linear inequalities. Their intersection is a convex polyhedral cone. When the predicted position differs from the true second-largest position, it is an error-cone fragment.
+
+There are a median **5,846 observed error-cone fragments**, with range **2,405–6,806**, in the eight development networks. A median **97.29% of test errors lie in fragments absent from the discovery half**. Even ignoring top-two and output labels, a median 92.79% of test errors have previously unseen full activation histories. For the zoo, the unseen error-fragment fractions are 97.52%, 88.77%, 86.83%, 98.37%, 98.38%, and 76.40% (mystery, seeds 0–4).
+
+These are **not maximal convex error pieces**. Neighboring activation or output regions may merge into a larger convex error set; the diagnostic neither finds such mergers nor proves they are impossible. The large missing mass shows that a list of observed local fragments has poor coverage. A geometry-based improvement would need to construct much larger error regions or integrate families of fragments together.
+
+## Verification and reproducibility
+
+Run `python r6_geometry.py --dev-count 8 --log2-inputs 16 --out r6_geometry.json` from the repository. The script loads only NumPy weight arrays and uses no imports from unguarded experimental programs. Its input-group encoding was checked on an explicit event sequence; species-coverage calculations were checked on a small example with a known unseen atom. Its measured accuracies agree with the supplied reference within five sampling standard errors for every network. Output contains all per-network and per-time counts and mass estimates.
+
+
+
+Reproduction commands
+=====================
+
+ROUND 6: REPRODUCTION GUIDE
+===========================
+
+Scope and provenance
+--------------------
+The supplied original algzoo-432-interp-r5(1).zip is unchanged. Round 6 adds
+the modules listed below, this guide, notes, r6_geometry.json, and
+r6_results/. The delivered JSON/NPZ results are already included; expensive
+recomputation is optional. The original r6.sh is a legacy round-5 launcher,
+not the driver for these new experiments. Do not execute it for this guide.
+
+New executable sources:
+r6_core.py             shared-prefix evaluation and MF3 interpolation
+r6_low.py              small MF2 quadrature rules
+r6_event.py            deterministic event quadrature and final-input sweep
+r6_correction.py       MF3/MF4 corrections, measurement, and combination reports
+r6_exact_anchor.py     supplied trace_line with actual MAC counts and retries
+r6_geometry.py         independent-sample geometry diagnostic
+r6_verify.py           small implementation checks
+r6_summary.py          saved-result tables and plot
+r6_bounds_check.py     restricted-oracle mathematical bound constants
+r6_bounds_minimal.py   bound constants and analytic ANOVA counterexample
+
+Run every command below from the directory containing lines.py, weights.npz,
+weights_seed0.npz through weights_seed4.npz, pop1k/seed0.npz, and
+pop1k/reference.npz. Data paths in the estimator modules are relative to the
+working directory. Do not import arbitrary original experiment scripts:
+many execute experiments at import time. The new summary and minimal bound
+scripts also execute at top level; invoke them as scripts as shown below.
+
+1. Prepare a separate reproduction directory
+---------------------------------------------
+If using the already extracted delivered directory, change into that
+directory and continue at section 2. To reconstruct from the original ZIP,
+edit the three absolute paths in this block. R6_DELIVERED_DIR is the directory
+containing the new sources and the included r6_results/correction_frozen.json.
+R6_REBUILD_PARENT must not exist yet; this avoids overwriting delivered data.
+
+set -eu
+export R6_ORIGINAL_ZIP='/absolute/path/algzoo-432-interp-r5(1).zip'
+export R6_DELIVERED_DIR='/absolute/path/delivered/algzoo-432-interp'
+export R6_REBUILD_PARENT='/absolute/path/new-r6-reproduction'
+python3.12 - <<'PY'
+import os, shutil
+from pathlib import Path
+from zipfile import ZipFile
+dest = Path(os.environ['R6_REBUILD_PARENT']).resolve()
+dest.mkdir(parents=True, exist_ok=False)
+with ZipFile(os.environ['R6_ORIGINAL_ZIP']) as z:
+    assert all((dest / p).resolve().is_relative_to(dest) for p in z.namelist())
+    z.extractall(dest)
+repo = dest / 'algzoo-432-interp'
+src = Path(os.environ['R6_DELIVERED_DIR'])
+names = ['r6_core.py', 'r6_low.py', 'r6_event.py', 'r6_correction.py',
+         'r6_exact_anchor.py', 'r6_geometry.py', 'r6_verify.py',
+         'r6_summary.py', 'r6_bounds_check.py', 'r6_bounds_minimal.py',
+         'R6_REPRODUCE.txt']
+for name in names:
+    shutil.copy2(src / name, repo / name)
+(repo / 'r6_results').mkdir(exist_ok=True)
+shutil.copy2(src / 'r6_results/correction_frozen.json',
+             repo / 'r6_results/correction_frozen.json')
+print(repo)
+PY
+cd "$R6_REBUILD_PARENT/algzoo-432-interp"
+
+The original archive alone does not contain the new modules or frozen
+manifest. Both must come from this delivery. The manifest is a historical
+selection record; retain it rather than generating a new freeze timestamp.
+
+2. Dependencies and CPU limits
+------------------------------
+The recorded run used Python 3.12.14, numpy 2.3.5, scipy 1.17.0, numba 0.68.0,
+llvmlite 0.50.0, threadpoolctl 3.6.0, and matplotlib 3.10.8. No PyTorch, CUDA,
+or GPU is needed for these new CPU modules. One way to create that environment:
+
+python3.12 -m venv r6_env
+. r6_env/bin/activate
+python -m pip install numpy==2.3.5 scipy==1.17.0 numba==0.68.0 llvmlite==0.50.0 threadpoolctl==3.6.0 matplotlib==3.10.8
+export OMP_NUM_THREADS=2
+export OPENBLAS_NUM_THREADS=2
+export MKL_NUM_THREADS=2
+export NUMBA_NUM_THREADS=2
+export MPLCONFIGDIR="$PWD/r6_results/mplconfig"
+export NUMBA_CACHE_DIR="$PWD/r6_results/numba_cache"
+mkdir -p r6_results "$MPLCONFIGDIR" "$NUMBA_CACHE_DIR"
+
+Execute the following runs serially. The correction writer replaces NPZs
+atomically, but simultaneous runs writing the same outputs are unnecessary.
+First Numba compilation adds time; saved wall times are not reproducible
+across machines. Floating-point values can differ slightly across BLAS and
+library builds. Seeds only control the explicitly labeled diagnostics.
+
+3. Fixed cohorts and selection
+------------------------------
+Development: population IDs 0,16,...,1008 (64 networks).
+Held out: population IDs 8,24,...,1016 (64 different networks).
+Both append zoo IDs 1024,...,1029, corresponding in order to weights.npz,
+then weights_seed0.npz,...,weights_seed4.npz. Zoo values are reported
+separately and excluded from population RMS and sampling comparisons.
+
+The correction shortlist was frozen at
+2026-10-19T14:43:13.553372+00:00, before its held-out evaluation. The selected
+high-compute development rule was recorded at
+2026-10-19T14:47:43.210587+00:00: exact MF3 n=6 plus the MF4 correction
+(k=4,n=2,K=8,q=8,keep=8). Its interpolation companion uses MF3 n=6,K=32.
+The low/event/anchor setting lists below were also fixed for held-out use.
+This reproduction replays fixed settings; it does not make a new selection.
+The summary constructs the Pareto frontier using development RMS only and
+then pairs the corresponding held-out records. All shortlist combinations,
+including unfavorable ones, are retained.
+
+4. Small verification before the full runs
+-----------------------------------------
+python r6_verify.py --out r6_results/verify.json
+python r6_bounds_check.py
+python r6_bounds_minimal.py
+
+r6_verify checks shared-prefix logits against direct forwards; six fixed
+independent prefixes on two networks against trace_line over each of the
+three final-input target intervals; the exact all-off, lowest-index tie;
+and cap-4 overflow retries against cap-512 on all 720 lines at one central
+order-3 node. Its RNG fixtures never enter an accuracy estimator. The bound
+scripts require only Python's standard library and evaluate theory for a
+larger restricted-oracle geometric class, not a theorem about this RNN zoo.
+
+5. Estimator families: regenerate all primary raw results
+---------------------------------------------------------
+r6_low.py has no CLI: it runs both cohorts with exactly
+(n,q)=(1,1),(1,2),(2,2),(2,4),(3,4),(4,8).
+
+python r6_low.py
+
+The MF3 interpolation settings are (outer order n, S intervals K).
+The event settings are (conditional order q, merge-bin count); bins=0
+retains every point component. Positive bins use the declared mean closure.
+For exact anchors, n is the order in both Beta coordinates. --dev-count
+means population cohort size for either split, despite the option's name.
+
+for split in dev held; do
+  python r6_core.py --split "$split" --settings 1:1,1:2,2:4,3:8,4:16,6:32 --out "r6_results/anchors_${split}.json"
+  python r6_event.py --split "$split" --settings 1:1,1:2,1:4,1:8,1:0,2:2,2:4,2:8 --out "r6_results/event_${split}.json"
+  python r6_exact_anchor.py --split "$split" --orders 3,4,6 --dev-count 64 --maxp 512 --out "r6_results/exact_anchor_${split}.json"
+done
+
+Recreate the separate dense S-grid diagnostic at the central n=3 node
+without recomputing completed exact anchors:
+
+python r6_exact_anchor.py --split dev --orders 3,4,6 --dev-count 64 --maxp 512 --resume --verify --out r6_results/exact_anchor_dev.json
+
+This adds exact_anchor_dev.verification.json (720 lines, 4096 S midpoints).
+Without --resume, exact-anchor output is regenerated; with --resume,
+completed orders are retained and the cohort must match.
+
+The correction grid has outer order n in two (MF3) or three (MF4)
+coordinates, K equally spaced conditional-CDF S midpoints, and q lower
+Gauss-Legendre nodes. keep is the number of declared lower-position
+arrangements per ordered (M,S). Generate these FOUR sources for each split:
+
+for split in dev held; do
+  python r6_correction.py --split "$split" --k 3 --n 1 --K 8 --q 4 --keep 8
+  python r6_correction.py --split "$split" --k 3 --n 2 --K 16 --q 8 --keep 8
+  python r6_correction.py --split "$split" --k 4 --n 1 --K 8 --q 8 --keep 56
+  python r6_correction.py --split "$split" --k 4 --n 2 --K 8 --q 8 --keep 8
+done
+
+They create correction_{split}_k{k}_n{n}_K{K}_q{q}_keep{keep}.npz and .json.
+The NPZs retain per-arrangement integrals; no estimator needs population
+reference labels to evaluate these integrals. For k=4 the delta is the
+MF4 singleton-corrected model minus a separately evaluated MF3 anchor at
+the same top-three values and positions. It is added to a fine MF3 anchor.
+
+Also run the fixed matched z38 comparator. It is outside the 12-setting
+correction shortlist and is required by the summary:
+
+for split in dev held; do
+  python r6_correction.py --split "$split" --k 3 --n 3 --K 8 --q 8 --keep 8
+done
+
+6. Derive fixed subsets, combinations, tables, and the figure
+------------------------------------------------------------
+The included manifest declares all 12 correction settings:
+k=3, n=1, K=8,  q=4, keep=1,2,4,8
+k=3, n=2, K=16, q=8, keep=1,2,4,8
+k=4, n=1, K=8,  q=8, keep=4,8,56
+k=4, n=2, K=8,  q=8, keep=8
+For MF3, keep=1,2,4 selects sorted remaining-position ranks [3], [1,6],
+or [0,2,5,7]. For MF4, keep=8 uses the ordered rank pairs
+(0,7),(7,0),(1,3),(3,1),(2,5),(5,2),(4,6),(6,4); keep=4 takes the first
+four. Thus balanced8 uses every remaining position once for R and once
+for Q. These choices are fixed designs, not fitted arrangements.
+
+The --report path SILENTLY SKIPS a missing source NPZ or anchor family.
+Check these prerequisites first; section 5 is their regeneration recipe:
+
+python - <<'PY'
+import json
+from pathlib import Path
+p = Path('r6_results')
+assert len(json.loads((p/'correction_frozen.json').read_text())['settings']) == 12
+for split in ('dev', 'held'):
+    for stem in ('k3_n1_K8_q4_keep8', 'k3_n2_K16_q8_keep8',
+                 'k4_n1_K8_q8_keep56', 'k4_n2_K8_q8_keep8'):
+        assert (p/f'correction_{split}_{stem}.npz').is_file()
+    for family in ('anchors', 'exact_anchor'):
+        rows = json.loads((p/f'{family}_{split}.json').read_text())
+        assert {3,4,6}.issubset({r['n'] for r in rows})
+    assert (p/f'correction_{split}_k3_n3_K8_q8_keep8.json').is_file()
+print('All combination prerequisites are present.')
+PY
+python r6_correction.py --report --split dev
+python r6_correction.py --report --split held
+python - <<'PY'
+import json
+for split in ('dev', 'held'):
+    rows = json.load(open(f'r6_results/correction_combinations_{split}.json'))
+    assert len(rows) == 72, (split, len(rows))
+print('72 combinations per cohort.')
+PY
+python r6_summary.py
+
+Reports read the full-arrangement sources and write the declared subset
+NPZs/JSONs, scaling the forward-row count to the rows actually required by
+that deployed subset. They also combine each of 12 corrections with each
+of six eligible anchors: interpolation n=3,4,6 and exact n=3,4,6. The result
+is correction_combinations_{dev,held}.json. The summary additionally reads
+low, event, anchors, exact_anchor, and matched-z38 JSONs for both cohorts;
+it writes r6_results/summary.json and r6_results/curve.png. It does not
+re-evaluate networks. Do not change the frozen manifest to report a new
+held-out winner.
+
+7. Optional independent measurement and geometry diagnostics
+------------------------------------------------------------
+These are diagnostics, not allowed deterministic accuracy estimators.
+They are not inputs to any estimate or the summary frontier.
+
+python r6_correction.py --measure 256
+python r6_geometry.py --dev-count 8 --log2-inputs 16 --seed 2026101906 --out r6_geometry.json
+
+Measurement uses seed 6007, 256 independent draws for each of 5040 top-four
+arrangements, and the 64 development networks plus six zoo networks. It
+writes correction_measurement.npz, correction_measurement.json, and
+correction_arrangement_report.json under r6_results. Finite measurement
+noise is subtracted for explicitly labeled diagnostic variance estimates.
+To rebuild only the arrangement report from an existing measurement NPZ:
+
+python - <<'PY'
+from r6_correction import arrangement_report
+arrangement_report()
+PY
+
+Geometry uses 8 population IDs 0,128,...,896 plus the six zoo networks and
+65536 iid Gaussian inputs. The first half discovers activation histories;
+the second measures coverage of those discovered histories. It reports
+prefixes at t=3,5,7,9,10, age/event groupings, and error partition fragments.
+Observed patterns/fragments are not maximal convex error pieces, and
+sample coverage is not a deterministic mass certificate. r6_geometry.md
+and other narrative notes are written summaries, not generated by this CLI.
+
+8. Auxiliary saved records
+--------------------------
+r6_results/verify.json is the current small-verifier output. The earlier
+event_tie_check.json and exact_anchor_overflow_check.json are snapshots of
+two of the same checks. If those legacy-shaped records are desired, derive
+them from the new verifier output without evaluating networks again:
+
+python - <<'PY'
+import json
+from pathlib import Path
+p = Path('r6_results')
+v = json.loads((p/'verify.json').read_text())
+(p/'exact_anchor_overflow_check.json').write_text(json.dumps(v['overflow_retry'], indent=2))
+t = dict(all_off_probability=v['all_off_probability'],
+         exact_probability=v['all_off_expected'],
+         absolute_error=abs(v['all_off_probability']-v['all_off_expected']))
+(p/'event_tie_check.json').write_text(json.dumps(t, indent=2))
+PY
+
+correction_z38_exploratory_dev.json is a historical, development-only
+postprocessing record outside the frozen shortlist and summary. It combines
+the matched-z38 correction delta with exact n=4, exact n=6, and interpolation
+n=6,K=32 anchors. No additional network evaluation is needed to recreate it;
+the following optional block uses the current cost-field convention:
+
+python - <<'PY'
+import json
+import numpy as np
+from pathlib import Path
+p = Path('r6_results')
+z = np.load(p/'correction_dev_k3_n3_K8_q8_keep8.npz')
+ids, delta, rows = z['ids'], z['delta'], int(z['rows'])
+ref = np.load('pop1k/reference.npz')['acc'][ids]
+output = []
+for family,n in [('exact_anchor',4), ('exact_anchor',6), ('anchors',6)]:
+    a = next(x for x in json.loads((p/f'{family}_dev.json').read_text()) if x['n']==n)
+    assert np.array_equal(ids, a['ids'])
+    c = np.asarray(a.get('costs_per_network', np.full(len(ids),a['cost']))) + 1.01*rows
+    e = 100*(np.asarray(a['estimates'])+delta-ref)
+    s = 100*np.sqrt(np.mean((ref*(1-ref)/c)[:-6]))
+    rms = float(np.sqrt(np.mean(e[:-6]**2)))
+    r = dict(exploratory=True, development_only=True, anchor=family, n=n, K=a.get('K'),
+             cost=float(c[:-6].mean()), cost_is_lower_bound=False, rms=rms,
+             mean=float(e[:-6].mean()), sampling_rms=float(s),
+             mse_ratio=float(rms*rms/s**2), zoo=e[-6:].tolist(),
+             exact_anchor_omits_scalar_work=a.get('cost_is_lower_bound',False))
+    if a.get('cost_is_lower_bound',False):
+        mac = np.asarray(a['costs_per_network'])+rows
+        ms = 100*np.sqrt(np.mean((ref*(1-ref)/mac)[:-6]))
+        r.update(mac_only_cost_lower_bound=float(mac[:-6].mean()),
+                 sampling_rms_at_mac_cost=float(ms), mse_ratio_at_mac_cost=float(rms*rms/ms**2))
+    output.append(r)
+(p/'correction_z38_exploratory_dev.json').write_text(json.dumps(output,indent=2))
+PY
+
+9. Accounting, accuracy, and interpretation
+------------------------------------------
+One full dense RNN forward is defined as 2880 MACs. Shared-prefix methods
+count the dense arithmetic they actually execute, normalized by 2880.
+They do not claim the original unimplemented 9300- or 1500-forward trees.
+The exact-anchor code sums the costs returned by supplied lines.trace_line
+on all 720 arrangements at every outer node. Only overflowing lines retry
+with doubled capacity; all discarded attempts are included in that count.
+Those exact-line counts omit scalar gate roots, sorting, CDFs, and related
+work, and therefore form MAC-model lower bounds for this implementation.
+
+Other methods use declared scalar-work allowances, not measured hardware
+upper bounds. Examples are 200 scalar-equivalent operations per root/CDF
+interval and the correction convention cost=1.01*forward_rows. Allocation,
+bookkeeping, and library internals are not individually timed or converted
+to exact MAC equivalents. Wall-clock seconds are supplementary only.
+
+The selected MF4 correction evaluates 2,304,000 complete forward rows per
+network: 8 outer nodes * 720 arrangements * 8 S nodes * 50 rows. The 50 are
+one MF4 base, 6*8 lower-input rows, and one separately evaluated MF3 anchor.
+All repeated rows are charged as executed. The fine MF3 anchor cost is added;
+there is no free subtraction or uncharged duplicate anchor. Subset reports
+charge the subset's deployment cost, not the cost of the larger diagnostic
+run from which its already computed integrals were extracted.
+
+An exact-anchor combination includes actual anchor MACs plus the correction
+1% allowance. Its reported convention cost is optimistic but is NOT a
+proved total lower bound: cost_is_lower_bound=false and
+exact_anchor_omits_scalar_work=true express this. Only the separate
+mac_only_cost_lower_bound field (anchor MAC count + raw correction rows)
+is the MAC-model bound. sampling_rms_at_mac_cost and mse_ratio_at_mac_cost
+use that bound. These implementation counts do not rule out an optimized
+algorithm that has not been implemented or tested here.
+
+Accuracy errors are estimator minus supplied reference, in percentage
+points. The reference uses 1,048,576 measurement samples; it is not exact
+ground truth. Reported estimator RMS values retain this reference noise.
+Sampling curves use the supplied reference accuracy p in p*(1-p)/C. When
+costs vary by network, the comparison averages p_i*(1-p_i)/C_i before taking
+the square root, rather than substituting one mean cost. The horizontal
+reference-noise line is a measurement scale, not a universal error floor.
+
+The correction JSON panels named correction_with_reference_anchor and
+correction_with_reference_mf4 use a measured reference anchor to diagnose
+the correction alone. They are not deployable estimators and are excluded
+from the primary frontier. All actual rules use the target network weights,
+fixed quadrature/design choices, and their own calculated anchors. No RNG,
+QMC sequence, population regression, or held-out calibration enters them.
+
+
+
+Complete new experiment and analysis source code
+================================================
+
+
+r6_core.py
+----------
+```python
+"""CPU deterministic MF3 quadrature with shared prefixes and linear-logit roots.
+Run from this repository. All rules are fixed; reference values only score them.
+"""
+import argparse, itertools, json, time
+from pathlib import Path
+import numpy as np
+from scipy.special import ndtr, ndtri, roots_jacobi
+from threadpoolctl import threadpool_limits
+
+ARR = np.array(list(itertools.permutations(range(10), 3)))
+
+def load(ids):
+    z = np.load('pop1k/seed0.npz')
+    keys = ['Wih', 'Whh', 'Wo']
+    pop = [z['s1048576_' + k] for k in keys]
+    zoo = []
+    for f in ['weights.npz'] + [f'weights_seed{i}.npz' for i in range(5)]:
+        w = np.load(f)
+        zoo.append([w['rnn.weight_ih_l0'][:, 0],
+                    w['rnn.weight_hh_l0'], w['linear.weight']])
+    return [np.ascontiguousarray(np.stack([
+        pop[j][i] if i < 1024 else zoo[i-1024][j] for i in ids
+    ]), dtype=np.float64) for j in range(3)]
+
+def rule(n, a=1, b=1):
+    x, w = roots_jacobi(n, b-1, a-1)
+    return (x+1)/2, w/w.sum()
+
+def forward(W, X):
+    wi, wh, wo = W
+    h = np.zeros((len(wi), len(X), 16))
+    for t in range(10):
+        h = np.maximum(h @ wh.transpose(0, 2, 1)
+                       + wi[:, None, :] * X[None, :, t, None], 0)
+    return h @ wo.transpose(0, 2, 1)
+
+def prefix_forward(W, tokens, values):
+    """Evaluate exactly the same rows, deduplicating identical input prefixes.
+    Returns logits and actual dense multiply/add work, in 2880-MAC units.
+    Also charges scalar adds and ReLU comparisons, unlike the base MAC count.
+    """
+    wi, wh, wo = W
+    drive = wi[:, None, :] * values[None, :, None]
+    h = np.zeros((len(wi), 1, 16))
+    inv = np.zeros(len(tokens), dtype=int)
+    work = 16*len(values)
+    for t in range(10):
+        edges, inv = np.unique(np.column_stack([inv, tokens[:, t]]),
+                               axis=0, return_inverse=True)
+        if t == 0:
+            h = np.maximum(drive[:, edges[:, 1]], 0)
+            work += len(edges)*16
+        else:
+            h = np.maximum(h[:, edges[:, 0]] @ wh.transpose(0, 2, 1)
+                           + drive[:, edges[:, 1]], 0)
+            work += len(edges)*(256+32)
+    L = h @ wo.transpose(0, 2, 1)
+    work += len(h[0])*160
+    return L[:, inv], work/2880
+
+def line_probability(L, s, y):
+    """Gaussian measure of correctness for logits linearly interpolated in x_S.
+    The integral of this interpolant is exact; the network need not be affine.
+    """
+    target = np.take_along_axis(L, y[None, :, None, None], axis=-1)
+    d = target-L
+    d0, dd = d[:, :, :-1], np.diff(d, axis=2)
+    nz = dd != 0
+    r = np.divide(-d0, dd, out=np.zeros_like(dd), where=nz)
+    low = np.maximum(0, np.max(np.where(dd > 0, r, -np.inf), axis=-1))
+    high = np.minimum(1, np.min(np.where(dd < 0, r, np.inf), axis=-1))
+    bad = np.any((~nz) & ((d0 < 0) | ((d0 == 0) &
+        (np.arange(10)[None, None, None, :] < y[None, :, None, None]))), axis=-1)
+    low, high = np.clip(low, 0, 1), np.clip(high, 0, 1)
+    a = s[:-1]+np.diff(s)*low
+    b = s[:-1]+np.diff(s)*high
+    mass = np.where((high > low) & ~bad, ndtr(b)-ndtr(a), 0)
+    return mass.sum(axis=-1)/(ndtr(s[-1])-ndtr(s[0]))
+
+def mf3(W, n, K):
+    """n x n Beta outer rule; K affine interpolation intervals along S."""
+    est = np.zeros(len(W[0])); cost = 0.0
+    ur, wr = rule(n, 8, 3); ug, wg = rule(n, 2, 1)
+    for a, wa in zip(ur, wr):
+        for g, w in zip(ug, wg):
+            b = a+(1-a)*g
+            R, M = ndtri(a), ndtri(b)
+            s = ndtri(a+(b-a)*np.arange(K+1)/K)
+            mu = -np.exp(-R*R/2)/np.sqrt(2*np.pi)/a
+            # symbols 0=M, 1=R, 2=mu; interior S nodes have distinct symbols.
+            vals = np.r_[M, R, mu, s[1:-1]]
+            st = np.r_[1, np.arange(3, K+2), 0]
+            tok = np.full((720, K+1, 10), 2, dtype=int)
+            for j in range(720):
+                tok[j, :, ARR[j, 0]] = 0
+                tok[j, :, ARR[j, 1]] = st
+                tok[j, :, ARR[j, 2]] = 1
+            L, c = prefix_forward(W, tok.reshape(-1, 10), vals)
+            p = line_probability(L.reshape(len(W[0]), 720, K+1, 10),
+                                 s, ARR[:, 1])
+            est += wa*w*p.mean(axis=1)
+            # 200 scalar-equivalent operations/interval: margins, roots,
+            # reductions, masks and both normal CDFs. Report separately.
+            cost += c+720*K*200/2880
+    return est, cost
+
+def score(est, ids, cost):
+    ref = np.load('pop1k/reference.npz')
+    p = ref['acc'][ids]; err = (est-p)*100
+    ans = {'cost': float(cost), 'ids': list(map(int, ids)),
+           'estimates': est.tolist(), 'errors_pp': err.tolist()}
+    for name, mask in [('dev', ids < 1024),
+                       ('held', (ids < 1024) & (ids % 16 == 8))]:
+        if name == 'dev': mask &= ids % 16 == 0
+        if mask.any():
+            e = err[mask]; samp = 100*np.sqrt(np.mean(p[mask]*(1-p[mask]))/cost)
+            ans[name] = dict(rms=float(np.sqrt(np.mean(e*e))),
+                             mean=float(e.mean()), sampling=float(samp),
+                             ratio=float(np.mean(e*e)/samp**2))
+    ans['zoo_errors'] = err[ids >= 1024].tolist()
+    return ans
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--split', choices=['dev', 'held', 'all'], default='dev')
+    ap.add_argument('--settings', default='1:1,1:2,2:4,3:8,4:16,6:32')
+    ap.add_argument('--out', default='r6_results/anchors_dev.json')
+    a = ap.parse_args()
+    ids = np.r_[np.arange(0, 1024, 16) if a.split == 'dev' else
+                np.arange(8, 1024, 16) if a.split == 'held' else
+                np.sort(np.r_[np.arange(0, 1024, 16), np.arange(8, 1024, 16)]),
+                np.arange(1024, 1030)]
+    W = load(ids); results = []
+    for n, K in [tuple(map(int, s.split(':'))) for s in a.settings.split(',')]:
+        start = time.time(); est, cost = mf3(W, n, K)
+        row = score(est, ids, cost); row.update(n=n, K=K)
+        results.append(row)
+        Path(a.out).parent.mkdir(exist_ok=True)
+        Path(a.out).write_text(json.dumps(results, indent=2))
+        print(n, K, 'seconds', round(time.time()-start, 1),
+              {k: v for k, v in row.items() if k not in
+               ('ids', 'estimates', 'errors_pp')}, flush=True)
+
+if __name__ == '__main__':
+    with threadpool_limits(limits=2):
+        main()
+
+```
+
+r6_low.py
+---------
+```python
+"""Small MF2 product-Beta rules, evaluated with actual shared-prefix work."""
+import json, itertools
+from pathlib import Path
+import numpy as np
+from scipy.special import ndtri
+from threadpoolctl import threadpool_limits
+from r6_core import load, rule, prefix_forward, score
+
+def mf2(W, n, q):
+    arr = np.array(list(itertools.permutations(range(10), 2)))
+    um, wm = rule(n, 10, 1); us, ws = rule(q, 9, 1)
+    est = np.zeros(len(W[0])); cost = 0.0
+    for a, weight in zip(um, wm):
+        M, S = ndtri(a), ndtri(a*us)
+        mu = -np.exp(-S*S/2)/np.sqrt(2*np.pi)/(a*us)
+        vals = np.r_[M, S, mu]
+        tok = np.tile((1+q+np.arange(q))[None, :, None], (90, 1, 10))
+        for j, (mp, sp) in enumerate(arr):
+            tok[j, :, mp] = 0; tok[j, :, sp] = 1+np.arange(q)
+        L, c = prefix_forward(W, tok.reshape(-1, 10), vals)
+        I = L.reshape(len(W[0]), 90, q, 10).argmax(-1) == arr[None, :, None, 1]
+        est += weight*(I*ws).sum(-1).mean(1)
+        cost += c+12*90*q/2880
+    return est, cost
+
+if __name__ == '__main__':
+    # The same six rules are fixed before evaluating either split.
+    with threadpool_limits(limits=2):
+        for split, offset in [('dev',0),('held',8)]:
+            ids = np.r_[np.arange(offset,1024,16),np.arange(1024,1030)]
+            W = load(ids); out = []
+            for n,q in [(1,1),(1,2),(2,2),(2,4),(3,4),(4,8)]:
+                est,cost = mf2(W,n,q); r = score(est,ids,cost)
+                r.update(n=n,q=q); out.append(r)
+                print(split,n,q,{k:v for k,v in r.items() if k not in ('ids','estimates','errors_pp')},flush=True)
+            Path(f'r6_results/low_{split}.json').write_text(json.dumps(out,indent=2))
+
+```
+
+r6_event.py
+-----------
+```python
+"""Deterministic event-branch quadrature, optional age/value-bin mean merging.
+The ninth-step mixture is integrated exactly over the final Gaussian input.
+This is a point/mean closure, not an exact affine-component distribution law.
+"""
+import argparse, json, time
+from pathlib import Path
+import numpy as np
+from scipy.special import ndtr, ndtri
+from threadpoolctl import threadpool_limits
+from r6_core import load, rule, score
+
+def phi(x):
+    return np.exp(-x*x/2)/np.sqrt(2*np.pi)
+
+def last_input(W, h, M, S, ip, jp):
+    """Exact gate sweep with lowest-index output ties. No random numbers."""
+    probs = np.zeros(h.shape[:2]); B = len(M); rows = np.arange(B)
+    for n, (wi, wh, wo) in enumerate(zip(*W)):
+        a = h[n] @ wh.T
+        gates = np.divide(-a, wi, out=np.full_like(a, np.inf), where=wi != 0)
+        bounds = np.column_stack([gates, S, M])
+        order = np.argsort(bounds, axis=1)
+        bounds = np.take_along_axis(bounds, order, axis=1)
+        on = (wi < 0) | ((wi == 0) & (a > 0))
+        c = (a*on) @ wo.T
+        d = (wi*on) @ wo.T
+        low = np.full(B, -np.inf); total = np.zeros(B)
+        for k in range(19):
+            high = bounds[:, k] if k < 18 else np.full(B, np.inf)
+            tgt = np.where(low >= M, ip, np.where(low >= S, 9, jp))
+            dc = c[rows, tgt, None]-c
+            dd = d[rows, tgt, None]-d
+            roots = np.divide(-dc, dd, out=np.zeros_like(dd), where=dd != 0)
+            l = np.maximum(low, np.max(np.where(dd > 0, roots, -np.inf), axis=1))
+            u = np.minimum(high, np.min(np.where(dd < 0, roots, np.inf), axis=1))
+            bad = np.any((dd == 0) & ((dc < 0) | ((dc == 0) &
+                          (np.arange(10)[None, :] < tgt[:, None]))), axis=1)
+            total += np.where((u > l) & ~bad, ndtr(u)-ndtr(l), 0)
+            if k < 18:
+                gate = order[:, k]; j = np.minimum(gate, 15)
+                sign = np.where(gate < 16, np.sign(wi[j]), 0)
+                c += (sign*a[rows, j])[:, None]*wo[:, j].T
+                d += (sign*wi[j])[:, None]*wo[:, j].T
+                flip = (gate < 16) & (wi[j] != 0)
+                on[rows[flip], j[flip]] ^= True
+                # Subtracting gate contributions can leave roundoff when the
+                # exact hidden state is zero. Restore the exact all-zero tie.
+                empty = ~on.any(axis=1)
+                c[empty] = 0; d[empty] = 0
+            low = high
+        probs[n] = total
+    # Includes final recurrent map, both initial readouts, gate sorting/updates,
+    # and 200 scalar-equivalents per root/CDF interval; conservatively charged.
+    cost = B*(256+320+16+128+18*(40+20)+19*200)/2880
+    return probs, cost
+
+def merge(h, M, S, ip, jp, weights, bins):
+    if bins == 0:
+        return h, M, S, ip, jp, weights, 0.0
+    keys = np.column_stack([ip, jp, np.minimum(bins-1, (bins*ndtr(M)).astype(int)),
+                             np.minimum(bins-1, (bins*ndtr(S)).astype(int))])
+    _, inv = np.unique(keys, axis=0, return_inverse=True)
+    ix = np.argsort(inv, kind='stable')
+    starts = np.r_[0, np.flatnonzero(np.diff(inv[ix]))+1]
+    total = np.add.reduceat(weights[ix], starts)
+    merged = np.add.reduceat(h[:, ix]*weights[None, ix, None], starts, axis=1)
+    merged /= total[None, :, None]
+    avg = lambda x: np.add.reduceat(x[ix]*weights[ix], starts)/total
+    first = ix[starts]
+    cost = (32*len(weights)+16*len(total))/2880
+    return merged, avg(M), avg(S), ip[first], jp[first], total, cost
+
+def event(W, q=1, bins=0):
+    """q=1 uses exact truncated means; q>1 Gauss-Legendre in conditional CDF.
+    bins=0 retains every component. Positive bins merge joint hidden vectors
+    by the two positions and CDF bins of M,S, keeping the entire vector mean.
+    """
+    nodes, weights = rule(q)
+    u = np.r_[nodes/2, .5+nodes/2]
+    x = np.r_[-np.sqrt(2/np.pi), np.sqrt(2/np.pi)] if q == 1 else ndtri(u)
+    mass = np.tile(weights/2, 2)
+    wi, wh, wo = W
+    h = np.maximum(wi[:, None, :]*x[None, :, None], 0)
+    M = x.copy(); S = np.full(len(x), -np.inf)
+    ip = np.zeros(len(x), dtype=int); jp = np.full(len(x), -1, dtype=int)
+    cost = len(x)*32/2880; counts = [len(x)]
+    for t in range(1, 9):
+        bounds = np.column_stack([np.zeros(len(M)), ndtr(S), ndtr(M), np.ones(len(M))])
+        widths = np.diff(bounds, axis=1)
+        parent, branch = np.where(widths > 1e-15)
+        left = bounds[parent, branch]; width = widths[parent, branch]
+        if q == 1:
+            z = (phi(ndtri(left))-phi(ndtri(left+width)))/width
+            w = mass[parent]*width
+        else:
+            z = ndtri(left[:, None]+width[:, None]*nodes).ravel()
+            w = (mass[parent, None]*width[:, None]*weights).ravel()
+            parent = np.repeat(parent, q); branch = np.repeat(branch, q)
+        h = np.maximum(h[:, parent] @ wh.transpose(0, 2, 1)
+                       + wi[:, None, :]*z[None, :, None], 0)
+        cost += len(z)*(272+32)/2880
+        newmax = branch == 2; newsecond = branch == 1
+        S = np.where(newmax, M[parent], np.where(newsecond, z, S[parent]))
+        M = np.maximum(M[parent], z)
+        jp = np.where(newmax, ip[parent], np.where(newsecond, t, jp[parent]))
+        ip = np.where(newmax, t, ip[parent]); mass = w
+        h, M, S, ip, jp, mass, c = merge(h, M, S, ip, jp, mass, bins)
+        cost += c; counts.append(len(M))
+    p, c = last_input(W, h, M, S, ip, jp)
+    assert abs(mass.sum()-1) < 1e-10
+    return p@mass, cost+c, counts
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--split', choices=['dev', 'held'], default='dev')
+    ap.add_argument('--settings', default='1:1,1:2,1:4,1:8,1:0,2:2,2:4,2:8')
+    ap.add_argument('--out', default='r6_results/event_dev.json')
+    a = ap.parse_args()
+    ids = np.r_[np.arange(0 if a.split == 'dev' else 8, 1024, 16), np.arange(1024, 1030)]
+    W = load(ids); out = []
+    for q, bins in [tuple(map(int, s.split(':'))) for s in a.settings.split(',')]:
+        start = time.time(); est, cost, counts = event(W, q, bins)
+        r = score(est, ids, cost); r.update(q=q, bins=bins, counts=counts)
+        out.append(r); Path(a.out).parent.mkdir(exist_ok=True)
+        Path(a.out).write_text(json.dumps(out, indent=2))
+        print(q, bins, 'seconds', round(time.time()-start, 1),
+              {k:v for k,v in r.items() if k not in ('ids','estimates','errors_pp')}, flush=True)
+
+if __name__ == '__main__':
+    with threadpool_limits(limits=2):
+        main()
+
+```
+
+r6_exact_anchor.py
+------------------
+```python
+"""MF3 anchor: tensor Beta quadrature and exact Gaussian S-line integration.
+
+Uses the supplied lines.trace_line; reports its measured matrix/readout MAC
+count (2,880 MACs/forward), a lower bound excluding roots, sorting and CDF work.
+No assumed prefix-tree acceleration. Failed overflow attempts are also charged.
+"""
+import os
+for _name in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "NUMBA_NUM_THREADS"):
+    os.environ[_name] = "2"
+import argparse
+import json
+import time
+from pathlib import Path
+import numpy as np
+import numba
+from scipy.special import ndtri
+from lines import trace_line
+from r6_core import ARR, load, rule, forward, score
+
+
+def nodes(n):
+    ur, wr = rule(n,8,3)
+    ug, wg = rule(n,2,1)
+    out = []
+    for a,wa in zip(ur,wr):
+        for g,wb in zip(ug,wg):
+            b = a+(1-a)*g
+            R,M = ndtri(a),ndtri(b)
+            mu = -np.exp(-R*R/2)/np.sqrt(2*np.pi)/a
+            x = np.full((len(ARR),10),mu)
+            x[np.arange(len(ARR)),ARR[:,0]] = M
+            x[np.arange(len(ARR)),ARR[:,1]] = R
+            x[np.arange(len(ARR)),ARR[:,2]] = R
+            out.append((x,R,M,float(wa*wb),float(a),float(b)))
+    return out
+
+
+def exact_node(W,x,R,M,cap=512):
+    remaining = np.arange(len(x))
+    prob = np.empty(len(x))
+    total_cost = 0.0
+    discarded = 0
+    p = np.ascontiguousarray(ARR[:,1],dtype=np.int64)
+    while len(remaining):
+        pp,cc,overflow = trace_line(*W,x[remaining],p[remaining],
+            np.full(len(remaining),R),np.full(len(remaining),M),p[remaining],cap)
+        total_cost += float(cc.sum())
+        good = overflow == 0
+        if np.any((pp[good] < -1e-10) | (pp[good] > 1+1e-10)):
+            raise ArithmeticError("Invalid exact line probability")
+        prob[remaining[good]] = pp[good]
+        remaining = remaining[~good]
+        discarded += len(remaining)
+        if len(remaining):
+            cap *= 2
+    return prob,total_cost,discarded,cap
+
+
+def mf3_exact(W,n,cap=512):
+    est,cost,discarded,maxcap = 0.0,0.0,0,cap
+    for x,R,M,w,a,b in nodes(n):
+        p,c,d,used = exact_node(W,x,R,M,cap)
+        est += w*p.mean()
+        cost += c
+        discarded += d
+        maxcap = max(maxcap,used)
+    return est,cost,discarded,maxcap
+
+
+def verify(W,n=3,K=4096,cap=512):
+    """One central outer node, all720 lines, checked against a dense CDF grid."""
+    x,R,M,w,a,b = nodes(n)[n*n//2]
+    exact,c,d,used = exact_node(W,x,R,M,cap)
+    s = ndtri(a+(b-a)*(np.arange(K)+.5)/K)
+    dense = np.empty(len(ARR))
+    for start in range(0,len(ARR),8):
+        part = np.arange(start,min(start+8,len(ARR)))
+        xx = np.repeat(x[part,None,:],K,axis=1)
+        xx[np.arange(len(part)),:,ARR[part,1]] = s
+        logits = forward([v[None] for v in W],xx.reshape(-1,10))[0]
+        dense[part] = (logits.argmax(1).reshape(len(part),K)==ARR[part,1,None]).mean(1)
+    return dict(n=n,K=K,lines=len(ARR),mean_error_pp=float(100*(dense-exact).mean()),
+                max_abs_error_pp=float(100*np.max(np.abs(dense-exact))),
+                rms_error_pp=float(100*np.sqrt(np.mean((dense-exact)**2))),
+                exact_node_mac_forwards=c,discarded_lines=d,maxcap=used)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--split",choices=("dev","held"),default="dev")
+    ap.add_argument("--orders",default="3,4")
+    ap.add_argument("--dev-count",type=int,default=64)
+    ap.add_argument("--maxp",type=int,default=512)
+    ap.add_argument("--verify",action="store_true")
+    ap.add_argument("--resume",action="store_true")
+    ap.add_argument("--out",default="r6_results/exact_anchor_dev.json")
+    a = ap.parse_args()
+    pop = np.arange(0 if a.split=="dev" else 8,1024,16)[:a.dev_count]
+    ids = np.r_[pop,np.arange(1024,1030)]
+    W = load(ids)
+    result = []
+    output = Path(a.out)
+    output.parent.mkdir(exist_ok=True)
+    if a.resume and output.exists():
+        result = json.loads(output.read_text())
+        if any(row["ids"] != ids.tolist() for row in result):
+            raise ValueError("Cannot resume a different network cohort")
+    if a.verify:
+        v = verify([w[0] for w in W],cap=a.maxp)
+        output.with_suffix(".verification.json").write_text(json.dumps(v,indent=2))
+        print("verification",v,flush=True)
+    for n in map(int,a.orders.split(",")):
+        if any(row["n"]==n for row in result):
+            continue
+        start = time.time()
+        est,cost,discarded,maxcaps = [],[],[],[]
+        for i in range(len(ids)):
+            e,c,d,m = mf3_exact([w[i] for w in W],n,a.maxp)
+            est.append(e); cost.append(c); discarded.append(d); maxcaps.append(m)
+            if i%8==0:
+                print("order",n,"network",int(ids[i]),"MAC forwards",round(c,1),
+                      "seconds",round(time.time()-start,1),flush=True)
+        est,cost = np.array(est),np.array(cost)
+        row = score(est,ids,float(cost[:len(pop)].mean()))
+        row.update(n=n,cost_is_lower_bound=True,cost_definition=__doc__,
+                   costs_per_network=cost.tolist(),discarded_lines=discarded,maxcaps=maxcaps,
+                   seconds=time.time()-start)
+        ref = np.load("pop1k/reference.npz")
+        pq = ref["acc"][ids]*(1-ref["acc"][ids])
+        sample = float(100*np.sqrt(np.mean(pq[:len(pop)]/cost[:len(pop)])))
+        metric = row[a.split]
+        metric.update(sampling_at_network_costs=sample,
+                      ratio_at_network_costs=metric["rms"]**2/sample**2,
+                      cost_min=float(cost[:len(pop)].min()),cost_max=float(cost[:len(pop)].max()),
+                      anchor_rms_pp=float(100*np.sqrt(np.mean((est[:len(pop)]-ref["mf3"][pop])**2))))
+        result.append(row)
+        output.write_text(json.dumps(result,indent=2))
+        print("completed",n,a.split,metric,flush=True)
+
+
+if __name__ == "__main__":
+    numba.set_num_threads(2)
+    main()
+
+```
+
+r6_correction.py
+----------------
+```python
+"""Deterministic two-level MF3/MF4 correction; RNG is confined to measure().
+Run from the repository, with OPENBLAS_NUM_THREADS=2. All forward rows charged.
+Examples: python r6_correction.py --measure 256
+ python r6_correction.py --split dev --k 3 --n 2 --K 16 --q 8 --keep 8
+ python r6_correction.py --split held --k 4 --n 2 --K 8 --q 8 --keep 8
+"""
+import argparse, itertools, json, os, pathlib, time
+import numpy as np
+from scipy.special import ndtr, ndtri, roots_jacobi
+
+OUT = pathlib.Path('r6_results'); OUT.mkdir(exist_ok=True)
+
+def save_npz(path, **data):
+    """Atomic replacement also keeps any open lazy NPZ reader valid."""
+    tmp=path.with_name(path.name+f'.{os.getpid()}.tmp')
+    with tmp.open('wb') as f: np.savez_compressed(f,**data)
+    tmp.replace(path)
+
+def load(split='dev'):
+    ids = np.r_[np.arange(8 if split == 'held' else 0, 1024, 16), 1024:1030]
+    p = np.load('pop1k/seed0.npz')
+    z = [np.load(f) for f in ['weights.npz']+[f'weights_seed{i}.npz' for i in range(5)]]
+    zz = [np.stack([v[key][:, 0] if j == 0 else v[key] for v in z]) for j, key in
+          enumerate(['rnn.weight_ih_l0', 'rnn.weight_hh_l0', 'linear.weight'])]
+    w = [np.concatenate([p['s1048576_'+key][ids[:-6]], b]).astype(np.float32) for key, b in zip(['Wih','Whh','Wo'],zz)]
+    return ids, w
+
+def predict(w, x):
+    h = np.zeros((len(w[0]), len(x), 16), dtype=w[0].dtype)
+    for t in range(10): h = np.maximum(h @ w[1].transpose(0,2,1) + x[None,:,t,None]*w[0][:,None], 0)
+    return (h @ w[2].transpose(0,2,1)).argmax(-1)
+
+def rule(n, a, b):
+    x, w = roots_jacobi(n, b-1, a-1)
+    return (x+1)/2, w/w.sum()
+
+def mu(v): return -np.exp(-np.asarray(v)**2/2)/np.sqrt(2*np.pi)/ndtr(v)
+
+def arrangements(k, keep):
+    a = np.array(list(itertools.permutations(range(10), k)))
+    if keep == 0 or keep == (8 if k == 3 else 56): return a
+    chosen = []
+    for row in a:
+        f = [x for x in range(10) if x not in row[:2]]
+        if k == 3: yes = f.index(row[2]) in {1:[3],2:[1,6],4:[0,2,5,7]}[keep]
+        else:
+            pairs = [(0,7),(7,0),(1,3),(3,1),(2,5),(5,2),(4,6),(6,4)]
+            yes = (f.index(row[2]),f.index(row[3])) in pairs[:keep]
+        if yes: chosen.append(row)
+    return np.array(chosen)
+
+def grid(w, k, n, K, q, keep):
+    """Returns per-arrangement integrals: anchor3, anchor-k, corrected model.
+    CDF Gauss-Jacobi outer rule, S midpoints, q Gauss-Legendre lower nodes.
+    For k=4 the separately evaluated MF3 anchor allows MF4-model minus MF3.
+    """
+    arr = arrangements(k, keep); A = len(arr); N = len(w[0]); low = np.array([[i for i in range(10) if i not in a] for a in arr])
+    rules = [rule(n,8,3),rule(n,2,1)] if k == 3 else [rule(n,7,4),rule(n,1,3),rule(n,2,1)]
+    uq, wq = rule(q,1,1); out = np.zeros((N,A,3)); rows = 1+(10-k)*q+(k==4)
+    block = max(1,4096//(K*rows)); count = 0
+    for ij in itertools.product(range(n), repeat=len(rules)):
+        u = [rules[t][0][j] for t,j in enumerate(ij)]; wt = np.prod([rules[t][1][j] for t,j in enumerate(ij)])
+        if k == 3: fr = u[0]; fm = fr+(1-fr)*u[1]; vals = [ndtri(fm),None,ndtri(fr)]
+        else: fq=u[0]; fr=fq+(1-fq)*u[1]; fm=fr+(1-fr)*u[2]; vals=[ndtri(fm),None,ndtri(fr),ndtri(fq)]
+        s = ndtri(fr+(fm-fr)*(np.arange(K)+.5)/K); zn = ndtri(ndtr(vals[-1])*uq)
+        for start in range(0,A,block):
+            aa = arr[start:start+block]; ll = low[start:start+block]; b=len(aa)
+            base = np.full((b,K,10),mu(vals[-1]),np.float32)
+            for j,v in enumerate(vals): base[np.arange(b)[:,None],np.arange(K),aa[:,j,None]] = s if j==1 else v
+            X = np.repeat(base[:,:,None,:],rows,axis=2)
+            for j in range(10-k): X[np.arange(b)[:,None,None],np.arange(K)[None,:,None],1+j*q+np.arange(q),ll[:,j,None,None]] = zn
+            if k == 4:
+                X[:,:,-1] = mu(vals[2])
+                for j in range(3): X[np.arange(b)[:,None],np.arange(K),-1,aa[:,j,None]] = s if j==1 else vals[j]
+            I = (predict(w,X.reshape(-1,10)).reshape(N,b,K,rows)==aa[None,:,None,None,1]).astype(float)
+            i0=I[...,0]; ej=(I[...,1:1+(10-k)*q].reshape(N,b,K,10-k,q)*wq).sum(-1)
+            model=np.clip(i0+(ej-i0[...,None]).sum(-1),0,1)
+            out[:,start:start+b,0]+=wt*(I[...,-1] if k==4 else i0).mean(-1)
+            out[:,start:start+b,1]+=wt*i0.mean(-1); out[:,start:start+b,2]+=wt*model.mean(-1)
+            count += b*K*rows
+    return arr,out,count
+
+def score(ids, est, rows, target='acc'):
+    p=np.load('pop1k/reference.npz'); e=100*(est-p[target][ids]); pop=e[:-6]
+    samp=100*np.sqrt(np.mean(p['acc'][ids[:-6]]*(1-p['acc'][ids[:-6]]))/(rows*1.01))
+    return dict(forward_rows=int(rows),cost=rows*1.01,rms=float(np.sqrt(np.mean(pop**2))),mean=float(pop.mean()),
+                sampling_rms=float(samp),mse_ratio=float(np.mean(pop**2)/samp**2),zoo=e[-6:].tolist())
+
+def measure(reps):
+    """Balanced independent measurement of true-minus-anchor arrangement means.
+    This function never constructs an estimator; finite measurement noise is subtracted.
+    """
+    ids,w=load(); arr=arrangements(4,0); N=len(ids); A=len(arr); rng=np.random.default_rng(6007)
+    sums=np.zeros((2,N,A)); squares=np.zeros_like(sums); parts=np.zeros((4,2,N,A))
+    block=max(1,4096//reps); t0=time.time()
+    for st in range(0,A,block):
+        aa=arr[st:st+block]; b=len(aa); a=np.repeat(aa,reps,axis=0); B=len(a)
+        v=np.sort(rng.standard_normal((B,10)),axis=1)[:,::-1][:,:4]
+        lp=np.array([[p for p in range(10) if p not in row] for row in a]); x=np.zeros((B,10),np.float32)
+        x[np.arange(B)[:,None],lp]=ndtri(ndtr(v[:,3,None])*rng.random((B,6)))
+        x[np.arange(B)[:,None],a]=v; y=a[:,1]; truth=predict(w,x)==y
+        for j,k in enumerate((3,4)):
+            base=np.repeat(mu(v[:,k-1,None]),10,axis=1).astype(np.float32); base[np.arange(B)[:,None],a[:,:k]]=v[:,:k]
+            d=(truth.astype(np.int8)-(predict(w,base)==y)).reshape(N,b,reps)
+            sums[j,:,st:st+b]=d.sum(-1); squares[j,:,st:st+b]=(d*d).sum(-1)
+            for h,pp in enumerate(np.array_split(np.arange(reps),4)): parts[h,j,:,st:st+b]=d[...,pp].sum(-1)
+        if st%(block*80)==0: print('measurement',st,A,round(time.time()-t0,1),flush=True)
+    result={}
+    for j,k in enumerate((3,4)):
+        groups=np.array([tuple(row[:k]) for row in arr]); _,inv=np.unique(groups,axis=0,return_inverse=True)
+        G=inv.max()+1; s=np.zeros((N,G)); ss=np.zeros_like(s); nr=np.bincount(inv)*reps
+        for i in range(N): s[i]=np.bincount(inv,weights=sums[j,i]); ss[i]=np.bincount(inv,weights=squares[j,i])
+        means=s/nr; rawnoise=(squares[j]-sums[j]**2/reps)/(reps-1)/reps
+        noise=np.stack([np.bincount(inv,weights=v) for v in rawnoise])/(nr/reps)**2
+        var=means.var(1)-(1-1/G)*noise.mean(1)
+        result[f'mf{k}']=dict(sd_points=(100*np.sqrt(np.maximum(var,0))).tolist(),raw_sd_points=(100*means.std(1)).tolist(),
+            per_arrangement_se_points=(100*np.sqrt(noise.mean(1))).tolist(),correction_mean_points=(100*means.mean(1)).tolist(),arrangements=int(G),draws_per_arrangement=int(nr[0]))
+    save_npz(OUT/'correction_measurement.npz',ids=ids,arr=arr,sums=sums,squares=squares,parts=parts,reps=reps)
+    (OUT/'correction_measurement.json').write_text(json.dumps(result,indent=2)); arrangement_report()
+
+def arrangement_report():
+    """Describe the measurement only; noise-corrected subset errors are not estimates."""
+    z=np.load(OUT/'correction_measurement.npz'); a=z['arr']; reps=int(z['reps']); result={}
+    for j,k,label in [(0,3,'mf3'),(1,4,'mf4'),(0,4,'mf4_arr_minus_mf3')]:
+        arr,inv=np.unique(a[:,:k],axis=0,return_inverse=True); G=len(arr); N=len(z['ids']); nr=np.bincount(inv)*reps
+        s=np.stack([np.bincount(inv,weights=v,minlength=G) for v in z['sums'][j]])
+        ss=np.stack([np.bincount(inv,weights=v,minlength=G) for v in z['squares'][j]])
+        m=s/nr; rawnoise=(z['squares'][j]-z['sums'][j]**2/reps)/(reps-1)/reps
+        noise=np.stack([np.bincount(inv,weights=v) for v in rawnoise])/(nr/reps)**2
+        var=m.var(1)-(1-1/G)*noise.mean(1)
+        r=dict(sd_points=(100*np.sqrt(np.maximum(var,0))).tolist(),classes={},subsets={})
+        ms=10*arr[:,0]+arr[:,1]; rel=ms.copy()
+        for col in range(2,k): rel=4*rel+2*(arr[:,col]>arr[:,0])+(arr[:,col]>arr[:,1])
+        for class_label,gg in [('MS',ms),('MS_relative_order',rel)]:
+            _,ii=np.unique(gg,return_inverse=True); cnt=np.bincount(ii); cm=np.stack([np.bincount(ii,weights=v)/cnt for v in m])
+            residual=((m-cm[:,ii])**2).mean(1)-(noise*(1-1/cnt[ii])).mean(1)
+            r['classes'][class_label]=dict(count=len(cnt),variance_share=(1-residual/var).tolist(),residual_sd_points=(100*np.sqrt(np.maximum(residual,0))).tolist())
+        for keep in ([1,2,4] if k==3 else [4,8]):
+            aa={tuple(row) for row in arrangements(k,keep)}; mask=np.array([tuple(row) in aa for row in arr]); w=mask/mask.sum()-1/G
+            e=100*(m@w); nv=10000*(noise@(w*w)); rms=np.sqrt(max(np.mean((e*e-nv)[:-6]),0))
+            r['subsets'][str(keep)]=dict(arrangements=int(mask.sum()),noise_corrected_rms=float(rms),raw_rms=float(np.sqrt(np.mean(e[:-6]**2))),
+                mean=float(e[:-6].mean()),per_network_measurement_se=float(np.sqrt(nv[:-6].mean())),zoo=e[-6:].tolist(),zoo_se=np.sqrt(nv[-6:]).tolist())
+        result[label]=r
+    (OUT/'correction_arrangement_report.json').write_text(json.dumps(result,indent=2))
+    print(json.dumps({k:dict(median_sd_points=float(np.median(v['sd_points'][:-6])),subsets=v['subsets']) for k,v in result.items()},indent=2))
+
+def reports(split):
+    """Read fixed subset rules from already evaluated arrangement integrals.
+    Charge only rows required when that declared rule is deployed, plus actual anchor cost.
+    """
+    ref=np.load('pop1k/reference.npz'); corrections={}; output=[]
+    for cfg in json.load(open(OUT/'correction_frozen.json'))['settings']:
+        k,n,K,q,keep=[cfg[a] for a in ['k','n','K','q','keep']]
+        stem=f'correction_{split}_k{k}_n{n}_K{K}_q{q}_keep'
+        source=OUT/(stem+str(8 if k==3 or n==2 else 56)+'.npz')
+        if not source.exists(): continue
+        z=np.load(source); aa={tuple(x) for x in arrangements(k,keep)}; mask=np.array([tuple(x) in aa for x in z['arr']])
+        ids=z['ids']; v=z['integrals'][:,mask]; rows=int(z['rows'])*mask.sum()//len(mask); es=v.mean(1); delta=es[:,2]-es[:,0]; delta4=es[:,2]-es[:,1]
+        name=stem+str(keep); corrections[name]=(ids,delta,rows)
+        save_npz(OUT/(name+'.npz'),ids=ids,arr=z['arr'][mask],integrals=v,rows=rows,delta=delta,delta4=delta4)
+        rr=dict(settings=cfg,same_grid=score(ids,es[:,2],rows),correction_with_reference_anchor=score(ids,ref['mf3'][ids]+delta,rows))
+        if k==4: rr['correction_with_reference_mf4']=score(ids,ref['mf4'][ids]+delta4,rows)
+        (OUT/(name+'.json')).write_text(json.dumps(rr,indent=2))
+    for af in ['anchors','exact_anchor']:
+        f=OUT/(af+'_'+split+'.json')
+        if not f.exists(): continue
+        for a in json.load(open(f)):
+            if a['n'] not in (3,4,6): continue
+            for name,(ids,delta,rows) in corrections.items():
+                assert np.array_equal(ids,a['ids'])
+                costs=np.asarray(a.get('costs_per_network',np.full(len(ids),a['cost'])))+rows*1.01
+                e=100*(np.array(a['estimates'])+delta-ref['acc'][ids]); pq=ref['acc'][ids]*(1-ref['acc'][ids])
+                sm=100*np.sqrt(np.mean((pq/costs)[:-6])); rms=float(np.sqrt(np.mean(e[:-6]**2)))
+                output.append(dict(anchor=af,n=a['n'],K=a.get('K'),correction=name,cost=float(costs[:-6].mean()),cost_is_lower_bound=False,
+                    cost_min=float(costs[:-6].min()),cost_max=float(costs[:-6].max()),rms=rms,mean=float(e[:-6].mean()),
+                    sampling_rms=float(sm),mse_ratio=float(rms*rms/sm**2),zoo=e[-6:].tolist(),ids=ids.tolist(),errors_pp=e.tolist()))
+                output[-1]['exact_anchor_omits_scalar_work']=a.get('cost_is_lower_bound',False)
+                if a.get('cost_is_lower_bound',False):
+                    mac=np.asarray(a['costs_per_network'])+rows
+                    ms=100*np.sqrt(np.mean((pq/mac)[:-6]))
+                    output[-1].update(mac_only_cost_lower_bound=float(mac[:-6].mean()),
+                        sampling_rms_at_mac_cost=float(ms),mse_ratio_at_mac_cost=float(rms*rms/ms**2))
+    (OUT/('correction_combinations_'+split+'.json')).write_text(json.dumps(output,indent=2))
+    print(split,'combinations saved:',len(output))
+
+def main():
+    p=argparse.ArgumentParser(); p.add_argument('--measure',type=int,default=0); p.add_argument('--report',action='store_true'); p.add_argument('--split',default='dev',choices=['dev','held'])
+    for a,d in [('k',3),('n',1),('K',8),('q',4),('keep',8)]: p.add_argument('--'+a,type=int,default=d)
+    a=p.parse_args()
+    if a.measure: measure(a.measure); return
+    if a.report: reports(a.split); return
+    ids,w=load(a.split); t=time.time(); arr,v,rows=grid(w,a.k,a.n,a.K,a.q,a.keep)
+    est=v.mean(1); ref=np.load('pop1k/reference.npz'); delta=est[:,2]-est[:,0]
+    report=dict(settings=vars(a),seconds=time.time()-t,arrangements=len(arr),same_grid=score(ids,est[:,2],rows),
+                correction_with_reference_anchor=score(ids,ref['mf3'][ids]+delta,rows))
+    delta4=est[:,2]-est[:,1]
+    if a.k==4: report['correction_with_reference_mf4']=score(ids,ref['mf4'][ids]+delta4,rows)
+    name=f'correction_{a.split}_k{a.k}_n{a.n}_K{a.K}_q{a.q}_keep{a.keep}'
+    save_npz(OUT/(name+'.npz'),ids=ids,arr=arr,integrals=v,rows=rows,delta=delta,delta4=delta4)
+    (OUT/(name+'.json')).write_text(json.dumps(report,indent=2)); print(json.dumps(report,indent=2),flush=True)
+
+if __name__=='__main__': main()
+
+```
+
+r6_geometry.py
+--------------
+```python
+"""Measurement-only gate-history diagnostic; not an accuracy estimator.
+
+The first half of independent iid Gaussian inputs discovers patterns; the second
+half measures mass coverage. Error fragments also fix top-two and output indices,
+so they form a particular convex-cone partition, not maximal convex error pieces.
+"""
+import os
+for _name in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
+    os.environ[_name] = "2"
+import argparse
+import json
+from pathlib import Path
+import numpy as np
+
+
+def keys(gates, group=None):
+    """Opaque exact gate bitstrings, optionally prefixed by a grouping label."""
+    raw = np.ascontiguousarray(gates).view(np.dtype((np.void, gates.shape[1]*2))).ravel()
+    if group is None:
+        return raw
+    out = np.empty(len(raw), dtype=[("group", "u4"), ("pattern", raw.dtype)])
+    out["group"], out["pattern"] = group, raw
+    return out
+
+
+def species(key, split, keep=None):
+    """Discovery/test counts and held-out coverage of discovered species."""
+    if keep is None:
+        keep = np.ones(len(key), bool)
+    which = np.arange(len(key))[keep] < split
+    unique, inverse = np.unique(key[keep], return_inverse=True)
+    a = np.bincount(inverse[which], minlength=len(unique))
+    b = np.bincount(inverse[~which], minlength=len(unique))
+    na, nb = int(a.sum()), int(b.sum())
+    result = dict(observed_species=len(unique), discovery_species=int((a>0).sum()),
+                  discovery_rows=na, test_rows=nb,
+                  unseen_test_mass=float(b[a==0].sum()/max(1,nb)))
+    order = np.argsort(-a, kind="stable")
+    result["top_k_test_mass"] = {
+        str(k): float(b[order[:min(k,int((a>0).sum()))]].sum()/max(1,nb))
+        for k in (1,16,64,256,1024,4096)
+    }
+    if unique.dtype.names is not None:
+        group = unique["group"]
+        order = np.lexsort((-a, group))
+        gs = group[order]
+        starts = np.r_[0, np.flatnonzero(gs[1:] != gs[:-1])+1]
+        rank = np.arange(len(order)) - np.repeat(starts, np.diff(np.r_[starts,len(order)]))
+        result["observed_groups"] = len(starts)
+        result["top_k_per_group_test_mass"] = {
+            str(k): float(b[order[(rank<k)&(a[order]>0)]].sum()/max(1,nb))
+            for k in (1,4,16)
+        }
+    return result
+
+
+def input_groups(x, steps):
+    M = np.full(len(x), -np.inf)
+    S = M.copy()
+    history = np.zeros(len(x), np.uint32)
+    result = {}
+    for t in range(10):
+        nm, ns = x[:,t] > M, x[:,t] > S
+        event = np.where(nm,2,np.where(ns,1,0))
+        history = 3*history + event.astype(np.uint32)
+        S, M = np.where(nm,M,np.where(ns,x[:,t],S)), np.maximum(M,x[:,t])
+        if t+1 in steps:
+            top = np.argsort(x[:,:t+1],axis=1)[:,-2:]
+            result[t+1] = ((t-top[:,1])*(t+1)+(t-top[:,0]), history.copy())
+    return result
+
+
+def load_models(root, count):
+    p = np.load(root/"pop1k/seed0.npz")
+    w = [p["s1048576_"+k].astype(np.float64) for k in ("Wih","Whh","Wo")]
+    indices = np.arange(0,64,max(1,64//count))[:count]*16
+    for i in indices:
+        yield "pop"+str(i), [v[i] for v in w]
+    for name, file in [("mystery","weights.npz")]+[(f"seed{i}",f"weights_seed{i}.npz") for i in range(5)]:
+        p = np.load(root/file)
+        yield name, [p["rnn.weight_ih_l0"][:,0].astype(float),
+                     p["rnn.weight_hh_l0"].astype(float), p["linear.weight"].astype(float)]
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--root",type=Path,default=Path(__file__).resolve().parent)
+    ap.add_argument("--dev-count",type=int,default=8,choices=(8,16,32,64))
+    ap.add_argument("--log2-inputs",type=int,default=16)
+    ap.add_argument("--seed",type=int,default=2026101906)
+    ap.add_argument("--out",type=Path,default=Path("r6_geometry.json"))
+    args = ap.parse_args()
+    n = 2**args.log2_inputs
+    x = np.random.default_rng(args.seed).standard_normal((n,10))
+    top = np.argsort(x,axis=1)[:,-2:]
+    target, maxpos = top[:,0], top[:,1]
+    steps = (3,5,7,9,10)
+    groups = input_groups(x,steps)
+    result = dict(description=__doc__, seed=args.seed, inputs=n, discovery_inputs=n//2,
+                  dev_count=args.dev_count, measurement_forwards_per_network=n, networks=[])
+    for name,(wi,wh,wo) in load_models(args.root,args.dev_count):
+        h = np.zeros((n,16))
+        gates = np.empty((n,10),np.uint16)
+        bit = (1 << np.arange(16)).astype(np.uint16)
+        for t in range(10):
+            h = h@wh.T+x[:,t,None]*wi
+            gates[:,t] = ((h>0)*bit).sum(1,dtype=np.uint16)
+            np.maximum(h,0,out=h)
+        pred = (h@wo.T).argmax(1)
+        error = pred != target
+        row = dict(name=name, accuracy=float(1-error.mean()), prefixes={})
+        for t in steps:
+            age, event = groups[t]
+            row["prefixes"][str(t)] = dict(
+                all=species(keys(gates[:,:t]),n//2),
+                by_ages=species(keys(gates[:,:t],age),n//2),
+                by_events=species(keys(gates[:,:t],event),n//2))
+        row["error_patterns"] = species(keys(gates),n//2,error)
+        fragment = ((maxpos*10+target)*10+pred).astype(np.uint32)
+        row["error_cone_fragments"] = species(keys(gates,fragment),n//2,error)
+        result["networks"].append(row)
+        args.out.write_text(json.dumps(result,indent=2))
+        end = row["prefixes"]["10"]["all"]
+        print(name, "prefix_species", end["observed_species"], "unseen", round(end["unseen_test_mass"],4),
+              "error_fragments", row["error_cone_fragments"]["observed_species"], flush=True)
+
+
+if __name__ == "__main__":
+    main()
+
+```
+
+r6_verify.py
+------------
+```python
+"""Small regression checks only; randomized fixtures never enter an estimator."""
+import os
+for _name in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "NUMBA_NUM_THREADS"):
+    os.environ[_name] = "2"
+import argparse
+import json
+from pathlib import Path
+import numpy as np
+import numba
+from scipy.special import ndtr
+from r6_core import load, forward, prefix_forward
+from r6_event import last_input
+from r6_exact_anchor import nodes, exact_node
+from lines import trace_line
+
+
+def verify():
+    W = load(np.array([0,1024]))
+    tokens = np.array([[0]*10,[0]*9+[1],[0]*8+[1,2],
+        [0,1,2,0,1,2,0,1,2,0],[0,1,2,0,1,2,0,1,2,0],
+        [1,0,2,2,0,1,1,2,0,0]])
+    values = np.array([-1.25,.125,1.5])
+    direct = forward(W,values[tokens])
+    shared,cost = prefix_forward(W,tokens,values)
+    assert np.allclose(direct,shared,rtol=1e-12,atol=1e-10)
+    result = dict(prefix_max_logit_difference=float(np.max(np.abs(direct-shared))),
+                  prefix_counted_cost=float(cost),direct_rows=len(tokens))
+
+    # Independent Gaussian prefixes are a measurement fixture, not an estimator.
+    x = np.zeros((6,10))
+    x[:,:9] = np.random.default_rng(2026101907).standard_normal((6,9))
+    top = np.argsort(x[:,:9],axis=1)[:,-2:]
+    jp,ip = top[:,0],top[:,1]
+    S,M = x[np.arange(6),jp],x[np.arange(6),ip]
+    h = np.zeros((len(W[0]),6,16))
+    for t in range(9):
+        h = np.maximum(h@W[1].transpose(0,2,1)+W[0][:,None,:]*x[None,:,t,None],0)
+    swept,_ = last_input(W,h,M,S,ip,jp)
+    xx = np.repeat(x,3,axis=0)
+    lo = np.column_stack([np.full(6,-12.),S,M]).ravel()
+    hi = np.column_stack([S,M,np.full(6,12.)]).ravel()
+    target = np.column_stack([jp,np.full(6,9),ip]).ravel().astype(np.int64)
+    p = np.full(len(xx),9,np.int64)
+    checked = []
+    for i in range(len(W[0])):
+        probability,_,overflow = trace_line(*[w[i] for w in W],xx,p,lo,hi,target)
+        assert not overflow.any()
+        checked.append((probability*(ndtr(hi)-ndtr(lo))).reshape(6,3).sum(1))
+    checked = np.array(checked)
+    # The omitted Gaussian tails beyond +/-12 have total mass below 4e-33.
+    assert np.allclose(swept,checked,rtol=1e-10,atol=1e-10)
+    result["last_input_max_probability_difference"] = float(np.max(np.abs(swept-checked)))
+
+    wi = np.tile([1.,-1.],8)
+    wh = np.zeros((16,16)); wh[:,0] = -1
+    wo = np.random.default_rng(0).standard_normal((10,16)); wo[0] = 0
+    hh = np.zeros((1,1,16)); hh[0,0,0] = 1
+    probability,_ = last_input([wi[None],wh[None],wo[None]],hh,
+        np.array([3.]),np.array([2.]),np.array([1]),np.array([0]))
+    expected = float(ndtr(1)-ndtr(-1))
+    assert abs(float(probability[0,0])-expected)<1e-14
+    result["all_off_probability"] = float(probability[0,0])
+    result["all_off_expected"] = expected
+
+    x,R,M,_,_,_ = nodes(3)[4]
+    ww = [w[0] for w in W]
+    a,c,_,_ = exact_node(ww,x,R,M,512)
+    b,retry_cost,discarded,capacity = exact_node(ww,x,R,M,4)
+    assert np.array_equal(a,b) and discarded>0 and retry_cost>c
+    result["overflow_retry"] = dict(max_probability_difference=float(np.max(np.abs(a-b))),
+        baseline_mac_forwards=c,with_retries_mac_forwards=retry_cost,
+        discarded_lines=discarded,final_capacity=capacity)
+    return result
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--out",default="r6_results/verify.json")
+    args = parser.parse_args()
+    numba.set_num_threads(2)
+    result = verify()
+    path = Path(args.out); path.parent.mkdir(exist_ok=True)
+    path.write_text(json.dumps(result,indent=2))
+    print(json.dumps(result,indent=2))
+
+```
+
+r6_bounds_minimal.py
+--------------------
+```python
+"""Restricted cone-oracle bound and analytic ANOVA counterexample; no data."""
+from math import atan, cos, pi, sin, sqrt
+
+
+def G(r):
+    a = atan(r)
+    return (35*a - 28*sin(2*a) + 7*sin(4*a)
+            - 4*sin(6*a)/3 + sin(8*a)/8)/(35*pi)
+
+
+V = 0.069
+Q = (1-sqrt(1-4*V))/2
+lo, hi = 0., 10.
+for _ in range(80):
+    mid = (lo+hi)/2
+    if G(mid) < Q:
+        lo = mid
+    else:
+        hi = mid
+R = (lo+hi)/2
+print(f"Mass cap={Q:.12f}; R={R:.12f}")
+print("Queries; worst-error lower(pp); sampling RMS(pp); squared ratio")
+for N in (100, 1000, 10000, 100000, 1000000, 10000000):
+    theta = (256/(175*N))**(1/8)
+    lower = 2*(G(R)-G(R*cos(theta)))/5
+    sampling = sqrt(V/N)
+    print(N, 100*lower, 100*sampling, (lower/sampling)**2)
+
+# iid Gaussian X,Y,Z: m=|X+Y|-|X-Y|+2|Z|, first ANOVA m_A=2|Z|.
+# Failure of m means XY<0 and |Z| is smallest: probability (1/2)*(1/3).
+# Additive g=X+sqrt(3)|Z| fails in a wedge of angle pi/3.
+true_p = 1-1/6
+anova_p = 1.
+additive_p = 0.5+atan(sqrt(3))/pi
+assert abs(true_p-additive_p) < 1e-15
+print("ANOVA example: true, ANOVA, other additive:",
+      true_p, anova_p, additive_p)
+
+```
+
+r6_bounds_check.py
+------------------
+```python
+"""Reproduce the original restricted-oracle bound in r6_bounds.md.
+
+No data access, fitting, random numbers, or external packages are required.
+These are minimax bounds for a larger geometric class, not measurements on
+the 432-parameter RNN population.
+"""
+from math import atan, cos, pi, sin, sqrt
+
+
+def cone_mass(radius):
+    """P[X_10 >= ||X_1:9|| / radius], for X ~ N(0, I_10)."""
+    angle = atan(radius)
+    return (35 * angle - 28 * sin(2 * angle) + 7 * sin(4 * angle)
+            - (4 / 3) * sin(6 * angle) + sin(8 * angle) / 8) / (35 * pi)
+
+
+def bound_constants(variance=0.069):
+    cap = (1 - sqrt(1 - 4 * variance)) / 2
+    lower, upper = 0.0, 10.0
+    for _ in range(80):
+        middle = (lower + upper) / 2
+        if cone_mass(middle) < cap:
+            lower = middle
+        else:
+            upper = middle
+    return cap, (lower + upper) / 2
+
+
+def lower_bound(queries, radius):
+    angle = (256 / (175 * queries)) ** (1 / 8)
+    return (2 / 5) * (cone_mass(radius) - cone_mass(radius * cos(angle)))
+
+
+def main():
+    variance = 0.069
+    cap, radius = bound_constants(variance)
+    print(f"Error-mass cap: {cap:.12f}; cone radius: {radius:.12f}")
+    print("queries  lower_pp  sampling_pp  squared_ratio")
+    for queries in [100, 1000, 10000, 100000, 1000000, 10000000]:
+        lower = lower_bound(queries, radius)
+        sampling = sqrt(variance / queries)
+        print(f"{queries:>8} {100*lower:>10.6f} {100*sampling:>12.6f} "
+              f"{(lower/sampling)**2:>14.6f}")
+    print("\nIllustrative certificate radii from z26's estimated median tails:")
+    print("patterns  forwards  estimated_tail_pp  midpoint_radius_pp  sampling_pp")
+    for patterns, tail in [(1, .80103), (3, .60671), (10, .33667),
+                           (30, .15146), (100, .04989), (300, .01299),
+                           (1000, .00291)]:
+        cost = 5040 * patterns
+        print(f"{patterns:>8} {cost:>9} {100*tail:>18.3f} "
+              f"{50*tail:>19.4f} {100*sqrt(variance/cost):>12.6f}")
+    print("\nTruncation crossover from 0.362 points:", variance / .00362**2)
+
+
+if __name__ == "__main__":
+    main()
+
+```
+
+r6_summary.py
+-------------
+```python
+"""Assemble tables and the development-selected frontier from saved results."""
+import json
+from pathlib import Path
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+
+P = Path('r6_results')
+def get(file): return json.loads((P/file).read_text())
+records = {}
+for split in ['dev', 'held']:
+    rows = []
+    for family in ['low', 'event', 'anchors', 'exact_anchor']:
+        for r in get(f'{family}_{split}.json'):
+            label = family+':'+':'.join(str(r.get(k, '')) for k in ['n','K','q','bins'])
+            m = r[split]
+            rows.append(dict(id=label, family=family, cost=r['cost'], rms=m['rms'], mean=m['mean'],
+                sampling=m.get('sampling_at_network_costs',m['sampling']),
+                ratio=m.get('ratio_at_network_costs',m['ratio']), zoo=r['zoo_errors'],
+                lower_bound=r.get('cost_is_lower_bound',False)))
+    for r in get(f'correction_combinations_{split}.json'):
+        if 'k3_n3_K8_q8' in r['correction']: continue  # benchmark, outside frozen shortlist
+        label = r['anchor']+str(r['n'])+':'+r['correction'].replace('_'+split+'_','_')
+        rows.append(dict(id=label,family='two_level',cost=r['cost'],rms=r['rms'],mean=r['mean'],
+                         sampling=r['sampling_rms'],ratio=r['mse_ratio'],zoo=r['zoo'],
+                         lower_bound=r['cost_is_lower_bound'],
+                         exact_anchor_omits_scalar_work=r.get('exact_anchor_omits_scalar_work',False),
+                         mac_only_cost_lower_bound=r.get('mac_only_cost_lower_bound'),
+                         sampling_rms_at_mac_cost=r.get('sampling_rms_at_mac_cost'),
+                         mse_ratio_at_mac_cost=r.get('mse_ratio_at_mac_cost')))
+    r=get(f'correction_{split}_k3_n3_K8_q8_keep8.json')['same_grid']
+    rows.append(dict(id='z38',family='z38',cost=r['cost'],rms=r['rms'],mean=r['mean'],
+                     sampling=r['sampling_rms'],ratio=r['mse_ratio'],zoo=r['zoo'],lower_bound=False))
+    records[split] = rows
+
+# Selection is a function of development results only; held values are just paired.
+best = float('inf'); frontier=[]
+held = {r['id']:r for r in records['held']}
+for r in sorted(records['dev'],key=lambda x:x['cost']):
+    if r['rms'] < best:
+        frontier.append(dict(dev=r,held=held[r['id']]))
+        best=r['rms']
+summary=dict(units='percentage points',selection='development RMS Pareto frontier; no held retuning',
+             arithmetic_caveat='Exact-line costs omit scalar work. Other costs use declared scalar allowances, not measured hardware upper bounds.',
+             frontier=frontier,all_methods=records)
+(P/'summary.json').write_text(json.dumps(summary,indent=2))
+
+fig,ax=plt.subplots(figsize=(10.6,6.5))
+c=np.geomspace(40,1e7,400)
+ax.loglog(c,100*np.sqrt(.0698014658949404/c),'--',color='#222222',lw=1.8,label='Sampling (held-out variance)')
+for split,color,marker in [('dev','#df8b23','o'),('held','#176d94','s')]:
+    ax.loglog([r[split]['cost'] for r in frontier],[r[split]['rms'] for r in frontier],
+              color=color,marker=marker,lw=1.7,ms=5,label=f'Frozen frontier: {split}')
+for split,color in [('dev','#df8b23'),('held','#176d94')]:
+    r=next(x for x in records[split] if x['id']=='z38')
+    ax.scatter(r['cost'],r['rms'],color=color,marker='X',s=95,zorder=5)
+ax.annotate('z38 reference rule',(2.984e6,.621),xytext=(7e5,1.25),
+            arrowprops=dict(arrowstyle='-',color='#777777'),fontsize=10)
+ax.axhline(.025800749,color='#999999',ls=':',lw=1.2,label='Reference RMS noise (not a hard error floor)')
+ax.set(xlim=(40,1e7),ylim=(.006,12),xlabel='Counted forward equivalents per network (log scale)',
+       ylabel='RMS accuracy error, percentage points (log scale)',
+       title='Two-level quadrature improves the estimate, but remains above sampling')
+ax.grid(which='major',alpha=.22);ax.legend(loc='lower left',fontsize=9)
+fig.text(.12,.012,'64 development + 64 held-out networks. Exact-line x-coordinates are optimistic MAC counts; scalar work is additional.',fontsize=8,color='#444444')
+fig.tight_layout(rect=(0,.035,1,1));fig.savefig(P/'curve.png',dpi=180)
+for item in frontier:
+    print(item['dev']['id'], {s:{k:item[s][k] for k in ['cost','rms','mean','sampling','ratio']} for s in ['dev','held']})
+
+```

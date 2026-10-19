@@ -1,0 +1,4 @@
+points; median over the 64 dev networks (10th-90th percentile); zoo SDs in order mystery, seed0..4
+  true - MF4 over 5,040 arrangements: SD 2.022 (1.143-3.050); (M,S) share 16.4%; zoo 1.15 1.86 3.80 1.85 1.77 2.39
+  true - MF3 over 720 MF3 arrangements: SD 3.934 (2.503-5.414); (M,S) share 22.1%; zoo 2.61 3.85 5.94 4.51 3.41 4.22
+  true - MF3 over 5,040 MF4 arrangements: SD 4.661
