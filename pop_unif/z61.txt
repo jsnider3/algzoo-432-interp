@@ -1,0 +1,23 @@
+new networks: 512, accuracy 90.22% SD 3.63 (training 1,024: 90.56% SD 3.70); mystery percentile 98.6
+label banks (seed 61 - seed 55): mean -0.0304 points, RMS 0.0342
+
+ChatGPT round 7's compiled models
+G1                                         618.5 FE | bank 61: RMS 0.991 mean +0.083 MSE/s 0.700 [0.592, 0.813] | bank 55: RMS 0.989 mean +0.053 MSE/s 0.698 [0.592, 0.810]
+mf4_k2_nopulse                             618.8 FE | bank 61: RMS 0.676 mean +0.088 MSE/s 0.325 [0.274, 0.384] | bank 55: RMS 0.671 mean +0.058 MSE/s 0.322 [0.271, 0.380]
+compact                                    176.0 FE | bank 61: RMS 0.950 mean +0.104 MSE/s 0.183 [0.158, 0.210] | bank 55: RMS 0.946 mean +0.074 MSE/s 0.182 [0.158, 0.209]
+mf4_k2_small                               595.2 FE | bank 61: RMS 0.681 mean +0.095 MSE/s 0.318 [0.242, 0.421] | bank 55: RMS 0.676 mean +0.065 MSE/s 0.314 [0.238, 0.419]
+mf4_k2                                     650.6 FE | bank 61: RMS 0.599 mean +0.090 MSE/s 0.269 [0.230, 0.313] | bank 55: RMS 0.594 mean +0.060 MSE/s 0.265 [0.228, 0.309]
+mf4_k4                                    1216.5 FE | bank 61: RMS 0.544 mean +0.106 MSE/s 0.414 [0.353, 0.480] | bank 55: RMS 0.538 mean +0.075 MSE/s 0.406 [0.346, 0.470]
+
+z60 rebuilds (gfeat readout)
+G(1,1)                                     618.5 FE | bank 61: RMS 0.991 mean +0.083 MSE/s 0.700 [0.592, 0.813] | bank 55: RMS 0.989 mean +0.053 MSE/s 0.698 [0.592, 0.810]
+G(1,1) + P                                 631.7 FE | bank 61: RMS 0.879 mean +0.101 MSE/s 0.561 [0.478, 0.654] | bank 55: RMS 0.876 mean +0.070 MSE/s 0.560 [0.476, 0.653]
+G(1,2)                                    1129.7 FE | bank 61: RMS 0.680 mean +0.098 MSE/s 0.601 [0.503, 0.714] | bank 55: RMS 0.674 mean +0.067 MSE/s 0.593 [0.497, 0.706]
+G(1,4)                                    2151.9 FE | bank 61: RMS 0.573 mean +0.103 MSE/s 0.814 [0.684, 0.956] | bank 55: RMS 0.567 mean +0.073 MSE/s 0.799 [0.674, 0.942]
+MF4 K=2                                    618.8 FE | bank 61: RMS 0.676 mean +0.088 MSE/s 0.325 [0.274, 0.384] | bank 55: RMS 0.671 mean +0.058 MSE/s 0.322 [0.271, 0.380]
+MF4 K=2 + P                                631.9 FE | bank 61: RMS 0.618 mean +0.093 MSE/s 0.278 [0.240, 0.321] | bank 55: RMS 0.613 mean +0.062 MSE/s 0.274 [0.236, 0.317]
+MF4 K=2 + P + H                            650.6 FE | bank 61: RMS 0.588 mean +0.086 MSE/s 0.259 [0.222, 0.300] | bank 55: RMS 0.583 mean +0.055 MSE/s 0.255 [0.219, 0.295]
+MF4 K=4 + P + H                           1216.4 FE | bank 61: RMS 0.551 mean +0.105 MSE/s 0.425 [0.354, 0.504] | bank 55: RMS 0.545 mean +0.075 MSE/s 0.417 [0.348, 0.495]
+ends K=1 both + P                          220.2 FE | bank 61: RMS 0.936 mean +0.099 MSE/s 0.222 [0.194, 0.252] | bank 55: RMS 0.933 mean +0.069 MSE/s 0.221 [0.193, 0.251]
+ends K=1 MF4 + P                           132.3 FE | bank 61: RMS 0.963 mean +0.090 MSE/s 0.141 [0.121, 0.161] | bank 55: RMS 0.961 mean +0.060 MSE/s 0.141 [0.121, 0.161]
+ends K=2 MF4 + P                           207.1 FE | bank 61: RMS 0.785 mean +0.073 MSE/s 0.147 [0.127, 0.167] | bank 55: RMS 0.782 mean +0.043 MSE/s 0.146 [0.126, 0.166]

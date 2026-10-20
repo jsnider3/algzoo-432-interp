@@ -1,0 +1,108 @@
+{
+  "spec": {
+    "recipe": "unif",
+    "K": 2,
+    "kind": "4",
+    "subset": "all",
+    "pulse": true,
+    "groups": "tune",
+    "supports": 0
+  },
+  "refit": "index",
+  "dimensions": 72,
+  "base_dimensions": 48,
+  "costs": {
+    "anchor_rows": 1440,
+    "pulse_rows": 2,
+    "prefix_fe": 566.9,
+    "feature_fe": 14.377777777777778,
+    "pulse_fe": 6.0,
+    "readout_budget_fe": 63.339930555555554,
+    "compiled_readout_fe": 63.339930555555554,
+    "total_fe": 650.6177083333332,
+    "compiled_total_fe": 650.6177083333332
+  },
+  "metrics": {
+    "crossfit": {
+      "rms_points": 0.6060284030827574,
+      "mean_points": 0.00452195177119228,
+      "mse_ratio": 0.28392741908069075
+    },
+    "b128": {
+      "rms_points": 0.5432519602818543,
+      "mean_points": 0.03153869219190142,
+      "mse_ratio": 0.227041378130529
+    },
+    "b64": {
+      "rms_points": 0.8308297656799157,
+      "mean_points": 0.4243649455371923,
+      "mse_ratio": 0.5394395692795372
+    },
+    "mystery": {
+      "rms_points": 0.44528218677480913,
+      "mean_points": -0.44528218677480913,
+      "mse_ratio": 0.2882872622902854,
+      "errors_points": [
+        -0.44528218677480913
+      ]
+    }
+  },
+  "outer_choices": [
+    [
+      "rbf",
+      0.1,
+      0.003,
+      0.0001
+    ],
+    [
+      "rbf",
+      1.0,
+      0.01,
+      0.001
+    ],
+    [
+      "rbf",
+      0.1,
+      0.01,
+      0.001
+    ],
+    [
+      "rbf",
+      0.1,
+      0.01,
+      0.0001
+    ],
+    [
+      "rbf",
+      1.0,
+      0.01,
+      0.001
+    ],
+    [
+      "rbf",
+      0.1,
+      0.01,
+      0.001
+    ],
+    [
+      "rbf",
+      1.0,
+      0.01,
+      0.001
+    ],
+    [
+      "rbf",
+      0.1,
+      0.003,
+      0.0001
+    ]
+  ],
+  "refit_choice": [
+    "rbf",
+    1.0,
+    0.003,
+    0.0001
+  ],
+  "compile_max_error": 2.2453150450019166e-12,
+  "offline_seconds": 102.69102560600732
+}

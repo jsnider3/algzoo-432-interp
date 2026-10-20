@@ -1,0 +1,11 @@
+{
+  "full_feature_error": 6.572520305780927e-14,
+  "online_margin_max_abs_error": 0.00015858575876848136,
+  "online_correctness_disagreements": 0,
+  "online_feature_max_abs_error": 3.3879729883778964e-06,
+  "sparse_feature_error": 2.842170943040401e-14,
+  "sparse_compilation_error": 7.653100375648592e-12,
+  "sparse_saved_external_prediction_error": 1.5834111799506445e-11,
+  "serialized_query_estimate": 0.9450022032815468,
+  "cached_mystery_estimate": 0.9450022164110123
+}

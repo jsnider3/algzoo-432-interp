@@ -1,0 +1,101 @@
+[
+  {
+    "test": "trie",
+    "k": 1,
+    "file": "weights.npz",
+    "max_logit_error": 0.0,
+    "argmax_mismatches": 0
+  },
+  {
+    "test": "trie",
+    "k": 1,
+    "file": "weights_seed0.npz",
+    "max_logit_error": 0.0,
+    "argmax_mismatches": 0
+  },
+  {
+    "test": "trie",
+    "k": 1,
+    "file": "weights_seed4.npz",
+    "max_logit_error": 0.0,
+    "argmax_mismatches": 0
+  },
+  {
+    "test": "trie",
+    "k": 2,
+    "file": "weights.npz",
+    "max_logit_error": 0.0,
+    "argmax_mismatches": 0
+  },
+  {
+    "test": "trie",
+    "k": 2,
+    "file": "weights_seed0.npz",
+    "max_logit_error": 0.0,
+    "argmax_mismatches": 0
+  },
+  {
+    "test": "trie",
+    "k": 2,
+    "file": "weights_seed4.npz",
+    "max_logit_error": 0.0,
+    "argmax_mismatches": 0
+  },
+  {
+    "test": "trie",
+    "k": 4,
+    "file": "weights.npz",
+    "max_logit_error": 0.0,
+    "argmax_mismatches": 0
+  },
+  {
+    "test": "trie",
+    "k": 4,
+    "file": "weights_seed0.npz",
+    "max_logit_error": 0.0,
+    "argmax_mismatches": 0
+  },
+  {
+    "test": "trie",
+    "k": 4,
+    "file": "weights_seed4.npz",
+    "max_logit_error": 0.0,
+    "argmax_mismatches": 0
+  },
+  {
+    "test": "compiled",
+    "supports": 0,
+    "choice": 0,
+    "max_prediction_error": 2.220446049250313e-16
+  },
+  {
+    "test": "compiled",
+    "supports": 0,
+    "choice": 19,
+    "max_prediction_error": 2.7426949600339867e-12
+  },
+  {
+    "test": "compiled",
+    "supports": 0,
+    "choice": 46,
+    "max_prediction_error": 5.755396159656812e-13
+  },
+  {
+    "test": "compiled",
+    "supports": 128,
+    "choice": 0,
+    "max_prediction_error": 2.220446049250313e-16
+  },
+  {
+    "test": "compiled",
+    "supports": 128,
+    "choice": 19,
+    "max_prediction_error": 2.0229373731694977e-12
+  },
+  {
+    "test": "compiled",
+    "supports": 128,
+    "choice": 46,
+    "max_prediction_error": 2.7755575615628914e-15
+  }
+]

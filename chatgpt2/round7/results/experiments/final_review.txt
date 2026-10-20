@@ -1,0 +1,109 @@
+Final code review, 2026-10-20
+
+Reviewed cost_experiments.py, deploy.py, combinations.py, extended.py,
+aggregates.py, aggregates_pulse.py, mechanics.py, and verification.json.
+No material mathematical or data-leakage bug found in the root's methods.
+
+PASS — Nyström model.
+The landmark indices come only from the current training fold, using a fixed
+population-level RNG seed. K_mm=U diag(lambda) U^T is whitened with
+B=U/sqrt(lambda), Phi=K_nm B. Ridge solves
+(Phi^T Phi+alpha I)theta=Phi^T(y-ybar), and the compiled landmark coefficients
+are B theta. The returned prediction K_test,m B theta+ybar is correct.
+The eigenthreshold removes only small numerical eigenvalues. The penalty
+matches the full-kernel ridge convention; the separate linear family retains
+its original alpha*n convention. Retained landmarks need not be recomputed
+or whitened on a new target.
+
+PASS — Compiled inference.
+compile_readout uses the same standardization, response centering, landmark
+selection, gamma/d normalization and alpha as predictions. Linear scaling
+and intercept are folded into raw-feature coefficients correctly. Full and
+Nyström RBF eigenvector contractions happen offline, leaving only target
+standardization, distances, exponentials and one coefficient dot product.
+The supplied verification records agree within 2.75e-12. The fixed-prefix
+runtime precomputes all Wih*value products and multiplies Whh once per distinct
+parent state. The trie output/rival handling preserves first-index ties.
+
+PASS — Genuine one-anchor dependency.
+The MF4-only feature branch accesses only m4 and I4, with its own m4 RMS and
+mean context. The aggregate-agent MF4 selection correctly drops m3 context
+(column23) and all MF3 channels, while retaining the same m4 RMS. The MF4
+H block keeps I4 and the MF4 softsign only. No MF3 run is mathematically
+required, even though an exploratory cache reader initially loaded both.
+The standalone final runner should use the direct one-anchor path.
+
+PASS — Deterministic endpoint geometry.
+Endpoint R ranks0 and7 are the first and last free temporal positions for
+every ordered (M,S) pair. This is a fixed structural subset of the supplied
+anchor design, not a random or quasi-random input sample. The Nyström RNG
+selects training-population supports offline, which is explicitly allowed.
+
+PASS — High-K generation and labels.
+extended.mf4_cells orders all720 arrangements then each S slice, matching the
+reshape used in features/temporal4 and the target labels repeat(ARR[:,1],K).
+Both populations' weights, statistics and labels retain the same ordering.
+Float32 is used throughout the generated prefix forward; the float64 summary
+then consumes those margins. This is consistent with the supplied float32
+cell-cache convention, up to ordinary floating-point path differences.
+The K8/16 data do not establish a universal high-budget accuracy ceiling.
+
+PASS — H4 arithmetic accounting.
+For extended.temporal4 as actually written, 6*C additional scalar operations
+cover independently recomputing m4 RMS normalization and softsign. Adding
+2*K*sum(group_sizes)+12*K covers the group reductions and final means. Root's
+extra6C is appropriately conservative. A consolidated extractor can reuse
+the existing normalized margins/softsigns and omit the duplicate6C charge.
+The aggregate-agent budget assumes this reuse and includes block-scaling
+operations through its extra+d allowance. Charges to all groups even where
+an inner fold selects the base-only model are conservative.
+
+SMALL REPRODUCIBILITY NOTES (not invalidating results).
+1. cost_experiments.evaluate chooses the final external-model hyperparameter
+   from perm0 outer-fold candidate losses, whereas gfeat.fit_predict and
+   aggregates use i-mod8 training-population CV for that final choice. Both
+   procedures are training-only. Cross-fit primary comparisons are paired;
+   external comparison tables should identify the refit selection procedure
+   and avoid attributing every difference solely to a feature block.
+2. extended.py imports mechanics.weights, which resolves weight files from
+   the current directory rather than its PROJECT argument. Its docstring
+   explicitly requires running from the project directory, so the reported
+   runs are correct. The final consolidated CLI should resolve every file
+   through PROJECT or explicitly chdir(PROJECT) to avoid user surprises.
+3. The exploratory evaluation scripts compute many model candidates and
+   sometimes unused summaries, which is offline model-selection work. Their
+   advertised target cost applies to deploy.py / a consolidated extractor,
+   not to calling the whole experiment script for every new target.
+
+The final self-contained runner is being prepared separately; not yet
+reviewed as of this file's initial write.
+
+SELF-CONTAINED RUNNER REVIEW
+Reviewed round7_estimator.py (365-line initial consolidated version).
+No material issue found. Exact and Nyström kernels, ridge penalties,
+candidate ordering, nested selection, and offline coefficient compilation
+are consistent with the experimental implementations. The groups=tune
+coordinate transform exactly compiles the block metric D_base/db +
+weight*D_groups/dh; groups=fixed correctly uses one global standardized
+metric; groups=none uses the plain baseline. The linear tune fallback uses
+base dimensions only and serializes zero coefficients for extra dimensions.
+
+One normalization/softsign pass is shared by baseline and H summaries,
+justifying omission of the separate6C extraction charge. The readout's
+coordinate factors are folded into saved scale, so its2d query charge
+covers standardization and block weighting together. Fixed RBF budgets are
+conservative when the selected family is linear. Pulse and one-anchor
+paths carry only their own required data. All model metadata, trie arrays,
+standardization arrays and coefficients serialize without pickle; the
+saved plan is sufficient for a target-only weights query. Loading weights
+and labels is now rooted at --root, fixing the exploratory cwd limitation.
+The --refit index/outer switch exposes the legitimate historical protocol
+difference instead of silently hiding it.
+
+Suggested only two optional data-input guards, communicated to the author:
+require cached cell arrays to have shape (number_of_networks,720*K), and
+require a single query network to have shapes (16,),(16,16),(10,16). These
+prevent accidentally supplying an incompatible cache or whole population
+to the single-target CLI. They do not affect any reported intended run.
+The author is independently checking online/cached feature parity and
+compiled exact/sparse predictions; no broad extra tests are needed.

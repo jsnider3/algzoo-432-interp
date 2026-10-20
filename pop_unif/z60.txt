@@ -1,0 +1,26 @@
+
+unif recipe
+G(1,1)                              44 feats   618.5 FE | cross-fit RMS 0.964 mean +0.001 MSE/s 0.682 | b128 0.875/+0.143 | b64 1.269/+0.804 | mystery -0.553
+G(1,1) + P                          54 feats   631.7 FE | cross-fit RMS 0.841 mean +0.006 MSE/s 0.531 | b128 0.808/+0.214 | b64 1.032/+0.451 | mystery -0.416
+G(1,2)                              54 feats  1129.7 FE | cross-fit RMS 0.678 mean +0.017 MSE/s 0.617 | b128 0.563/+0.093 | b64 0.929/+0.490 | mystery -0.367
+G(1,4)                              74 feats  2151.9 FE | cross-fit RMS 0.583 mean +0.010 MSE/s 0.869 | b128 0.529/+0.080 | b64 0.635/+0.254 | mystery -0.066
+MF4 K=2                             38 feats   618.8 FE | cross-fit RMS 0.681 mean +0.007 MSE/s 0.341 | b128 0.589/+0.043 | b64 0.981/+0.505 | mystery -0.259
+MF4 K=2 + P                         48 feats   631.9 FE | cross-fit RMS 0.663 mean +0.014 MSE/s 0.330 | b128 0.630/+0.114 | b64 0.839/+0.366 | mystery -0.358
+MF4 K=2 + P + H                     72 feats   650.6 FE | cross-fit RMS 0.613 mean +0.011 MSE/s 0.290 | b128 0.565/+0.063 | b64 0.804/+0.370 | mystery -0.353
+MF4 K=4 + P + H                    106 feats  1216.4 FE | cross-fit RMS 0.518 mean -0.000 MSE/s 0.389 | b128 0.488/+0.011 | b64 0.565/+0.224 | mystery +0.026
+ends K=1 both + P                   54 feats   220.2 FE | cross-fit RMS 0.962 mean +0.008 MSE/s 0.242 | b128 0.854/+0.245 | b64 1.041/+0.644 | mystery -0.985
+ends K=1 MF4 + P                    43 feats   132.3 FE | cross-fit RMS 0.949 mean +0.004 MSE/s 0.141 | b128 0.895/+0.201 | b64 1.065/+0.588 | mystery -0.909
+ends K=2 MF4 + P                    48 feats   207.1 FE | cross-fit RMS 0.797 mean -0.004 MSE/s 0.156 | b128 0.827/+0.169 | b64 0.810/+0.361 | mystery -0.820
+
+zoo recipe
+G(1,1)                              44 feats   618.5 FE | cross-fit RMS 0.597 mean +0.009 MSE/s 0.319 | seed0 +0.510 | seed1 -0.037 | seed2 -0.180 | seed3 -0.155 | seed4 +0.121
+G(1,1) + P                          54 feats   631.7 FE | cross-fit RMS 0.579 mean +0.008 MSE/s 0.306 | seed0 +0.595 | seed1 +0.470 | seed2 -0.327 | seed3 -0.257 | seed4 +0.184
+G(1,2)                              54 feats  1129.7 FE | cross-fit RMS 0.515 mean +0.008 MSE/s 0.434 | seed0 -0.487 | seed1 +0.477 | seed2 -0.005 | seed3 -0.409 | seed4 -0.096
+G(1,4)                              74 feats  2151.9 FE | cross-fit RMS 0.435 mean +0.006 MSE/s 0.588 | seed0 -0.506 | seed1 +0.807 | seed2 -0.188 | seed3 -0.638 | seed4 -0.450
+MF4 K=2                             38 feats   618.8 FE | cross-fit RMS 0.577 mean +0.012 MSE/s 0.298 | seed0 -0.307 | seed1 +0.466 | seed2 +0.220 | seed3 -0.526 | seed4 +0.060
+MF4 K=2 + P                         48 feats   631.9 FE | cross-fit RMS 0.526 mean +0.009 MSE/s 0.253 | seed0 -0.263 | seed1 +0.753 | seed2 -0.041 | seed3 -0.423 | seed4 -0.029
+MF4 K=2 + P + H                     72 feats   650.6 FE | cross-fit RMS 0.684 mean +0.012 MSE/s 0.440 | seed0 -0.306 | seed1 +0.246 | seed2 -0.273 | seed3 -0.342 | seed4 -0.241
+MF4 K=4 + P + H                    106 feats  1216.4 FE | cross-fit RMS 0.595 mean +0.009 MSE/s 0.623 | seed0 -0.201 | seed1 -0.053 | seed2 -0.309 | seed3 -0.245 | seed4 -0.469
+ends K=1 both + P                   54 feats   220.2 FE | cross-fit RMS 0.615 mean +0.009 MSE/s 0.121 | seed0 +0.731 | seed1 +0.555 | seed2 -0.444 | seed3 -0.227 | seed4 +0.380
+ends K=1 MF4 + P                    43 feats   132.3 FE | cross-fit RMS 0.653 mean +0.010 MSE/s 0.082 | seed0 +1.081 | seed1 +0.231 | seed2 -0.218 | seed3 -0.447 | seed4 +0.375
+ends K=2 MF4 + P                    48 feats   207.1 FE | cross-fit RMS 0.587 mean +0.005 MSE/s 0.103 | seed0 +0.216 | seed1 +0.380 | seed2 -0.068 | seed3 -0.400 | seed4 +0.133

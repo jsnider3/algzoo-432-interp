@@ -8,3 +8,6 @@ pop1k/seed0_z1[3-8]*.npz
 chatgpt2/roles_run_*/designed_v3_population.npz
 chatgpt2/roles_run_*/mechanisms.npz
 pop1k/seed0_z46*.npz
+pop_unif/cells_k*.npz
+chatgpt2/round7/runs/*.predictions.npz
+chatgpt2/round7/results/**/*.npz

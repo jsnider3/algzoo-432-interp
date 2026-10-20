@@ -1,0 +1,285 @@
+{
+  "title": "Accuracy versus target compute",
+  "rms_unit": "percentage points",
+  "compute_unit": "forward equivalents",
+  "sampling_mean_pq": {
+    "unif": 0.08415976,
+    "zoo": 0.0691045116264
+  },
+  "sampling_formula": "100 * sqrt(mean_pq / total_FE)",
+  "validation": "Eight outer folds on 1024 networks per recipe; internal readout tuning.",
+  "selection_note": "Selected tested model families; lines connect increasing K.",
+  "recipe_labels": {
+    "unif": "Mystery recipe",
+    "zoo": "AlgZoo recipe"
+  },
+  "external_note": "Zoo released_errors contain mystery then seeds 0-4; mystery uses another recipe.",
+  "pulse_probe_note": "Pulse row counts in source files denote two trajectories; 20 age outputs are decoded.",
+  "baseline_cost_note": "G uses the audited advertised arithmetic budget, with scalar input products cached.",
+  "points": [
+    {
+      "family": "g",
+      "population": "unif",
+      "k": 1,
+      "fe": 618.5454861111111,
+      "rmse_points": 0.9635517591000049,
+      "mean_points": 0.0007164427656164755,
+      "mse_ratio": 0.6823657846973892,
+      "source_file": "audit_baselines.json",
+      "source_detail": null
+    },
+    {
+      "family": "g",
+      "population": "unif",
+      "k": 2,
+      "fe": 1129.6635416666668,
+      "rmse_points": 0.6780179165913756,
+      "mean_points": 0.017068733344973462,
+      "mse_ratio": 0.6170593768596854,
+      "source_file": "audit_baselines.json",
+      "source_detail": null
+    },
+    {
+      "family": "g",
+      "population": "unif",
+      "k": 4,
+      "fe": 2151.899652777778,
+      "rmse_points": 0.5830577946004777,
+      "mean_points": 0.009817304244701163,
+      "mse_ratio": 0.8692420547266774,
+      "source_file": "audit_baselines.json",
+      "source_detail": null
+    },
+    {
+      "family": "g",
+      "population": "zoo",
+      "k": 1,
+      "fe": 618.5454861111111,
+      "rmse_points": 0.5967308919243987,
+      "mean_points": 0.008966394859429384,
+      "mse_ratio": 0.31872951534015664,
+      "source_file": "audit_baselines.json",
+      "source_detail": null
+    },
+    {
+      "family": "g",
+      "population": "zoo",
+      "k": 2,
+      "fe": 1129.6635416666668,
+      "rmse_points": 0.5150273327399002,
+      "mean_points": 0.008143665203895575,
+      "mse_ratio": 0.4336139706859728,
+      "source_file": "audit_baselines.json",
+      "source_detail": null
+    },
+    {
+      "family": "g",
+      "population": "zoo",
+      "k": 4,
+      "fe": 2151.899652777778,
+      "rmse_points": 0.43451328562381236,
+      "mean_points": 0.0056568961718512015,
+      "mse_ratio": 0.5879247365591271,
+      "source_file": "audit_baselines.json",
+      "source_detail": null
+    },
+    {
+      "family": "compact",
+      "population": "unif",
+      "k": 1,
+      "fe": 175.99131944444446,
+      "rmse_points": 0.9508272179302963,
+      "mean_points": -0.0089278079490063,
+      "mse_ratio": 0.18905577788176736,
+      "source_file": "combo_results/unif_k1_ends_mfboth_p1_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "compact",
+      "population": "unif",
+      "k": 2,
+      "fe": 318.1871527777778,
+      "rmse_points": 0.7599883069345452,
+      "mean_points": -0.006210421790418601,
+      "mse_ratio": 0.21836948922680638,
+      "source_file": "combo_results/unif_k2_ends_mfboth_p1_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "compact",
+      "population": "unif",
+      "k": 4,
+      "fe": 602.5788194444444,
+      "rmse_points": 0.7625771949571019,
+      "mean_points": -0.0012011904656795578,
+      "mse_ratio": 0.41636765666631675,
+      "source_file": "combo_results/unif_k4_ends_mfboth_p1_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "mf4",
+      "population": "unif",
+      "k": 1,
+      "fe": 321.00034722222216,
+      "rmse_points": 0.8720023112529668,
+      "mean_points": 0.0017771816349057882,
+      "mse_ratio": 0.2900255582306118,
+      "source_file": "combo_results/unif_k1_all_mf4_p1_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "mf4",
+      "population": "unif",
+      "k": 2,
+      "fe": 591.4482638888888,
+      "rmse_points": 0.6506404456179994,
+      "mean_points": 0.0013238417024441181,
+      "mse_ratio": 0.29750507045860375,
+      "source_file": "combo_results/unif_k2_all_mf4_p1_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "mf4",
+      "population": "unif",
+      "k": 4,
+      "fe": 1132.3440972222222,
+      "rmse_points": 0.5759523646616382,
+      "mean_points": 0.0008800689677891508,
+      "mse_ratio": 0.44632071999359346,
+      "source_file": "combo_results/unif_k4_all_mf4_p1_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "mf4",
+      "population": "unif",
+      "k": 8,
+      "fe": 2214.135763888889,
+      "rmse_points": 0.561895859791811,
+      "mean_points": 0.0028472736519647443,
+      "mse_ratio": 0.8306372597322895,
+      "source_file": "extended_results/unif_k8_mf4_pulse_h0_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "mf4",
+      "population": "unif",
+      "k": 16,
+      "fe": 4377.719097222222,
+      "rmse_points": 0.5731253820080504,
+      "mean_points": -0.0001675632422805124,
+      "mse_ratio": 1.708608934813303,
+      "source_file": "extended_results/unif_k16_mf4_pulse_h0_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "compact",
+      "population": "zoo",
+      "k": 1,
+      "fe": 175.99131944444446,
+      "rmse_points": 0.6338438469286181,
+      "mean_points": 0.003170108994722553,
+      "mse_ratio": 0.10231737809301107,
+      "source_file": "combo_results/zoo_k1_ends_mfboth_p1_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "compact",
+      "population": "zoo",
+      "k": 2,
+      "fe": 318.1871527777778,
+      "rmse_points": 0.5894297955425377,
+      "mean_points": 0.006152463956404981,
+      "mse_ratio": 0.15997068684618024,
+      "source_file": "combo_results/zoo_k2_ends_mfboth_p1_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "compact",
+      "population": "zoo",
+      "k": 4,
+      "fe": 602.5788194444444,
+      "rmse_points": 0.54963088738317,
+      "mean_points": 0.004204280586481927,
+      "mse_ratio": 0.2634205919500778,
+      "source_file": "combo_results/zoo_k4_ends_mfboth_p1_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "mf4",
+      "population": "zoo",
+      "k": 1,
+      "fe": 321.00034722222216,
+      "rmse_points": 0.5841596541784451,
+      "mean_points": 0.003679289603731445,
+      "mse_ratio": 0.15851202607893977,
+      "source_file": "combo_results/zoo_k1_all_mf4_p1_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "mf4",
+      "population": "zoo",
+      "k": 2,
+      "fe": 591.4482638888888,
+      "rmse_points": 0.5475880500191252,
+      "mean_points": 0.007544589227814649,
+      "mse_ratio": 0.2566364169469742,
+      "source_file": "combo_results/zoo_k2_all_mf4_p1_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "mf4",
+      "population": "zoo",
+      "k": 4,
+      "fe": 1132.3440972222222,
+      "rmse_points": 0.49982633205409366,
+      "mean_points": 0.010452147942813239,
+      "mse_ratio": 0.40936459852835455,
+      "source_file": "combo_results/zoo_k4_all_mf4_p1_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "mf4",
+      "population": "zoo",
+      "k": 8,
+      "fe": 2214.135763888889,
+      "rmse_points": 0.44314313870791017,
+      "mean_points": 0.008848314101070884,
+      "mse_ratio": 0.6291959285129489,
+      "source_file": "extended_results/zoo_k8_mf4_pulse_h0_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "mf4",
+      "population": "zoo",
+      "k": 16,
+      "fe": 4377.719097222222,
+      "rmse_points": 0.42571362005142416,
+      "mean_points": 0.007512647366411565,
+      "mse_ratio": 1.1480917042040766,
+      "source_file": "extended_results/zoo_k16_mf4_pulse_h0_sup128.json",
+      "source_detail": null
+    },
+    {
+      "family": "groups",
+      "population": "unif",
+      "k": 2,
+      "fe": 650.6427083333333,
+      "rmse_points": 0.6060284030056909,
+      "mean_points": 0.004521951620038635,
+      "mse_ratio": 0.283938332810344,
+      "source_file": "aggregates_mf4pulse_unif_k2.json",
+      "source_detail": "results.groups"
+    },
+    {
+      "family": "groups",
+      "population": "unif",
+      "k": 4,
+      "fe": 1216.4975694444445,
+      "rmse_points": 0.5154793270303488,
+      "mean_points": 0.0025569030255399123,
+      "mse_ratio": 0.3840866871772127,
+      "source_file": "aggregates_mf4pulse_unif_k4.json",
+      "source_detail": "results.groups"
+    }
+  ]
+}
