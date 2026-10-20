@@ -1,0 +1,24 @@
+
+logistic unit classifier (1.8 FE for the descriptors and the classifier)
+  unit AUC: dead 0.986, always-on 0.904, event-ptr 0.993, late-ptr 0.959, max-det 1.000, late-marker 0.931, comparator 0.998, other 0.885
+  network counts, r(predicted, true): always-on +0.34, event-ptr +0.67, late-ptr +0.13, max-det +0.89, late-marker +0.16, comparator +0.89, other +0.44; late pointer +0.16, event pointer +0.68
+  weights only: 20 statistics                                   1.8 FE | cross-fit 1.683 (0.01x) | new 1.706 (0.01x) | mystery -2.42
+  weights only: 20 statistics + predicted roles                 3.6 FE | cross-fit 1.581 (0.01x) | new 1.664 (0.01x) | mystery -1.11
+  minimal estimator                                            89.6 FE | cross-fit 1.202 (0.15x) | new 1.236 (0.16x) | mystery -1.28
+    residual vs true max detectors -0.15, late pointer +0.18
+  minimal estimator + predicted roles                          91.4 FE | cross-fit 1.126 (0.14x) | new 1.144 (0.14x) | mystery -1.70
+    residual vs true max detectors -0.03, late pointer +0.14
+  compact 44 + weight statistics                              161.3 FE | cross-fit 0.887 (0.15x) | new 0.860 (0.14x) | mystery -1.55
+  compact 44 + weight statistics + predicted roles            163.1 FE | cross-fit 0.860 (0.14x) | new 0.831 (0.13x) | mystery -1.19
+
+boosting unit classifier (18.9 FE for the descriptors and the classifier)
+  unit AUC: dead 0.450, always-on 0.936, event-ptr 0.984, late-ptr 0.987, max-det 0.997, late-marker 0.975, comparator 0.997, other 0.939
+  network counts, r(predicted, true): always-on +0.55, event-ptr +0.85, late-ptr +0.87, max-det +0.94, late-marker +0.79, comparator +0.92, other +0.61; late pointer +0.87, event pointer +0.86
+  weights only: 20 statistics                                   1.8 FE | cross-fit 1.683 (0.01x) | new 1.706 (0.01x) | mystery -2.42
+  weights only: 20 statistics + predicted roles                20.7 FE | cross-fit 1.605 (0.06x) | new 1.656 (0.07x) | mystery -1.13
+  minimal estimator                                            89.6 FE | cross-fit 1.202 (0.15x) | new 1.236 (0.16x) | mystery -1.28
+    residual vs true max detectors -0.15, late pointer +0.18
+  minimal estimator + predicted roles                         108.4 FE | cross-fit 1.123 (0.16x) | new 1.134 (0.16x) | mystery -1.42
+    residual vs true max detectors -0.08, late pointer +0.08
+  compact 44 + weight statistics                              161.3 FE | cross-fit 0.887 (0.15x) | new 0.860 (0.14x) | mystery -1.55
+  compact 44 + weight statistics + predicted roles            180.2 FE | cross-fit 0.864 (0.16x) | new 0.845 (0.15x) | mystery -1.02

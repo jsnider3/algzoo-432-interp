@@ -1,0 +1,46 @@
+
+all design: 44 named quantities
+  kernel, named                                 630.7 FE | cross-fit 0.733 (0.40x) | new 0.668 mean +0.102 (0.32x) | mystery -0.58
+  linear, named                                 587.3 FE | cross-fit 0.787 (0.43x) | new 0.777 mean +0.108 (0.41x) | mystery -0.93
+  kernel, named + 20 weight statistics          644.9 FE | cross-fit 0.618 (0.29x) | new 0.593 mean +0.083 (0.26x) | mystery -0.38
+  linear, named + 20 weight statistics          587.3 FE | cross-fit 0.683 (0.33x) | new 0.667 mean +0.083 (0.30x) | mystery -0.94
+  forward selection on all 1,024: 1. soft[S near R]; 2. log s; 3. pulse+ growth; 4. pulse- growth SD; 5. bit[S near M]; 6. |a|[S near M]; 7. M after S soft[S near R]; 8. S last soft[S near M]; 9. R after S soft[S near R]; 10. pulse+ growth SD; 11. pulse+ late margin; 12. mean margin
+  forward, 1 quantities, linear                 587.3 FE | cross-fit 1.471 (1.51x) | new 1.520 mean +0.189 (1.56x) | mystery -1.08
+  forward, 1 quantities, additive               587.3 FE | cross-fit 1.469 (1.51x) | new 1.530 mean +0.199 (1.58x) | mystery -1.18
+  forward, 2 quantities, linear                 587.3 FE | cross-fit 1.171 (0.96x) | new 1.242 mean +0.130 (1.04x) | mystery +0.18
+  forward, 2 quantities, additive               587.3 FE | cross-fit 1.145 (0.91x) | new 1.232 mean +0.130 (1.03x) | mystery -0.14
+  forward, 3 quantities, linear                 587.3 FE | cross-fit 0.954 (0.63x) | new 0.979 mean +0.092 (0.65x) | mystery -0.63
+  forward, 3 quantities, additive               587.3 FE | cross-fit 0.928 (0.60x) | new 0.945 mean +0.094 (0.60x) | mystery -0.37
+  forward, 4 quantities, linear                 587.3 FE | cross-fit 0.934 (0.61x) | new 0.952 mean +0.101 (0.61x) | mystery -0.65
+  forward, 4 quantities, additive               587.3 FE | cross-fit 0.912 (0.58x) | new 0.918 mean +0.112 (0.57x) | mystery -0.54
+  forward, 6 quantities, linear                 587.3 FE | cross-fit 0.855 (0.51x) | new 0.879 mean +0.103 (0.52x) | mystery -0.67
+  forward, 6 quantities, additive               587.3 FE | cross-fit 0.828 (0.48x) | new 0.843 mean +0.110 (0.48x) | mystery -0.76
+  forward, 8 quantities, linear                 587.3 FE | cross-fit 0.824 (0.47x) | new 0.831 mean +0.109 (0.47x) | mystery -0.73
+  forward, 8 quantities, additive               587.3 FE | cross-fit 0.789 (0.43x) | new 0.783 mean +0.120 (0.41x) | mystery -0.76
+  forward, 12 quantities, linear                587.3 FE | cross-fit 0.787 (0.43x) | new 0.791 mean +0.116 (0.42x) | mystery -0.93
+  forward, 12 quantities, additive              587.3 FE | cross-fit 0.753 (0.40x) | new 0.747 mean +0.128 (0.38x) | mystery -0.82
+  3-quantity linear model, points of accuracy per training SD: soft[S near R] +2.24, log s +1.29, pulse+ growth -0.72; intercept 90.56%
+  6-quantity linear model, points of accuracy per training SD: soft[S near R] +1.75, log s +1.06, pulse+ growth -0.76, pulse- growth SD +0.29, bit[S near M] +0.62, |a|[S near M] -0.34; intercept 90.56%
+
+compact design: 44 named quantities
+  kernel, named                                 204.7 FE | cross-fit 0.953 (0.22x) | new 0.940 mean +0.106 (0.21x) | mystery -1.04
+  linear, named                                 161.3 FE | cross-fit 0.990 (0.19x) | new 0.969 mean +0.110 (0.17x) | mystery -1.30
+  kernel, named + 20 weight statistics          218.9 FE | cross-fit 0.770 (0.15x) | new 0.858 mean +0.074 (0.19x) | mystery -0.54
+  linear, named + 20 weight statistics          161.3 FE | cross-fit 0.887 (0.15x) | new 0.860 mean +0.103 (0.14x) | mystery -1.55
+  forward selection on all 1,024: 1. soft[S near R]; 2. log s; 3. pulse+ growth SD; 4. M after S bit[S near M]; 5. |a|[S near R]; 6. pulse- growth SD; 7. M after S soft[S near R]; 8. mean margin; 9. R after S bit[S near R]; 10. soft[S near M]; 11. pulse+ late margin; 12. pulse+ growth
+  forward, 1 quantities, linear                 161.3 FE | cross-fit 1.641 (0.52x) | new 1.691 mean +0.206 (0.53x) | mystery -1.67
+  forward, 1 quantities, additive               161.3 FE | cross-fit 1.624 (0.51x) | new 1.685 mean +0.180 (0.53x) | mystery -1.51
+  forward, 2 quantities, linear                 161.3 FE | cross-fit 1.375 (0.36x) | new 1.417 mean +0.138 (0.37x) | mystery -0.34
+  forward, 2 quantities, additive               161.3 FE | cross-fit 1.295 (0.32x) | new 1.350 mean +0.109 (0.34x) | mystery -0.80
+  forward, 3 quantities, linear                 161.3 FE | cross-fit 1.229 (0.29x) | new 1.254 mean +0.100 (0.29x) | mystery -1.09
+  forward, 3 quantities, additive               161.3 FE | cross-fit 1.175 (0.26x) | new 1.210 mean +0.076 (0.27x) | mystery -1.29
+  forward, 4 quantities, linear                 161.3 FE | cross-fit 1.207 (0.28x) | new 1.179 mean +0.098 (0.26x) | mystery -1.01
+  forward, 4 quantities, additive               161.3 FE | cross-fit 1.171 (0.26x) | new 1.143 mean +0.072 (0.24x) | mystery -1.17
+  forward, 6 quantities, linear                 161.3 FE | cross-fit 1.123 (0.24x) | new 1.095 mean +0.092 (0.22x) | mystery -0.88
+  forward, 6 quantities, additive               161.3 FE | cross-fit 1.093 (0.23x) | new 1.063 mean +0.094 (0.21x) | mystery -1.30
+  forward, 8 quantities, linear                 161.3 FE | cross-fit 1.101 (0.23x) | new 1.090 mean +0.099 (0.22x) | mystery -1.04
+  forward, 8 quantities, additive               161.3 FE | cross-fit 1.076 (0.22x) | new 1.059 mean +0.091 (0.21x) | mystery -1.20
+  forward, 12 quantities, linear                161.3 FE | cross-fit 1.020 (0.20x) | new 0.997 mean +0.125 (0.18x) | mystery -1.13
+  forward, 12 quantities, additive              161.3 FE | cross-fit 1.013 (0.20x) | new 0.967 mean +0.122 (0.17x) | mystery -0.90
+  3-quantity linear model, points of accuracy per training SD: soft[S near R] +2.07, log s +1.37, pulse+ growth SD +0.66; intercept 90.56%
+  6-quantity linear model, points of accuracy per training SD: soft[S near R] +1.31, log s +1.39, pulse+ growth SD +0.72, M after S bit[S near M] +0.56, |a|[S near R] +0.45, pulse- growth SD +0.26; intercept 90.56%

@@ -1,0 +1,16 @@
+
+1,024 training networks
+  learned rows,  16:   23.9 FE | RMS on the 512 1.063, mean +0.001 (0.031x)
+  learned rows,  32:   36.9 FE | RMS on the 512 0.929, mean +0.022 (0.037x)
+  learned rows,  64:   61.4 FE | RMS on the 512 0.885, mean +0.001 (0.055x)
+  learned rows, 128:  108.4 FE | RMS on the 512 0.845, mean +0.023 (0.089x)
+  learned rows, 256:  192.1 FE | RMS on the 512 0.938, mean +0.029 (0.194x)
+  compact 44 + weight statistics + roles:  163.1 FE | RMS on the 512 0.831, mean +0.079 (0.130x)
+
+2,048 training networks
+  learned rows,  16:   24.2 FE | RMS on the 512 0.956, mean +0.047 (0.025x)
+  learned rows,  32:   37.2 FE | RMS on the 512 0.853, mean +0.029 (0.031x)
+  learned rows,  64:   61.5 FE | RMS on the 512 0.771, mean +0.051 (0.042x)
+  learned rows, 128:  104.3 FE | RMS on the 512 0.727, mean +0.058 (0.064x)
+  learned rows, 256:  191.0 FE | RMS on the 512 0.693, mean +0.079 (0.106x)
+  compact 44 + weight statistics + roles:  163.1 FE | RMS on the 512 0.828, mean +0.079 (0.129x)

@@ -1,0 +1,14 @@
+  fold 0 done
+  fold 1 done
+  fold 2 done
+  fold 3 done
+  fold 4 done
+  fold 5 done
+  fold 6 done
+  fold 7 done
+
+64 learned rows + pulses + weight statistics + roles (169 features); rows, pulses and roles 57.0 FE
+  ridge       57.1 FE | cross-fit 0.877 (0.052x) | new 0.904 (0.054x) | mystery +0.04 | 
+  boosting    57.9 FE | cross-fit 1.086 (0.081x) | new 1.045 (0.073x) | mystery -1.06 | [536, 562, 536, 493, 351, 499, 385, 375]
+  mlp         66.5 FE | cross-fit 0.885 (0.062x) | new 0.904 (0.063x) | mystery -0.72 | [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+  nystrom     73.6 FE | cross-fit 1.048 (0.096x) | new 1.012 (0.087x) | mystery -1.14 | [(0.03, 0.01), (0.03, 0.01), (0.03, 0.001), (0.03, 0.01), (0.03, 0.01), (0.03, 0.001), (0.03, 0.01), (0.03, 0.01)]

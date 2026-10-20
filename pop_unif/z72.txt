@@ -1,0 +1,14 @@
+1024 blind test networks: accuracy 90.60% SD 3.78; mystery percentile 96.7
+  minimal 2                   83.6 FE | RMS 1.440 mean +0.019 | MSE/sampling 0.207 (0.180-0.235) | vs shrunk sampling 0.35
+  minimal 5 + roles           91.4 FE | RMS 1.170 mean +0.022 | MSE/sampling 0.149 (0.130-0.171) | vs shrunk sampling 0.25
+  compact + roles            163.1 FE | RMS 0.863 mean -0.007 | MSE/sampling 0.145 (0.126-0.164) | vs shrunk sampling 0.20
+  learned K8 16               23.4 FE | RMS 1.008 mean -0.007 | MSE/sampling 0.028 (0.025-0.032) | vs shrunk sampling 0.10
+  learned K8 32               34.6 FE | RMS 0.950 mean +0.015 | MSE/sampling 0.037 (0.033-0.042) | vs shrunk sampling 0.10
+  learned K8 64               55.1 FE | RMS 0.903 mean +0.017 | MSE/sampling 0.054 (0.047-0.061) | vs shrunk sampling 0.11
+  learned mixed 16            21.8 FE | RMS 1.027 mean -0.044 | MSE/sampling 0.028 (0.024-0.031) | vs shrunk sampling 0.10
+  learned mixed 32            33.2 FE | RMS 0.933 mean -0.045 | MSE/sampling 0.035 (0.031-0.039) | vs shrunk sampling 0.10
+  learned mixed 128           96.0 FE | RMS 0.842 mean -0.012 | MSE/sampling 0.081 (0.073-0.090) | vs shrunk sampling 0.13
+  7.18 compact               176.0 FE | RMS 0.960 mean -0.004 | MSE/sampling 0.194 (0.170-0.219) | vs shrunk sampling 0.26
+  7.18 mf4_k2_small          595.2 FE | RMS 0.608 mean +0.008 | MSE/sampling 0.263 (0.233-0.294) | vs shrunk sampling 0.29
+  7.18 mf4_k2                650.6 FE | RMS 0.587 mean +0.013 | MSE/sampling 0.268 (0.239-0.298) | vs shrunk sampling 0.29
+  7.18 mf4_k4               1216.5 FE | RMS 0.495 mean +0.028 | MSE/sampling 0.356 (0.314-0.400) | vs shrunk sampling 0.37

@@ -1,0 +1,16 @@
+correlations with accuracy on the 1,024: S-vs-R separation +0.88, log s +0.82, median SNR +0.58, mean signed log(1+|SNR|) +0.75, share |SNR| < 1 -0.80
+correlation of log s with the SNR summaries: median SNR +0.75, mean signed log(1+|SNR|) +0.85, share |SNR| < 1 -0.78
+  S-vs-R separation                                                        83.6 FE | cross-fit 1.762 (0.31x) | new 1.790 (0.31x) | mystery -1.93
+    accuracy = 90.56% +3.25 x z(S-vs-R separation)
+  S-vs-R separation + log s                                                83.6 FE | cross-fit 1.394 (0.19x) | new 1.446 (0.20x) | mystery -0.53
+    accuracy = 90.56% +2.18 x z(S-vs-R separation) +1.50 x z(log s)
+  S-vs-R separation + median SNR                                          162.0 FE | cross-fit 1.631 (0.51x) | new 1.677 (0.52x) | mystery +0.39
+    accuracy = 90.56% +2.88 x z(S-vs-R separation) +0.77 x z(median SNR)
+  S-vs-R separation + mean signed log(1+|SNR|)                            162.0 FE | cross-fit 1.592 (0.49x) | new 1.651 (0.51x) | mystery -0.16
+    accuracy = 90.56% +2.55 x z(S-vs-R separation) +1.03 x z(mean signed log(1+|SNR|))
+  S-vs-R separation + share |SNR| < 1                                     162.0 FE | cross-fit 1.651 (0.52x) | new 1.716 (0.55x) | mystery -1.82
+    accuracy = 90.56% +2.42 x z(S-vs-R separation) -1.03 x z(share |SNR| < 1)
+  S-vs-R separation + mean signed log(1+|SNR|) + share |SNR| < 1          162.0 FE | cross-fit 1.582 (0.48x) | new 1.650 (0.51x) | mystery -0.47
+    accuracy = 90.56% +2.37 x z(S-vs-R separation) +0.82 x z(mean signed log(1+|SNR|)) -0.41 x z(share |SNR| < 1)
+  S-vs-R separation + log s + mean signed log(1+|SNR|) + share |SNR| < 1  162.0 FE | cross-fit 1.393 (0.37x) | new 1.444 (0.39x) | mystery -0.65
+    accuracy = 90.56% +2.12 x z(S-vs-R separation) +1.47 x z(log s) -0.07 x z(mean signed log(1+|SNR|)) -0.18 x z(share |SNR| < 1)

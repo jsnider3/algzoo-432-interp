@@ -1,0 +1,25 @@
+seed-8 networks: accuracy 90.38% SD 3.72
+
+1,024 training networks
+   32 rows   36.8 FE | RMS on the 512 0.927, mean +0.004 (0.036x)
+   64 rows   61.1 FE | RMS on the 512 0.883, mean +0.017 (0.055x)
+  128 rows  108.1 FE | RMS on the 512 0.820, mean +0.046 (0.084x)
+  256 rows  193.4 FE | RMS on the 512 0.842, mean +0.080 (0.158x)
+  384 rows  268.7 FE | RMS on the 512 0.885, mean +0.062 (0.242x)
+  512 rows  343.5 FE | RMS on the 512 0.704, mean +0.019 (0.196x)
+
+2,048 training networks
+   32 rows   37.5 FE | RMS on the 512 0.850, mean +0.041 (0.031x)
+   64 rows   62.9 FE | RMS on the 512 0.733, mean +0.037 (0.039x)
+  128 rows  108.9 FE | RMS on the 512 0.706, mean +0.048 (0.063x)
+  256 rows  191.6 FE | RMS on the 512 0.695, mean +0.026 (0.107x)
+  384 rows  270.4 FE | RMS on the 512 0.725, mean +0.071 (0.164x)
+  512 rows  348.0 FE | RMS on the 512 0.734, mean +0.073 (0.216x)
+
+4,096 training networks
+   32 rows   37.9 FE | RMS on the 512 0.883, mean +0.023 (0.034x)
+   64 rows   61.4 FE | RMS on the 512 0.744, mean +0.029 (0.039x)
+  128 rows  107.2 FE | RMS on the 512 0.668, mean +0.042 (0.055x)
+  256 rows  192.1 FE | RMS on the 512 0.605, mean +0.049 (0.081x)
+  384 rows  271.6 FE | RMS on the 512 0.562, mean +0.042 (0.099x)
+  512 rows  350.4 FE | RMS on the 512 0.589, mean +0.051 (0.140x)

@@ -1,0 +1,42 @@
+A. the first 32 learned rows (8-box K = 4 pool), chosen on all 1,024
+   1. M@1 0.81, S@3 0.28, R@8 0.21, Q@6 0.11  weight +0.32  S~R S old
+   2. M@7 1.86, S@0 0.99, R@5 0.72, Q@8 0.64  weight +0.19  S old
+   3. M@1 0.81, S@8 0.28, R@3 0.21, Q@6 0.11  weight +0.26  S~R
+   4. M@2 1.77, S@0 0.65, R@1 0.56, Q@9 0.11  weight +0.21  S~R S old
+   5. M@5 1.86, S@1 0.80, R@3 0.72, Q@7 0.64  weight +0.22  S~R S old
+   6. M@1 1.59, S@4 0.33, R@9 0.21, Q@0 0.11  weight +0.15  S~R S old
+   7. M@6 1.18, S@0 0.87, R@1 0.72, Q@9 0.64  weight +0.16  S~R S old
+   8. M@7 1.86, S@4 0.80, R@9 0.72, Q@0 0.64  weight +0.12  S~R S old
+   9. M@9 1.86, S@3 0.80, R@0 0.72, Q@8 0.64  weight +0.19  S~R M last S old
+  10. M@7 1.18, S@1 0.98, R@3 0.72, Q@6 0.64  weight +0.20  M~S S old
+  11. M@3 1.59, S@2 0.33, R@9 0.21, Q@0 0.11  weight +0.12  S~R M right after S S old
+  12. M@8 1.06, S@9 0.85, R@7 0.56, Q@0 0.11  weight +0.20  M~S S last
+  13. M@3 1.39, S@7 1.33, R@8 0.98, Q@5 0.64  weight +0.15  M~S
+  14. M@6 1.18, S@3 0.76, R@5 0.72, Q@8 0.64  weight +0.12  S~R S old
+  15. M@7 2.01, S@8 1.05, R@6 0.98, Q@4 0.64  weight +0.14  S~R
+  16. M@8 1.77, S@5 0.65, R@6 0.56, Q@2 0.11  weight +0.14  S~R
+  17. M@8 1.06, S@0 0.85, R@9 0.56, Q@1 0.11  weight +0.18  M~S S old
+  18. M@5 1.77, S@9 0.86, R@7 0.56, Q@4 0.11  weight +0.25  S last
+  19. M@9 2.01, S@0 1.05, R@4 0.98, Q@2 0.64  weight +0.19  S~R M last S old
+  20. M@5 1.86, S@3 0.80, R@1 0.72, Q@4 0.64  weight +0.15  S~R S old
+  21. M@0 1.06, S@3 0.99, R@9 0.56, Q@1 0.11  weight +0.22  M~S S old
+  22. M@7 1.06, S@9 0.99, R@8 0.56, Q@0 0.11  weight +0.24  M~S S last
+  23. M@6 1.59, S@5 0.33, R@7 0.21, Q@2 0.11  weight +0.17  S~R M right after S
+  24. M@8 1.77, S@1 0.86, R@7 0.56, Q@5 0.11  weight +0.21  S old
+  25. M@6 1.77, S@8 0.65, R@5 0.56, Q@2 0.11  weight +0.15  S~R
+  26. M@7 1.39, S@5 1.21, R@0 0.98, Q@9 0.64  weight +0.15  S~R M~S
+  27. M@0 1.77, S@8 0.65, R@9 0.56, Q@1 0.11  weight +0.17  S~R
+  28. M@9 1.59, S@2 0.33, R@4 0.21, Q@1 0.11  weight +0.15  S~R M last S old
+  29. M@7 1.18, S@1 0.76, R@5 0.72, Q@8 0.64  weight +0.14  S~R S old
+  30. M@5 1.39, S@2 1.02, R@1 0.98, Q@4 0.64  weight +0.16  S~R S old
+  31. M@6 1.77, S@0 0.65, R@5 0.56, Q@8 0.11  weight +0.15  S~R S old
+  32. M@2 1.39, S@9 1.02, R@8 0.98, Q@0 0.64  weight +0.11  S~R S last
+  tallies over the 32: S just above R (S - R < 0.25) 23, M at the last position 3, S at the last position 4, M right after S 2, S at least 5 steps old 20, M - S < 0.25 7
+
+B. readable formulas (180 compact lower-slice rows)
+  S-vs-R separation + log s: 83.6 FE | cross-fit 1.394 (0.19x) | new 1.446 (0.20x) | mystery -0.53
+    accuracy = 90.56% +2.18 x z(S-vs-R separation) +1.50 x z(log s)
+  S-vs-R separation + log s + predicted comparators + predicted max detectors: 85.4 FE | cross-fit 1.289 (0.17x) | new 1.325 (0.17x) | mystery -1.18
+    accuracy = 90.56% +1.89 x z(S-vs-R separation) +1.41 x z(log s) +0.58 x z(predicted comparators) +0.66 x z(predicted max detectors)
+  S-vs-R separation + log s + predicted comparators + predicted max detectors + pulse+ growth + pulse+ growth SD + pulse- growth SD: 91.4 FE | cross-fit 1.159 (0.15x) | new 1.180 (0.15x) | mystery -1.54
+    accuracy = 90.56% +1.59 x z(S-vs-R separation) +1.47 x z(log s) +0.42 x z(predicted comparators) +0.41 x z(predicted max detectors) -0.18 x z(pulse+ growth) +0.47 x z(pulse+ growth SD) +0.27 x z(pulse- growth SD)

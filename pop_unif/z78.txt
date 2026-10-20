@@ -1,0 +1,7 @@
+24140 candidate rows; 2,048 training networks
+   32 rows   37.5 FE | RMS on the 512 0.850, mean +0.041 (0.031x) | non-MF4 rows: double pulses 1
+   64 rows   62.9 FE | RMS on the 512 0.733, mean +0.037 (0.039x) | non-MF4 rows: lower inputs high 2, distractors 1, double pulses 2
+  128 rows  108.9 FE | RMS on the 512 0.706, mean +0.048 (0.063x) | non-MF4 rows: lower inputs high 3, alternating 1, distractors 3, double pulses 2, single pulses 1
+  256 rows  191.6 FE | RMS on the 512 0.695, mean +0.026 (0.107x) | non-MF4 rows: lower inputs high 5, lower inputs low 5, alternating 4, distractors 7, double pulses 3, single pulses 1
+  384 rows  270.4 FE | RMS on the 512 0.725, mean +0.071 (0.164x) | non-MF4 rows: lower inputs high 5, lower inputs low 7, alternating 11, distractors 12, double pulses 3, single pulses 1
+  512 rows  348.0 FE | RMS on the 512 0.734, mean +0.073 (0.216x) | non-MF4 rows: lower inputs high 6, lower inputs low 7, alternating 14, distractors 13, double pulses 4, single pulses 2

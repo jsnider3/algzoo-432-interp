@@ -1,0 +1,58 @@
+probe: 180 rows, 68.4 FE (prefix trie [2, 7, 16, 29, 46, 67, 92, 121, 153, 180])
+
+1. the probe quantities on the 1,024
+  handoff close bit          mean 0.976  r with accuracy +0.37; roles: dead -0.28, comparator +0.26, other -0.14, max-det +0.13
+  handoff close soft         mean 0.733  r with accuracy +0.08; roles: comparator +0.37, dead -0.17, event-ptr -0.16, event pointer -0.16
+  handoff close last bit     mean 0.910  r with accuracy +0.37; roles: comparator +0.35, other -0.19, late-marker -0.15, max-det +0.15
+  handoff close last soft    mean 0.551  r with accuracy +0.20; roles: comparator +0.36, event-ptr -0.26, event pointer -0.25, other -0.23
+  handoff clear bit          mean 0.971  r with accuracy +0.46; roles: dead -0.29, comparator +0.24, other -0.14, max-det +0.10
+  handoff clear soft         mean 0.705  r with accuracy +0.20; roles: comparator +0.31, dead -0.23, other -0.16, event-ptr -0.12
+  handoff clear last bit     mean 0.933  r with accuracy +0.41; roles: comparator +0.29, max-det +0.19, other -0.16, late-marker -0.15
+  handoff clear last soft    mean 0.422  r with accuracy -0.04; roles: event-ptr -0.26, event pointer -0.25, other -0.16, late-marker +0.10
+  new 2nd close bit          mean 0.994  r with accuracy +0.28; roles: dead -0.35, comparator +0.08, max-det +0.08, always-on -0.06
+  new 2nd close soft         mean 0.856  r with accuracy +0.08; roles: dead -0.29, comparator +0.13, always-on -0.10, max-det +0.07
+  new 2nd close last bit     mean 0.989  r with accuracy +0.33; roles: dead -0.28, max-det +0.13, comparator +0.10, always-on -0.10
+  new 2nd close last soft    mean 0.872  r with accuracy +0.19; roles: dead -0.28, max-det +0.13, always-on -0.13, comparator +0.08
+  new 2nd clear bit          mean 0.986  r with accuracy +0.35; roles: dead -0.38, comparator +0.13, always-on -0.07, event pointer +0.07
+  new 2nd clear soft         mean 0.876  r with accuracy +0.34; roles: dead -0.37, comparator +0.21, other -0.11, late-ptr +0.05
+  new 2nd clear last bit     mean 0.986  r with accuracy +0.32; roles: dead -0.34, comparator +0.10, always-on -0.08, event pointer +0.07
+  new 2nd clear last soft    mean 0.903  r with accuracy +0.31; roles: dead -0.35, comparator +0.12, always-on -0.08, event pointer +0.07
+
+2. the minimal estimator (180 MF4 rows at the lower S slice) with and without the probe
+  S-vs-R separation + log s (z63)                        83.6 FE | cross-fit 1.394 (0.19x) | new 1.446 mean +0.153 (0.20x) | mystery -0.53
+  S-vs-R separation + log s + the 16 probe quantities   152.0 FE | cross-fit 1.237 (0.28x) | new 1.251 mean +0.117 (0.27x) | mystery -1.23
+  selected (minimal): 1. S-vs-R separation; 2. log s; 3. pulse+ growth SD; 4. pulse- growth SD
+  minimal, 2 quantities                                  89.6 FE | cross-fit 1.394 (0.21x) | new 1.446 mean +0.153 (0.22x) | mystery -0.53
+  minimal, 3 quantities                                  89.6 FE | cross-fit 1.227 (0.16x) | new 1.273 mean +0.109 (0.17x) | mystery -1.27
+  minimal, 4 quantities                                  89.6 FE | cross-fit 1.209 (0.16x) | new 1.240 mean +0.119 (0.16x) | mystery -1.25
+  selected (minimal + probe): 1. S-vs-R separation; 2. log s; 3. pulse+ growth SD; 4. handoff clear bit; 5. pulse- growth SD; 6. pulse+ growth
+  minimal + probe, 2 quantities                         158.0 FE | cross-fit 1.394 (0.37x) | new 1.446 mean +0.153 (0.38x) | mystery -0.53
+  minimal + probe, 3 quantities                         158.0 FE | cross-fit 1.227 (0.28x) | new 1.273 mean +0.109 (0.29x) | mystery -1.27
+  minimal + probe, 4 quantities                         158.0 FE | cross-fit 1.191 (0.27x) | new 1.196 mean +0.104 (0.26x) | mystery -1.14
+  minimal + probe, 6 quantities                         158.0 FE | cross-fit 1.159 (0.25x) | new 1.157 mean +0.113 (0.24x) | mystery -1.15
+
+3. z62's 44 named quantities with and without the probe
+  all: ridge on the 44 + weight statistics              587.3 FE | cross-fit 0.683 (0.33x) | new 0.667 mean +0.083 (0.30x) | mystery -0.94
+  all: ridge on the 44 + weight statistics + probe      655.7 FE | cross-fit 0.660 (0.34x) | new 0.638 mean +0.090 (0.31x) | mystery -0.80
+  selected (all): 1. soft[S near R]; 2. log s; 3. pulse+ growth; 4. pulse- growth SD; 5. bit[S near M]; 6. |a|[S near M]; 7. M after S soft[S near R]; 8. S last soft[S near M]; 9. R after S soft[S near R]; 10. pulse+ growth SD; 11. pulse+ late margin; 12. mean margin
+  all, 3 quantities                                     587.3 FE | cross-fit 0.954 (0.63x) | new 0.979 mean +0.092 (0.65x) | mystery -0.63
+  all, 6 quantities                                     587.3 FE | cross-fit 0.855 (0.51x) | new 0.879 mean +0.103 (0.52x) | mystery -0.67
+  all, 12 quantities                                    587.3 FE | cross-fit 0.787 (0.43x) | new 0.791 mean +0.116 (0.42x) | mystery -0.93
+  selected (all + probe): 1. soft[S near R]; 2. log s; 3. pulse+ growth; 4. pulse- growth SD; 5. bit[S near M]; 6. |a|[S near M]; 7. M after S soft[S near R]; 8. S last soft[S near M]; 9. R after S soft[S near R]; 10. pulse+ growth SD; 11. handoff close soft; 12. handoff clear last soft
+  all + probe, 3 quantities                             655.7 FE | cross-fit 0.954 (0.71x) | new 0.979 mean +0.092 (0.72x) | mystery -0.63
+  all + probe, 6 quantities                             655.7 FE | cross-fit 0.855 (0.57x) | new 0.879 mean +0.103 (0.58x) | mystery -0.67
+  all + probe, 12 quantities                            655.7 FE | cross-fit 0.790 (0.49x) | new 0.785 mean +0.098 (0.46x) | mystery -0.76
+
+4. the 6-quantity model's residual (estimate - truth) against roles
+  without the probe  RMS 0.855; max-det -0.31, late-ptr +0.24, late pointer +0.24, late-marker -0.10
+  with the probe     RMS 0.855; max-det -0.31, late-ptr +0.24, late pointer +0.24, late-marker -0.10
+  compact: ridge on the 44 + weight statistics          161.3 FE | cross-fit 0.887 (0.15x) | new 0.860 mean +0.103 (0.14x) | mystery -1.55
+  compact: ridge on the 44 + weight statistics + probe  229.7 FE | cross-fit 0.829 (0.19x) | new 0.808 mean +0.091 (0.17x) | mystery -1.18
+  selected (compact): 1. soft[S near R]; 2. log s; 3. pulse+ growth SD; 4. M after S bit[S near M]; 5. |a|[S near R]; 6. pulse- growth SD; 7. M after S soft[S near R]; 8. mean margin; 9. R after S bit[S near R]; 10. soft[S near M]; 11. pulse+ late margin; 12. pulse+ growth
+  compact, 3 quantities                                 161.3 FE | cross-fit 1.229 (0.29x) | new 1.254 mean +0.100 (0.29x) | mystery -1.09
+  compact, 6 quantities                                 161.3 FE | cross-fit 1.123 (0.24x) | new 1.095 mean +0.092 (0.22x) | mystery -0.88
+  compact, 12 quantities                                161.3 FE | cross-fit 1.020 (0.20x) | new 0.997 mean +0.125 (0.18x) | mystery -1.13
+  selected (compact + probe): 1. soft[S near R]; 2. log s; 3. pulse+ growth SD; 4. M after S bit[S near M]; 5. |a|[S near R]; 6. new 2nd clear last soft; 7. pulse- growth SD; 8. pulse+ growth; 9. pulse+ late margin; 10. handoff clear last soft; 11. mean margin; 12. soft[S near M]
+  compact + probe, 3 quantities                         229.7 FE | cross-fit 1.229 (0.41x) | new 1.254 mean +0.100 (0.42x) | mystery -1.09
+  compact + probe, 6 quantities                         229.7 FE | cross-fit 1.138 (0.35x) | new 1.102 mean +0.078 (0.32x) | mystery -0.93
+  compact + probe, 12 quantities                        229.7 FE | cross-fit 0.999 (0.27x) | new 0.969 mean +0.103 (0.25x) | mystery -1.07

@@ -1,0 +1,34 @@
+check: base rows reproduce z63's S-vs-R separation to 2.0e-06
+
+base: minimal design 180 rows, 89.6 FE (with pulses)
+  minimal, 5 quantities, ridge                         89.6 FE | cross-fit 1.202 (0.15x) | new 1.236 (0.16x) | mystery -1.28
+  minimal, forward 5                                   89.6 FE | cross-fit 1.202 (0.15x) | new 1.236 (0.16x) | mystery -1.28
+  compact 44 named + 20 weight statistics, ridge      161.3 FE | cross-fit 0.887 (0.15x) | new 0.860 (0.14x) | mystery -1.55
+
+lower inputs high: 180 rows, +79.7 FE; lower inputs high bit mean 0.947 r(acc) +0.85 r(resid) -0.08 r(max-det) +0.20; lower inputs high soft mean 0.771 r(acc) +0.87 r(resid) -0.11 r(max-det) +0.19; lower inputs high bit, old S mean 0.936 r(acc) +0.82 r(resid) -0.10 r(max-det) +0.19; lower inputs high soft, old S mean 0.744 r(acc) +0.83 r(resid) -0.13 r(max-det) +0.18; lower inputs high change mean -0.048 r(acc) +0.62 r(resid) -0.18 r(max-det) +0.12; lower inputs high change, old S mean -0.066 r(acc) +0.60 r(resid) -0.11 r(max-det) +0.11
+  minimal + family, ridge                             169.3 FE | cross-fit 1.120 (0.25x) | new 1.165 (0.26x) | mystery -0.79
+  minimal + family, forward 6                         169.3 FE | cross-fit 1.186 (0.28x) | new 1.169 (0.27x) | mystery -0.93
+    selected: S-vs-R separation; log s; pulse+ growth SD; lower inputs high soft, old S; pulse- growth SD; lower inputs high change, old S
+  compact 44 + weight statistics + family, ridge      241.0 FE | cross-fit 0.860 (0.21x) | new 0.851 (0.20x) | mystery -1.52
+    forward-6 residual vs max detectors -0.18, late pointer +0.22
+
+lower inputs low: 180 rows, +79.7 FE; lower inputs low bit mean 0.947 r(acc) +0.83 r(resid) +0.03 r(max-det) +0.20; lower inputs low soft mean 0.795 r(acc) +0.84 r(resid) +0.01 r(max-det) +0.20; lower inputs low bit, old S mean 0.943 r(acc) +0.81 r(resid) -0.10 r(max-det) +0.24; lower inputs low soft, old S mean 0.786 r(acc) +0.80 r(resid) -0.14 r(max-det) +0.22; lower inputs low change mean -0.025 r(acc) +0.24 r(resid) +0.05 r(max-det) +0.04; lower inputs low change, old S mean -0.024 r(acc) +0.08 r(resid) -0.06 r(max-det) +0.07
+  minimal + family, ridge                             169.3 FE | cross-fit 1.155 (0.27x) | new 1.194 (0.28x) | mystery -0.77
+  minimal + family, forward 6                         169.3 FE | cross-fit 1.160 (0.27x) | new 1.203 (0.28x) | mystery -0.81
+    selected: S-vs-R separation; log s; pulse+ growth SD; lower inputs low soft, old S; lower inputs low bit; pulse- growth SD
+  compact 44 + weight statistics + family, ridge      241.0 FE | cross-fit 0.884 (0.22x) | new 0.852 (0.20x) | mystery -1.42
+    forward-6 residual vs max detectors -0.15, late pointer +0.20
+
+alternating: 360 rows, +159.5 FE; alternating bit mean 0.956 r(acc) +0.87 r(resid) -0.02 r(max-det) +0.21; alternating soft mean 0.799 r(acc) +0.88 r(resid) -0.05 r(max-det) +0.20; alternating bit, old S mean 0.949 r(acc) +0.85 r(resid) -0.10 r(max-det) +0.21; alternating soft, old S mean 0.783 r(acc) +0.85 r(resid) -0.14 r(max-det) +0.19; alternating change mean -0.020 r(acc) +0.37 r(resid) -0.13 r(max-det) +0.04; alternating change, old S mean -0.026 r(acc) +0.31 r(resid) -0.09 r(max-det) +0.01
+  minimal + family, ridge                             249.0 FE | cross-fit 1.137 (0.38x) | new 1.153 (0.38x) | mystery -0.68
+  minimal + family, forward 6                         249.0 FE | cross-fit 1.172 (0.41x) | new 1.181 (0.40x) | mystery -0.87
+    selected: alternating soft; log s; pulse+ growth SD; S-vs-R separation; alternating soft, old S; pulse- growth SD
+  compact 44 + weight statistics + family, ridge      320.8 FE | cross-fit 0.880 (0.29x) | new 0.849 (0.27x) | mystery -1.53
+    forward-6 residual vs max detectors -0.18, late pointer +0.23
+
+distractors: 180 rows, +64.4 FE; distractors bit mean 0.806 r(acc) +0.80 r(resid) -0.20 r(max-det) +0.19; distractors soft mean 0.458 r(acc) +0.77 r(resid) -0.22 r(max-det) +0.20; distractors bit, old S mean 0.774 r(acc) +0.77 r(resid) -0.20 r(max-det) +0.19; distractors soft, old S mean 0.389 r(acc) +0.76 r(resid) -0.21 r(max-det) +0.19
+  minimal + family, ridge                             154.0 FE | cross-fit 1.143 (0.24x) | new 1.130 (0.23x) | mystery -0.92
+  minimal + family, forward 6                         154.0 FE | cross-fit 1.143 (0.24x) | new 1.135 (0.23x) | mystery -0.94
+    selected: S-vs-R separation; log s; pulse+ growth SD; distractors soft; pulse- growth SD; pulse+ growth
+  compact 44 + weight statistics + family, ridge      225.7 FE | cross-fit 0.881 (0.21x) | new 0.835 (0.18x) | mystery -1.34
+    forward-6 residual vs max detectors -0.15, late pointer +0.20

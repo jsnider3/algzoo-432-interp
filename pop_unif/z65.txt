@@ -1,0 +1,46 @@
+check: accuracy from the regions vs labels, RMS difference 0.041 points (sampling noise about 0.03)
+regions: 108 defined, 88 occupied; accuracy lost per network 9.48 points on average
+
+minimal: S-vs-R separation + log s: accuracy residual RMS 1.394 points
+  sum over regions of cov(unexplained loss, residual) / var(residual) = +1.00 (about +1: the residual is the sum of the regions' misses)
+  regions carrying the residual (share of residual variance; region weight; mean loss; unexplained / total SD of the loss; correlation of the loss with max detectors, late pointer):
+     10.6%  M age 0, S age 4+                      weight  5.05%  loss 0.737  0.328 / 0.522  max-det -0.19  late -0.11
+      8.8%  M and S both 4+, S older               weight 12.66%  loss 0.457  0.196 / 0.346  max-det -0.25  late -0.09
+      7.3%  M and S both 4+, M older               weight 12.76%  loss 0.433  0.159 / 0.335  max-det -0.25  late -0.10
+      5.4%  M and S both 4+, S older, S~R          weight  2.56%  loss 0.718  0.138 / 0.203  max-det -0.23  late -0.07
+      5.0%  M age 1, S age 4+                      weight  5.04%  loss 0.314  0.138 / 0.217  max-det -0.22  late -0.07
+      4.8%  M and S both 4+, M older, S~R          weight  2.56%  loss 0.790  0.136 / 0.242  max-det -0.21  late -0.17
+      3.8%  M age 2, S age 4+                      weight  5.05%  loss 0.224  0.097 / 0.139  max-det -0.23  late -0.09
+      2.9%  M age 0, S age 4+, S~R                 weight  1.02%  loss 0.340  0.079 / 0.119  max-det -0.26  late -0.11
+      2.6%  M age 2, S age 4+, S~R                 weight  1.03%  loss 0.269  0.062 / 0.077  max-det -0.28  late -0.11
+      2.6%  M age 1, S age 4+, S~R                 weight  1.02%  loss 0.271  0.063 / 0.085  max-det -0.32  late -0.06
+      2.6%  M age 3, S age 4+                      weight  5.09%  loss 0.186  0.073 / 0.118  max-det -0.25  late -0.11
+      2.4%  M and S both 4+, M older, M~S          weight  1.29%  loss 0.101  0.056 / 0.071  max-det -0.37  late -0.02
+  family M last (age 0)  :  21.9% of the residual variance, weight 10.0%
+  family S last (age 0)  :   4.1% of the residual variance, weight 10.0%
+  family M age 1         :  13.2% of the residual variance, weight 10.0%
+  family both 4+         :  31.3% of the residual variance, weight 33.4%
+  near tie M~S :  19.8% of the residual variance, weight 8.6%
+  near tie S~R :  29.3% of the residual variance, weight 16.2%
+
+compact: 44 named + 20 weight statistics: accuracy residual RMS 0.887 points
+  sum over regions of cov(unexplained loss, residual) / var(residual) = +1.00 (about +1: the residual is the sum of the regions' misses)
+  regions carrying the residual (share of residual variance; region weight; mean loss; unexplained / total SD of the loss; correlation of the loss with max detectors, late pointer):
+     10.3%  M and S both 4+, S older               weight 12.66%  loss 0.457  0.159 / 0.346  max-det -0.25  late -0.09
+      8.4%  M and S both 4+, M older               weight 12.76%  loss 0.433  0.134 / 0.335  max-det -0.25  late -0.10
+      7.0%  M age 0, S age 4+                      weight  5.05%  loss 0.737  0.181 / 0.522  max-det -0.19  late -0.11
+      5.3%  M and S both 4+, S older, S~R          weight  2.56%  loss 0.718  0.118 / 0.203  max-det -0.23  late -0.07
+      4.7%  M age 2, S age 4+                      weight  5.05%  loss 0.224  0.078 / 0.139  max-det -0.23  late -0.09
+      4.6%  M age 1, S age 4+                      weight  5.04%  loss 0.314  0.095 / 0.217  max-det -0.22  late -0.07
+      4.4%  M and S both 4+, M older, S~R          weight  2.56%  loss 0.790  0.099 / 0.242  max-det -0.21  late -0.17
+      4.0%  M age 4+, S age 2                      weight  5.05%  loss 0.168  0.066 / 0.119  max-det -0.26  late -0.10
+      3.5%  M age 3, S age 4+                      weight  5.09%  loss 0.186  0.065 / 0.118  max-det -0.25  late -0.11
+      3.1%  M age 4+, S age 1                      weight  5.08%  loss 0.161  0.060 / 0.124  max-det -0.23  late -0.10
+      3.1%  M age 4+, S age 3                      weight  5.05%  loss 0.166  0.059 / 0.120  max-det -0.27  late -0.10
+      2.5%  M age 4+, S age 2, S~R                 weight  1.02%  loss 0.350  0.065 / 0.104  max-det -0.19  late -0.12
+  family M last (age 0)  :  12.0% of the residual variance, weight 10.0%
+  family S last (age 0)  :   5.5% of the residual variance, weight 10.0%
+  family M age 1         :  11.5% of the residual variance, weight 10.0%
+  family both 4+         :  33.1% of the residual variance, weight 33.4%
+  near tie M~S :  12.1% of the residual variance, weight 8.6%
+  near tie S~R :  30.7% of the residual variance, weight 16.2%

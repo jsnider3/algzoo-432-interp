@@ -1,0 +1,65 @@
+A. invariant quantities only (no log s, no mean margin)
+  selected, all: 1. soft[S near R]; 2. pulse+ growth; 3. pulse- growth SD; 4. M after S bit[S near R]; 5. |a|[S near M]; 6. |a|[S near R]; 7. M last soft[S near M]; 8. R after S bit[S near R]; 9. pulse+ margin; 10. S last soft[S near M]; 11. pulse+ growth SD; 12. M last bit[S near M]
+  3 quantities, all, linear                       587.3 FE | cross-fit 1.259 (1.11x) | new 1.233 mean +0.163 (1.03x) | mystery -1.81
+  6 quantities, all, linear                       587.3 FE | cross-fit 1.020 (0.73x) | new 1.004 mean +0.158 (0.68x) | mystery -1.55
+  12 quantities, all, linear                      587.3 FE | cross-fit 0.899 (0.56x) | new 0.913 mean +0.140 (0.56x) | mystery -1.27
+  selected, compact: 1. soft[S near R]; 2. pulse+ growth SD; 3. pulse+ margin; 4. pulse- growth SD; 5. M after S bit[S near M]; 6. |a|[S near M]; 7. |a|[S near R]; 8. pulse+ growth; 9. bit[S near R]; 10. M after S soft[S near R]; 11. M last soft[S near M]; 12. M right after S soft[S near M]
+  3 quantities, compact, linear                   161.3 FE | cross-fit 1.485 (0.42x) | new 1.472 mean +0.172 (0.40x) | mystery -2.09
+  6 quantities, compact, linear                   161.3 FE | cross-fit 1.320 (0.33x) | new 1.277 mean +0.171 (0.30x) | mystery -1.87
+  12 quantities, compact, linear                  161.3 FE | cross-fit 1.229 (0.29x) | new 1.225 mean +0.142 (0.28x) | mystery -1.44
+
+B. minimal readable estimator: compact design, MF4 rows at the lower S slice only
+  soft[S near R] + log s                           83.6 FE | cross-fit 1.394 (0.19x) | new 1.446 mean +0.153 (0.20x) | mystery -0.53
+    the same, additive                             83.6 FE | cross-fit 1.366 (0.19x) | new 1.444 mean +0.132 (0.20x) | mystery -0.63
+    points per training SD: soft[S near R] +2.18, log s +1.50
+  soft[S near R] + log s + pulse+ growth           86.6 FE | cross-fit 1.250 (0.16x) | new 1.304 mean +0.113 (0.17x) | mystery -1.20
+    the same, additive                             86.6 FE | cross-fit 1.239 (0.16x) | new 1.298 mean +0.100 (0.17x) | mystery -1.36
+    points per training SD: soft[S near R] +1.83, log s +1.63, pulse+ growth -0.68
+  soft[S near R] + log s + pulse+ growth + pulse+ growth SD   86.6 FE | cross-fit 1.225 (0.15x) | new 1.273 mean +0.108 (0.16x) | mystery -1.29
+    the same, additive                             86.6 FE | cross-fit 1.217 (0.15x) | new 1.275 mean +0.097 (0.16x) | mystery -1.34
+    points per training SD: soft[S near R] +1.78, log s +1.66, pulse+ growth -0.20, pulse+ growth SD +0.55
+  soft[S near R] + log s + pulse+ growth + pulse+ growth SD + pulse- growth SD   89.6 FE | cross-fit 1.202 (0.15x) | new 1.236 mean +0.119 (0.16x) | mystery -1.28
+    the same, additive                             89.6 FE | cross-fit 1.192 (0.15x) | new 1.230 mean +0.106 (0.16x) | mystery -1.44
+    points per training SD: soft[S near R] +1.72, log s +1.54, pulse+ growth -0.34, pulse+ growth SD +0.45, pulse- growth SD +0.30
+  (180 rows, 80.5 FE of rows)
+
+C. neuron roles (offline interpretation)
+  late  pointer: 282 networks, accuracy 91.17% (SD 3.77)
+  event pointer: 153 networks, accuracy 90.56% (SD 3.49)
+  none  pointer: 589 networks, accuracy 90.26% (SD 3.68)
+  0 comparators: 20 networks, accuracy 90.09%
+  1 comparators: 44 networks, accuracy 87.16%
+  2 comparators: 152 networks, accuracy 87.66%
+  3 comparators: 299 networks, accuracy 90.38%
+  4 comparators: 292 networks, accuracy 91.45%
+  5 comparators: 161 networks, accuracy 92.25%
+  6 comparators: 51 networks, accuracy 92.79%
+  mean role counts: dead 0.03, always-on 3.18, event-ptr 0.15, late-ptr 0.28, max-det 1.13, late-marker 0.33, comparator 3.48, other 7.43
+  soft[S near R]     r with accuracy +0.92; strongest role links: comparator +0.43, other -0.29, dead -0.21, late-ptr +0.16
+  log s              r with accuracy +0.82; strongest role links: max-det +0.28, comparator +0.25, other -0.24, late-marker -0.23
+  pulse+ growth      r with accuracy -0.46; strongest role links: late-marker +0.31, comparator -0.24, max-det -0.19, always-on +0.18
+  pulse+ growth SD   r with accuracy +0.46; strongest role links: late-marker -0.27, comparator +0.24, always-on -0.18, max-det +0.16
+  bit[S near M]      r with accuracy +0.74; strongest role links: comparator +0.54, other -0.32, late-marker -0.21, max-det +0.20
+  |a|[S near M]      r with accuracy -0.21; strongest role links: selectivity -0.31, comparator +0.28, event-ptr -0.18, event pointer -0.17
+  6-quantity model (all design): cross-fit RMS 0.855; after a cross-fitted ridge on the roles 0.773
+  residual (estimate - truth) vs roles: max-det -0.31, late-ptr +0.24, late pointer +0.24, selectivity +0.18, late-marker -0.10
+    network   62: accuracy 82.60%, estimate 77.92% (-4.68); none pointer; always-on 2, max-det 1, late-marker 1, comparator 2, other 10
+    network  999: accuracy 78.92%, estimate 83.15% (+4.23); late pointer; always-on 5, late-ptr 1, comparator 3, other 7
+    network  663: accuracy 93.21%, estimate 89.43% (-3.78); event pointer; always-on 3, event-ptr 1, max-det 2, comparator 2, other 8
+    network  866: accuracy 76.35%, estimate 79.62% (+3.28); late pointer; always-on 5, late-ptr 1, comparator 2, other 8
+    network  677: accuracy 86.67%, estimate 83.40% (-3.27); none pointer; always-on 2, max-det 1, comparator 6, other 7
+    network  857: accuracy 82.15%, estimate 85.41% (+3.26); late pointer; always-on 5, late-ptr 1, comparator 4, other 6
+    network  297: accuracy 74.95%, estimate 78.14% (+3.19); late pointer; always-on 6, late-ptr 1, comparator 2, other 7
+    network  804: accuracy 91.07%, estimate 87.92% (-3.15); none pointer; always-on 4, max-det 1, late-marker 1, comparator 3, other 7
+    network 1011: accuracy 82.73%, estimate 79.66% (-3.07); none pointer; always-on 1, max-det 2, late-marker 1, comparator 2, other 10
+    network  170: accuracy 86.74%, estimate 89.63% (+2.88); none pointer; always-on 5, late-marker 1, comparator 4, other 6
+
+D. sampling that may also use the population: the sampled accuracy shrunk toward the 1,024's mean (normal prior,
+   weight w = var / (var + mean p(1-p) / C)), scored on the 512 new networks
+  prior mean 90.56%, SD 3.70 points; the prior mean alone beats plain sampling below 65 FE
+     84 FE: plain sampling RMS 3.22, shrunk sampling RMS 2.41
+     87 FE: plain sampling RMS 3.16, shrunk sampling RMS 2.39
+    132 FE: plain sampling RMS 2.57, shrunk sampling RMS 2.10
+    207 FE: plain sampling RMS 2.05, shrunk sampling RMS 1.79
+    651 FE: plain sampling RMS 1.16, shrunk sampling RMS 1.10
+   1216 FE: plain sampling RMS 0.85, shrunk sampling RMS 0.82

@@ -1,0 +1,5 @@
+6860 candidate rows: MF4 5760, lower inputs high 180, lower inputs low 180, alternating 360, distractors 180, double pulses 180, single pulses 20
+   16 rows   22.4 FE | cross-fit 1.008 (0.027x) | new 0.961 (0.024x) | mystery -0.44 | kinds: MF4 13, lower inputs high 1, double pulses 2
+   32 rows   35.3 FE | cross-fit 0.908 (0.035x) | new 0.926 (0.035x) | mystery -0.36 | kinds: MF4 27, lower inputs high 2, lower inputs low 1, double pulses 2
+   64 rows   57.1 FE | cross-fit 0.869 (0.051x) | new 0.911 (0.055x) | mystery -0.15 | kinds: MF4 51, lower inputs high 4, lower inputs low 3, alternating 2, distractors 1, double pulses 2, single pulses 1
+  128 rows   98.6 FE | cross-fit 0.867 (0.088x) | new 0.864 (0.085x) | mystery +0.05 | kinds: MF4 97, lower inputs high 5, lower inputs low 9, alternating 8, distractors 4, double pulses 4, single pulses 1

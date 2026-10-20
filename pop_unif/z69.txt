@@ -1,0 +1,15 @@
+  fold 0 done
+  fold 1 done
+  fold 2 done
+  fold 3 done
+  fold 4 done
+  fold 5 done
+  fold 6 done
+  fold 7 done
+learned MF4 rows (K = 8 pool) + pulses + 20 weight statistics + predicted roles
+    8 rows   17.0 FE | cross-fit 1.112 (0.025x) | new 1.145 mean +0.002 (0.026x; shrunk sampling 3.25, 0.12x) | mystery +0.08
+   16 rows   23.7 FE | cross-fit 1.020 (0.029x) | new 1.061 mean +0.018 (0.031x; shrunk sampling 3.12, 0.12x) | mystery +0.07
+   32 rows   35.4 FE | cross-fit 0.932 (0.037x) | new 0.968 mean +0.035 (0.038x; shrunk sampling 2.93, 0.11x) | mystery -0.41
+   64 rows   57.0 FE | cross-fit 0.877 (0.052x) | new 0.904 mean +0.060 (0.054x; shrunk sampling 2.66, 0.12x) | mystery +0.04
+  128 rows   95.2 FE | cross-fit 0.876 (0.087x) | new 0.902 mean +0.062 (0.089x; shrunk sampling 2.33, 0.15x) | mystery +0.66
+  256 rows  164.4 FE | cross-fit 0.983 (0.189x) | new 0.987 mean +0.087 (0.184x; shrunk sampling 1.94, 0.26x) | mystery +0.78

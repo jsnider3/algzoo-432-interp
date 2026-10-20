@@ -1,0 +1,18 @@
+
+learned MF4 rows + pulses
+    4 rows   11.7 FE (fold designs 11.4-11.7) | cross-fit 1.736 (0.042x) | new 1.750 (0.041x) | mystery -1.06
+    8 rows   15.1 FE (fold designs 14.3-15.1) | cross-fit 1.519 (0.041x) | new 1.565 (0.043x) | mystery -0.85
+   16 rows   22.0 FE (fold designs 20.6-22.0) | cross-fit 1.363 (0.049x) | new 1.250 (0.040x) | mystery -0.66
+   32 rows   33.4 FE (fold designs 32.2-33.4) | cross-fit 1.097 (0.048x) | new 1.102 (0.047x) | mystery -0.43
+   64 rows   53.2 FE (fold designs 51.2-53.2) | cross-fit 0.950 (0.057x) | new 0.961 (0.057x) | mystery -0.81
+  first 16 rows chosen on all 1,024 (positions of M, S, R; S slice 0-3, low to high): (2,4,8) s1, (9,3,8) s2, (9,1,7) s0, (4,9,2) s2, (2,0,1) s0, (5,1,0) s0, (2,8,9) s0, (5,2,3) s0, (9,0,1) s2, (7,4,0) s0, (5,7,2) s0, (4,1,8) s0, (1,7,3) s3, (7,6,4) s0, (7,8,6) s0, (9,3,5) s3
+
+learned MF4 rows + pulses + 20 weight statistics
+    4 rows   11.6 FE (fold designs 11.5-11.6) | cross-fit 1.269 (0.022x) | new 1.298 (0.022x) | mystery -1.08
+    8 rows   15.3 FE (fold designs 14.9-15.3) | cross-fit 1.162 (0.025x) | new 1.206 (0.026x) | mystery -0.60
+   16 rows   21.9 FE (fold designs 21.3-21.9) | cross-fit 1.075 (0.030x) | new 1.112 (0.031x) | mystery -0.52
+   32 rows   34.0 FE (fold designs 32.7-34.0) | cross-fit 0.963 (0.037x) | new 0.980 (0.038x) | mystery -0.34
+   64 rows   55.2 FE (fold designs 52.1-55.2) | cross-fit 0.881 (0.051x) | new 0.911 (0.053x) | mystery -0.25
+  first 16 rows chosen on all 1,024 (positions of M, S, R; S slice 0-3, low to high): (1,3,2) s0, (4,9,6) s2, (2,0,1) s0, (5,1,3) s0, (7,0,3) s1, (2,3,8) s0, (9,0,6) s1, (2,8,3) s0, (9,2,6) s0, (7,4,2) s0, (8,1,6) s0, (8,9,7) s2, (8,4,7) s1, (4,3,1) s0, (1,5,3) s1, (8,0,9) s3
+
+for reference, sampling at 10 / 20 / 40 FE has RMS 9.32, 6.59, 4.66 points on the new networks; the population mean alone 3.64
