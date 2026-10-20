@@ -11,6 +11,9 @@ cell), and their network-level flip rates to the context; --screen-ctx uses scre
 for the context (2 + 12/16 rows per cell).
 --boxes=n / --k=K read z46's --boxes=n / K data.  --weights adds free weight statistics to the context (per
 neuron: W_ih, the self-loop, log norms of its recurrent row and column and of its readout column; mean/SD/min/max).
+--hidden=a,b,... sets the MLP's hidden widths (default 128,128,64).  Inference cost is counted: per cell, the
+network-dependent multiply-adds (8 continuous inputs x first width, then each later layer; the embeddings' and the
+context's first-layer terms are precomputed per cell and per network), at 2,880 per forward.
 --cv: 8-fold cross-fitting over all 1,024 networks (fold = i mod 8) instead of the dev/held split; zoo predictions
 are averaged over the 8 fold models.  --seed=s sets the training seed.
 Usage: python z47.py [epochs, default 3] [--no-context] [--screen | --screen-ctx] [--boxes=n]
@@ -18,8 +21,8 @@ Usage: python z47.py [epochs, default 3] [--no-context] [--screen | --screen-ctx
 import sys, time, numpy as np, torch as th
 args=[a for a in sys.argv[1:] if not a.startswith('--')]; ctx='--no-context' not in sys.argv
 SCR='--screen' in sys.argv; SCX='--screen-ctx' in sys.argv
-dev='cuda'; EP=int(args[0]) if args else 3; CV='--cv' in sys.argv; SEED=int(next((a.split('=')[1] for a in sys.argv if a.startswith('--seed=')),47)); th.manual_seed(SEED)
-NBa=next((a.split('=')[1] for a in sys.argv if a.startswith('--boxes=')),'2'); BS=('' if NBa=='2' else f'_b{NBa}')+next((f"_k{a.split('=')[1]}" for a in sys.argv if a.startswith('--k=') and a!='--k=8'),''); WTS='--weights' in sys.argv
+dev='cuda' if th.cuda.is_available() else 'cpu'; EP=int(args[0]) if args else 3; CV='--cv' in sys.argv; SEED=int(next((a.split('=')[1] for a in sys.argv if a.startswith('--seed=')),47)); th.manual_seed(SEED)
+NBa=next((a.split('=')[1] for a in sys.argv if a.startswith('--boxes=')),'2'); BS=('' if NBa=='2' else f'_b{NBa}')+next((f"_k{a.split('=')[1]}" for a in sys.argv if a.startswith('--k=') and a!='--k=8'),''); WTS='--weights' in sys.argv; HID=[int(v) for v in next((a.split('=')[1] for a in sys.argv if a.startswith('--hidden=')),'128,128,64').split(',')]
 D=np.load(f"pop1k/seed0_z46_cells{'_screen' if SCR or SCX else ''}{BS}.npz"); NB=int(D['NB']) if 'NB' in D.files else 2; K=int(D['K']); ARR=D['arr']; QREP=D['qrep']; NT,C=D['I4'].shape
 ref=np.load('pop1k/reference.npz'); acc=ref['acc']; pq=(acc[:1024]*(1-acc[:1024])).mean()
 g=lambda k,dt=th.float32: th.tensor(D[k]).to(dev,dt)
@@ -48,7 +51,9 @@ idx=np.arange(1030); test=np.r_[np.arange(0,1024,16),np.arange(8,1024,16)]; trai
 class G(th.nn.Module):
     def __init__(s):
         super().__init__(); s.emb=th.nn.ModuleList([th.nn.Embedding(n,4) for n in (NB,NB,NB,K,10,10,10,10)])
-        s.net=th.nn.Sequential(th.nn.Linear(32+8+(cx.shape[1] if ctx else 0)+(24 if SCR else 0),128),th.nn.ReLU(),th.nn.Linear(128,128),th.nn.ReLU(),th.nn.Linear(128,64),th.nn.ReLU(),th.nn.Linear(64,1))
+        d=[32+8+(cx.shape[1] if ctx else 0)+(24 if SCR else 0)]+HID; L_=[]
+        for i in range(len(HID)): L_+=[th.nn.Linear(d[i],d[i+1]),th.nn.ReLU()]
+        s.net=th.nn.Sequential(*L_,th.nn.Linear(d[-1],1))
     def forward(s,n,cc):
         e=th.cat([m(cat[cc,i]) for i,m in enumerate(s.emb)],1)
         f4,f3=m4[n,cc],m3[n,cc]; sc=scale[n,0]
@@ -71,12 +76,15 @@ if CV:
     for f in range(8):
         m_=train_model(pop[pop%8!=f],False); est[pop[pop%8==f]]=predict(m_,pop[pop%8==f]); zoo+=predict(m_,range(1024,1030))/8
         print(f"  fold {f} done",flush=True)
-    est[1024:]=zoo; e=100*(est-acc); cost=(14*C if SCR else 2*C+12*(C//16) if SCX else 2*C); samp=100*np.sqrt(pq/cost)
-    print(f"{C} cells, {cost} forwards per network; sampling RMS {samp:.4f}; weights {'on' if WTS else 'off'}; seed {SEED}; 8-fold cross-fitting")
+    est[1024:]=zoo; e=100*(est-acc); rows=(14*C if SCR else 2*C+12*(C//16) if SCX else 2*C)
+    mac=(8+(24 if SCR else 0))*HID[0]+HID[0]+sum(HID[i]*HID[i+1] for i in range(len(HID)-1))+HID[-1]+16      # per cell, incl. margins and the sigmoid
+    cost=rows+C*mac/2880; samp=100*np.sqrt(pq/cost)
+    print(f"  hidden {HID}: inference {mac} multiply-adds per cell = {C*mac/2880:.0f} forward-equivalents; total {cost:.0f}")
+    print(f"{C} cells, {rows} forward rows + inference = {cost:.0f} forward-equivalents per network; sampling RMS {samp:.4f}; weights {'on' if WTS else 'off'}; seed {SEED}; 8-fold cross-fitting")
     for lab,ix in (('all 1,024',pop),('dev 0::16',np.arange(0,1024,16)),('held 8::16',np.arange(8,1024,16))):
         print(f"  {lab:11s} RMS {np.sqrt((e[ix]**2).mean()):.4f} mean {e[ix].mean():+.4f}  MSE/sampling {np.mean(e[ix]**2)/samp**2:.2f}")
     print(f"  zoo errors "+" ".join(f"{v:+.3f}" for v in e[1024:])+f"  RMS {np.sqrt((e[1024:]**2).mean()):.3f}  MSE/sampling {np.mean(e[1024:]**2)/samp**2:.2f}")
-    np.save(f"pop1k/seed0_z47cv{BS}{'_w' if WTS else ''}_s{SEED}_est.npy",est); sys.exit(0)
+    np.save(f"pop1k/seed0_z47cv{BS}{'_w' if WTS else ''}{'' if HID==[128,128,64] else '_h'+'-'.join(map(str,HID))}_s{SEED}_est.npy",est); sys.exit(0)
 model=train_model(train); est=np.zeros(NT); cb=th.tensor(b,device=dev); ck=th.tensor(k,device=dev); cms=th.tensor(ARR[a,0]*10+ARR[a,1],device=dev); cR=th.tensor(ARR[a,2],device=dev)
 RB=np.zeros((NT,NBOX)); RK=np.zeros((NT,K)); RMS_=np.zeros((NT,100)); RI=np.zeros((NT,4))       # residual g - t by box, slice, (M,S), (I4,I3)
 with th.no_grad():

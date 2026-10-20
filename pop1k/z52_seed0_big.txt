@@ -1,0 +1,4 @@
+design   cells   rows  network FE (ChatGPT)  total FE   RMS i mod 8 | perm   mean   MSE/s   ChatGPT RMS   zoo errors (mystery, seed0-4)
+G(27,8)  155520  311040   108394.20 (108394.20)  112333.23  0.2224 | 0.2329  -0.0005   8.041   0.2273   +0.701 -0.101 -0.008 +0.188 -0.203 -0.085   [trie vs full forward bit mismatches (32 nets) 0; vs z46 cache n/a; 182s]
+G(64,8)  368640  737280   256887.20 (256887.20)  266027.59  0.2104 | 0.2198  +0.0002  17.040   0.2164   +0.723 -0.041 +0.096 +0.060 -0.193 -0.102   [trie vs full forward bit mismatches (32 nets) 0; vs z46 cache n/a; 379s]
+G(125,8)  720000 1440000   497194.00 (497194.00)  514895.74  0.2032 | 0.2095  +0.0002  30.760   0.2122   +0.766 -0.232 +0.228 +0.078 -0.345 -0.166   [trie vs full forward bit mismatches (32 nets) 5; vs z46 cache n/a; 697s]

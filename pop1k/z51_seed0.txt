@@ -1,0 +1,18 @@
+zoo roles: mystery: late pointer (n2 always-on, n5 late-ptr, n13 always-on); seed0: no pointer (n0 always-on, n1 always-on, n2 always-on, n4 always-on, n7 always-on, n9 always-on, n10 always-on, n13 always-on, n15 always-on); seed1: no pointer (n0 always-on, n4 always-on, n5 always-on, n7 always-on, n8 always-on, n9 always-on, n13 always-on); seed2: event pointer (n1 always-on, n5 always-on, n7 always-on, n8 always-on, n10 event-ptr, n12 always-on); seed3: event pointer (n6 always-on, n9 event-ptr); seed4: no pointer (n0 always-on, n1 always-on, n2 always-on, n5 always-on, n6 always-on, n7 always-on, n8 always-on, n9 always-on, n10 always-on, n11 always-on, n13 always-on)
+
+population (2^30), logit scale and accuracy by strategy:
+  strategy           n  scale median (5-95%)     accuracy median  log-scale ~ log-acc slope  scale expected at 95.30%
+  late pointer     170   10.55 ( 5.99-13.19)           94.96%                        5.9  10.82
+  event pointer    379    8.07 ( 5.62-10.97)           92.40%                        4.6  9.32
+  no pointer       475    7.75 ( 4.62-11.08)           92.76%                        5.8  9.34
+
+zoo models against their own strategy group: scale, percentile in group, scale expected from accuracy in group, ratio
+  mystery  late pointer   acc 95.30%  scale  14.28  100.0th pct  expected 10.82  ratio 1.32
+  seed0    no pointer     acc 90.98%  scale   8.36   58.5th pct  expected  7.14  ratio 1.17
+  seed1    no pointer     acc 88.04%  scale   5.91   18.1th pct  expected  5.90  ratio 1.00
+  seed2    event pointer  acc 94.84%  scale   8.43   60.9th pct  expected  9.12  ratio 0.93
+  seed3    event pointer  acc 93.20%  scale   8.91   70.7th pct  expected  8.42  ratio 1.06
+  seed4    no pointer     acc 88.98%  scale   7.21   40.8th pct  expected  6.27  ratio 1.15
+
+late-pointer networks within 1 point of the mystery's accuracy: 96; their scales median 11.15 (max 13.91); mystery 14.28 exceeds 100% of them
+population residual SD of log scale given accuracy 0.150; mystery's residual 0.389 = 2.6 SD; networks with a larger residual: 17

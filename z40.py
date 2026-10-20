@@ -9,7 +9,7 @@ from batch_train import forward, target
 from z2 import load
 from z10 import topk_mf
 from seeds_clocks import load as zload
-dev='cuda'; lc=int(sys.argv[1]) if len(sys.argv)>1 else 20
+dev='cuda' if th.cuda.is_available() else 'cpu'; lc=int(sys.argv[1]) if len(sys.argv)>1 else 20
 P,_=load('pop1k/seed0.npz')
 Z=[zload(f) for f in ["weights.npz"]+[f"weights_seed{i}.npz" for i in range(5)]]
 Wz=[th.tensor(np.stack([z[i] for z in Z]),dtype=th.float32) for i in range(3)]

@@ -13,7 +13,7 @@ from batch_train import forward
 from z2 import load
 from seeds_clocks import load as zload
 from scipy.special import ndtr, ndtri, roots_jacobi
-dev='cuda'; n,K,q=2,8,8
+dev='cuda' if th.cuda.is_available() else 'cpu'; n,K,q=2,8,8
 ids=np.r_[np.arange(0,1024,16),np.arange(8,1024,16),np.arange(1024,1030)]
 P,_=load('pop1k/seed0.npz'); Z=[zload(f) for f in ["weights.npz"]+[f"weights_seed{i}.npz" for i in range(5)]]
 Wz=[th.tensor(np.stack([z[i] for z in Z]),dtype=th.float32) for i in range(3)]

@@ -8,7 +8,7 @@ from batch_train import forward
 from z2 import load
 from seeds_clocks import load as zload
 from z10 import mu_below
-dev='cuda'; reps=256
+dev='cuda' if th.cuda.is_available() else 'cpu'; reps=256
 P,_=load('pop1k/seed0.npz'); Z=[zload(f) for f in ["weights.npz"]+[f"weights_seed{i}.npz" for i in range(5)]]
 Wz=[th.tensor(np.stack([z[i] for z in Z]),dtype=th.float32) for i in range(3)]
 ids=np.r_[np.arange(0,1024,16),np.arange(1024,1030)]; W=[th.cat([a,b])[ids].to(dev) for a,b in zip(P,Wz)]; N=len(ids)

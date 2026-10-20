@@ -1,0 +1,7 @@
+design   cells   rows  network FE (ChatGPT)  total FE   RMS i mod 8 | perm   mean   MSE/s   ChatGPT RMS   zoo errors (mystery, seed0-4)
+G(1,8)    5760   11520     4021.40 (  4021.40)    4196.37  0.3635 | 0.3838  +0.0028   0.802   0.3809   +0.779 -0.403 +0.416 -0.141 -0.507 -0.643   [trie vs full forward bit mismatches (32 nets) 0; vs z46 cache 1; 62s]
+Traceback (most recent call last):
+  File "/mnt/c/Users/josh/Documents/Git/algzoo-432-interp/z52.py", line 89, in <module>
+    feats.append(th.cat(out,1).cpu().numpy())
+                 ^^^^^^^^^^^^^
+RuntimeError: Tensors must have same number of dimensions: got 2 and 1

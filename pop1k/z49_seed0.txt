@@ -1,0 +1,25 @@
+population SD of accuracy 3.434 points; mean p(1-p) 0.06910
+RMS (points), cross-fitted on the 1,024; folds: i mod 8 | three random permutations; MSE/sampling at ChatGPT's total cost
+K = 1 (total cost 618.55 FE, sampling RMS 1.057)
+  cells only (invariant)            10 feats  1.3642 | 1.3654 1.3853 1.3750  MSE/s 1.666  picks: rbf g0.1 a1e-03
+  cells + logit scale               14 feats  1.1178 | 1.0457 1.1033 1.0764  MSE/s 1.118  picks: rbf g0.03 a1e-03
+  cells + weights                   30 feats  0.8681 | 0.8688 0.8909 0.8616  MSE/s 0.675  picks: rbf g0.01 a1e-03
+  cells + scale + weights (= G)     34 feats  0.6085 | 0.6251 0.6133 0.6387  MSE/s 0.331  picks: rbf g0.003 a1e-04
+  cells + invariant weights         30 feats  1.0517 | 1.0555 1.0410 1.0440  MSE/s 0.990  picks: rbf g0.1 a1e-02
+  weights only                      20 feats  1.1723 | 1.2191 1.1598 1.2451  MSE/s 1.230  picks: rbf g0.03 a1e-03
+  invariant weights only            20 feats  2.0021 | 2.0489 2.0043 2.0120  MSE/s 3.588  picks: rbf g1.0 a1e-01
+  logit scale + weights             24 feats  0.8792 | 0.8373 0.8146 0.8501  MSE/s 0.692  picks: rbf g0.03 a1e-04
+K = 2 (total cost 1129.66 FE, sampling RMS 0.782)
+  cells only (invariant)            30 feats  1.3711 | 1.3161 1.1053 1.1151  MSE/s 3.073  picks: rbf g0.1 a1e-03
+  cells + logit scale               34 feats  0.7456 | 0.7610 0.7655 0.7766  MSE/s 0.909  picks: rbf g0.03 a1e-03
+  cells + weights                   50 feats  0.7262 | 0.7385 0.7343 0.7409  MSE/s 0.862  picks: rbf g0.03 a1e-02
+  cells + scale + weights (= G)     54 feats  0.5009 | 0.5205 0.5172 0.5274  MSE/s 0.410  picks: rbf g0.01 a1e-03
+  cells + invariant weights         50 feats  0.8817 | 0.9025 0.8658 0.9382  MSE/s 1.271  picks: rbf g0.03 a1e-03
+K = 4 (total cost 2151.9 FE, sampling RMS 0.567)
+  cells only (invariant)            50 feats  0.7351 | 0.6971 0.7161 0.6898  MSE/s 1.683  picks: rbf g0.03 a1e-03
+  cells + logit scale               54 feats  0.5670 | 0.5407 0.5530 0.5326  MSE/s 1.001  picks: rbf g0.003 a1e-05
+  cells + weights                   70 feats  0.5715 | 0.5407 0.6226 0.5372  MSE/s 1.017  picks: rbf g0.03 a1e-03
+  cells + scale + weights (= G)     74 feats  0.4286 | 0.4568 0.4301 0.4230  MSE/s 0.572  picks: rbf g0.003 a1e-04
+  cells + invariant weights         70 feats  0.5815 | 0.5950 0.5820 0.6218  MSE/s 1.053  picks: rbf g0.03 a1e-03
+gauge check: max |2 L - L'| / max |L| = 2.9e-15; argmax agreement 1.000000
+  raw weight statistics change by RMS 1.885 (population SD of a statistic, median 0.314); canonical ones by 8.9e-16

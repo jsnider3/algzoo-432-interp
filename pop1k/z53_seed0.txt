@@ -1,0 +1,23 @@
+exact last-input integral vs 2^20-point midpoint rule, 128 prefixes per network:
+  mystery: max |exact - grid| 1.49e-06 (bound 2.5e-05), mean P 0.9712, segments 3.14
+  seed0: max |exact - grid| 1.40e-06 (bound 2.5e-05), mean P 0.9513, segments 3.09
+  seed1: max |exact - grid| 1.40e-06 (bound 2.7e-05), mean P 0.9200, segments 3.01
+  seed2: max |exact - grid| 1.90e-06 (bound 2.5e-05), mean P 0.9782, segments 3.22
+  seed3: max |exact - grid| 1.35e-06 (bound 2.7e-05), mean P 0.9631, segments 3.23
+  seed4: max |exact - grid| 1.32e-06 (bound 2.7e-05), mean P 0.9263, segments 3.20
+  pop0: max |exact - grid| 1.53e-06 (bound 2.5e-05), mean P 0.9103, segments 3.04
+  pop103: max |exact - grid| 1.29e-06 (bound 2.7e-05), mean P 0.9570, segments 3.32
+  pop206: max |exact - grid| 1.31e-06 (bound 2.5e-05), mean P 0.9401, segments 3.08
+  pop309: max |exact - grid| 1.20e-06 (bound 2.7e-05), mean P 0.9440, segments 3.29
+  pop412: max |exact - grid| 1.10e-06 (bound 2.5e-05), mean P 0.9901, segments 3.00
+  pop515: max |exact - grid| 1.37e-06 (bound 2.7e-05), mean P 0.9862, segments 3.31
+  pop618: max |exact - grid| 1.34e-06 (bound 2.5e-05), mean P 0.9762, segments 3.10
+  pop721: max |exact - grid| 1.34e-06 (bound 2.5e-05), mean P 0.9203, segments 2.82
+  pop824: max |exact - grid| 1.23e-06 (bound 2.5e-05), mean P 0.9183, segments 3.02
+  pop927: max |exact - grid| 1.45e-06 (bound 2.7e-05), mean P 0.9410, segments 2.96
+  largest error / its discretization bound: 0.08  (<= 1 means agreement within the grid's resolution)
+
+round-6 table, rescored from last_q*.npz (points; MSE/sampling at each network's cost):
+  q1: prefixes 504, held-out cost 1303.44 FE; raw held RMS 5.2264 mean +5.0265; dev-calibrated held RMS 1.1056 mean -0.0460 MSE/s 2.283; zoo -0.994 +1.074 +1.092 -0.406 -0.356 +2.125
+  q2: prefixes 4032, held-out cost 10324.80 FE; raw held RMS 3.5654 mean +3.4774; dev-calibrated held RMS 0.6400 mean +0.0560 MSE/s 6.057; zoo -0.172 +1.136 +0.905 -0.460 +0.111 +0.440
+  q3: prefixes 13608, held-out cost 34655.07 FE; raw held RMS 1.2212 mean +1.1294; dev-calibrated held RMS 0.4371 mean -0.0015 MSE/s 9.484; zoo -0.334 +0.357 +0.751 -0.608 -0.568 -0.311

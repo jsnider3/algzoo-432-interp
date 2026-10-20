@@ -1,0 +1,8 @@
+K  rows    distinct prefixes by depth (1..10)                         MAC FE   scalar FE  total FE  494K+69.4  saving
+1    1440  [6, 26, 83, 196, 354, 543, 814, 1112, 1440, 1440]    486.61     76.79    563.40     563.4  2.56x
+   bit mismatches over 1030 networks x 1440 rows: {'full_vs_cache_bits': 0, 'trie_vs_full_bits': 0};  max |margin diff| full vs cache 0.00e+00, trie vs full 4.66e-04
+2    2880  [7, 36, 131, 336, 634, 987, 1507, 2080, 2736, 2880]    911.51    145.89   1057.40    1057.4  2.72x
+   bit mismatches over 1030 networks x 2880 rows: {'full_vs_cache_bits': 0, 'trie_vs_full_bits': 0};  max |margin diff| full vs cache 0.00e+00, trie vs full 5.05e-04
+4    5760  [9, 56, 227, 616, 1194, 1875, 2893, 4016, 5328, 5760]   1761.29    284.11   2045.40    2045.4  2.82x
+   bit mismatches over 1030 networks x 5760 rows: {'full_vs_cache_bits': 0, 'trie_vs_full_bits': 5};  max |margin diff| full vs cache 0.00e+00, trie vs full 5.75e-04
+done-z48

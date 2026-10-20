@@ -1,0 +1,5 @@
+  hidden [16, 16]: inference 432 multiply-adds per cell = 108 forward-equivalents; total 1548
+  all 1,024   RMS 0.7101 mean +0.0879  MSE/sampling 1.13
+  dev 0::16   RMS 0.6974 mean +0.1703  MSE/sampling 1.09
+  held 8::16  RMS 0.6818 mean +0.1864  MSE/sampling 1.04
+  zoo errors +1.922 +0.304 -0.537 -0.052 -0.026 +0.854  RMS 0.895  MSE/sampling 1.79

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-padding-top: 140px">
+<head>
+  <meta charset="utf-8" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <title>AlgZoo: uninterpreted models with fewer than 1,500 parameters — Alignment Research Center</title>
+  <link rel="shortcut icon" href="https://storage.ghost.io/c/28/54/2854d6f9-e89b-45f1-9aa3-f33676f42daf/content/images/size/w256h256/2023/03/icons8-robot-208--1--1.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="https://www.alignment.org/assets/css/main.min.css?v=6ZPHYmeaKP0GDuJw" />
+  <link rel="stylesheet" href="https://www.alignment.org/assets/css/littlefoot.min.css?v=68EKlM1QYBavk3mJ" />
+
+  <link rel="icon" href="https://storage.ghost.io/c/28/54/2854d6f9-e89b-45f1-9aa3-f33676f42daf/content/images/size/w256h256/2023/03/icons8-robot-208--1--1.png" type="image/png">
+    <link rel="canonical" href="https://www.alignment.org/blog/algzoo-uninterpreted-models-with-fewer-than-1-500-parameters/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Alignment Research Center">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="AlgZoo: uninterpreted models with fewer than 1,500 parameters">
+    <meta property="og:description" content="This post covers work done by several researchers at, visitors to and collaborators of ARC, including Zihao Chen, George Robinson, David Matolcsi, Jacob Stavrianos, Jiawei Li and Michael Sklar. Thanks to Aryan Bhatt, Gabriel Wu, Jiawei Li, Lee Sharkey, Victor Lecomte and Zihao Chen for comments.
+
+
+In the wake of">
+    <meta property="og:url" content="https://www.alignment.org/blog/algzoo-uninterpreted-models-with-fewer-than-1-500-parameters/">
+    <meta property="article:published_time" content="2026-01-26T17:24:29.000Z">
+    <meta property="article:modified_time" content="2026-01-26T17:55:50.000Z">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="AlgZoo: uninterpreted models with fewer than 1,500 parameters">
+    <meta name="twitter:description" content="This post covers work done by several researchers at, visitors to and collaborators of ARC, including Zihao Chen, George Robinson, David Matolcsi, Jacob Stavrianos, Jiawei Li and Michael Sklar. Thanks to Aryan Bhatt, Gabriel Wu, Jiawei Li, Lee Sharkey, Victor Lecomte and Zihao Chen for comments.
+
+
+In the wake of">
+    <meta name="twitter:url" content="https://www.alignment.org/blog/algzoo-uninterpreted-models-with-fewer-than-1-500-parameters/">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="Jacob Hilton">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Alignment Research Center",
+        "url": "https://www.alignment.org/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://storage.ghost.io/c/28/54/2854d6f9-e89b-45f1-9aa3-f33676f42daf/content/images/size/w256h256/2023/03/icons8-robot-208--1--1.png",
+            "width": 60,
+            "height": 60
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Jacob Hilton",
+        "url": "https://www.alignment.org/author/jacob/",
+        "sameAs": [
+            "https://www.jacobh.co.uk/"
+        ]
+    },
+    "headline": "AlgZoo: uninterpreted models with fewer than 1,500 parameters",
+    "url": "https://www.alignment.org/blog/algzoo-uninterpreted-models-with-fewer-than-1-500-parameters/",
+    "datePublished": "2026-01-26T17:24:29.000Z",
+    "dateModified": "2026-01-26T17:55:50.000Z",
+    "description": "This post covers work done by several researchers at, visitors to and collaborators of ARC, including Zihao Chen, George Robinson, David Matolcsi, Jacob Stavrianos, Jiawei Li and Michael Sklar. Thanks to Aryan Bhatt, Gabriel Wu, Jiawei Li, Lee Sharkey, Victor Lecomte and Zihao Chen for comments.\n\n\nIn the wake of recent debate about pragmatic versus ambitious visions for mechanistic interpretability, ARC is sharing some models we've been studying that, in spite of their tiny size, serve as challe",
+    "mainEntityOfPage": "https://www.alignment.org/blog/algzoo-uninterpreted-models-with-fewer-than-1-500-parameters/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 6.72">
+    <link rel="alternate" type="application/rss+xml" title="Alignment Research Center" href="https://www.alignment.org/blog/rss/">
+    <script defer src="https://cdn.jsdelivr.net/ghost/portal@~2.72/umd/portal.min.js" data-i18n="true" data-ghost="https://www.alignment.org/" data-key="7a47b4e78b020015f8424437f3" data-api="https://alignment.ghost.io/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.9/umd/sodo-search.min.js" data-key="7a47b4e78b020015f8424437f3" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.9/umd/main.css" data-sodo-search="https://alignment.ghost.io/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://www.alignment.org/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=H-xYiMJpfVIWffjV"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=r20fakk8yHsT_Z6Y">
+    <script defer src="/public/member-attribution.min.js?v=AKG4hWena9j3yX3I"></script>
+    <script defer src="/public/ghost-stats.min.js?v=vFcCUf6ZQ0Hyhc8h" data-stringify-payload="false" data-datasource="analytics_events" data-storage="localStorage" data-host="https://www.alignment.org/.ghost/analytics/api/v1/page_hit"  tb_site_uuid="2854d6f9-e89b-45f1-9aa3-f33676f42daf" tb_post_uuid="e712d31a-8dac-40d5-a485-9b4d5952e527" tb_post_type="post" tb_member_uuid="undefined" tb_member_status="undefined" tb_gift_link=""></script><style>:root {--ghost-accent-color: #3f885b;}</style>
+    <style>
+@media (prefers-color-scheme: dark) {
+  section.post__content table th { color: inherit !important; }
+  section.post__content table tbody > tr:nth-child(odd) > td,
+  section.post__content table tbody > tr:nth-child(odd) > th {
+    background-color: inherit !important;
+  }
+}
+  .small-text-box {
+    font-size: 80%;
+    padding: 0.5rem 1rem;
+    width: fit-content;
+    background-color: #F4F9F6;
+    border-radius: 4px;
+    margin-top: 2rem;
+    @media (prefers-color-scheme: dark) {
+      background-color: #2C7C58;
+      a {
+        color: #fdfcf9;
+        transition: color 0.3s ease, border 0.3s ease;
+        &:hover {
+          color: #88f6a6;
+        }
+      }
+    }
+  }
+
+.page-alignment-research-center h1.page__title {
+  display: none;
+}
+</style>
+</head>
+<body class="post-template" id="body">
+
+
+  
+<header class="main-header" id="main-header">
+<div class="container" style="">
+
+
+  <div class="main-header__text-container">
+    <h1 class="main-header__blog-title typgr8-gamma">
+      <a class="unstyled-anchor" href="https://www.alignment.org">Alignment Research Center</a>
+    </h1>
+  </div>
+
+  <!-- <div class="main-header__menu-container"> -->
+    <nav class="menu nav-collapse" id="menu">
+      <ul class="nav-ul">
+
+        <!-- this is the nav I would like to use, but a bug with the Ghost nav helper breaks things, so I'm using the default nav markup for now. -->
+
+  <li class="nav-item nav-blog"
+      role="presentation">
+    <a class="" href="https://www.alignment.org/blog/">Blog</a>
+  </li>
+  <li class="nav-item nav-team"
+      role="presentation">
+    <a class="" href="https://www.alignment.org/team/">Team</a>
+  </li>
+  <li class="nav-item nav-hiring"
+      role="presentation">
+    <a class="" href="https://www.alignment.org/hiring/">Hiring</a>
+  </li>
+  <li class="nav-item nav-donate"
+      role="presentation">
+    <a class="" href="https://www.alignment.org/donate/">Donate</a>
+  </li>
+
+
+
+
+<!-- <li class="nav-subscribe " role="presentation">
+  <a class="" href="https://www.alignment.org/subscribe">
+    <i class="fa fa-envelope-square"></i>
+    <span class="menu-icon-helper-text hidden"> Subscribe</span>
+  </a>
+</li> -->
+
+
+      </ul>
+    </nav>
+  <!-- </div> -->
+
+</div>
+
+</header>
+
+<main class="container content" id="content">
+
+  <article class="post post no-image">
+
+
+      <header class="post__header">
+        <h1 class="post__title typgr8-alpha">AlgZoo: uninterpreted models with fewer than 1,500 parameters</h1>
+
+        <div class="post__meta">
+          Posted by
+          <a href="/author/jacob/">Jacob Hilton</a>
+          on
+          <time class="post__date" datetime="2026-01-26">
+            January 26th, 2026
+          </time>
+
+        </div>
+      </header>
+
+      <section class="post__content" id="jlb-content">
+            <p><em>This post covers work done by several researchers at, visitors to and collaborators of ARC, including Zihao Chen, George Robinson, David Matolcsi, Jacob Stavrianos, Jiawei Li and Michael Sklar. Thanks to Aryan Bhatt, Gabriel Wu, Jiawei Li, Lee Sharkey, Victor Lecomte and Zihao Chen for comments.</em></p>
+<p>In the wake of recent debate about <a href="https://www.lesswrong.com/posts/StENzDcD3kpfGJssR/a-pragmatic-vision-for-interpretability">pragmatic</a> versus <a href="https://www.lesswrong.com/posts/Hy6PX43HGgmfiTaKu/an-ambitious-vision-for-interpretability">ambitious</a> visions for mechanistic interpretability, ARC is sharing some models we've been studying that, in spite of their tiny size, serve as challenging test cases for any ambitious interpretability vision. The models are RNNs and transformers trained to perform algorithmic tasks, and range in size from 8 to 1,408 parameters. The largest model that we believe we more-or-less fully understand has 32 parameters; the next largest model that we have put substantial effort into, but have failed to fully understand, has 432 parameters. The models are available here:</p>
+<p style="text-align: center;"><strong><a href="https://github.com/alignment-research-center/alg-zoo"><button style="text-transform: none;">AlgZoo GitHub repo</button></a></strong></p>
+<p>We think that the "ambitious" side of the mechanistic interpretability community has historically underinvested in "fully understanding slightly complex models" compared to "partially understanding incredibly complex models". There has been some prior work aimed at full understanding, for instance on models trained to perform <a href="https://www.lesswrong.com/s/h95ayYYwMebGEYN5y/p/kjudfaQazMmC74SbF">paren balancing</a>, <a href="https://arxiv.org/abs/2301.05217">modular addition</a> and more general <a href="https://arxiv.org/abs/2410.07476">group operations</a>, but we still don't think the field is close to being able to fully understand our models (at least, not in the sense we discuss in this post). If we are going to one day fully understand multi-billion-parameter LLMs, we probably first need to reach the point where fully understanding models with a few hundred parameters is pretty easy; we hope that AlgZoo will spur research to either help us reach that point, or help us reckon with the magnitude of the challenge we face.</p>
+<p>One likely reason for this underinvestment is lingering philosophical confusion over the meaning of "explanation" and "full understanding". Our current perspective at ARC is that, given a model that has been optimized for a particular loss, an "explanation" of the model amounts to a <strong>mechanistic estimate of the model's loss</strong>. We evaluate mechanistic estimates in one of two ways. We use <a href="https://www.alignment.org/blog/formal-verification-heuristic-explanations-and-surprise-accounting/"><em>surprise accounting</em></a> to determine whether we have achieved a full understanding; but for practical purposes, we simply look at mean squared error as a function of compute, which allows us to <a href="https://www.alignment.org/blog/competing-with-sampling/">compare the estimate with sampling</a>.</p>
+<p>In the rest of this post, we will:</p>
+<ul>
+<li>Review our perspective on mechanistic estimates as explanations, including our two ways of evaluating mechanistic estimates</li>
+<li>Walk through three AlgZoo RNNs that we've studied, the smallest of which we fully understand, and the largest of which we don't</li>
+<li>Conclude with some thoughts on how ARC's approach relates to ambitious mechanistic interpretability</li>
+</ul>
+<h2 id="mechanistic-estimates-as-explanations">Mechanistic estimates as explanations</h2>
+<p>Models from AlgZoo are trained to perform a simple algorithmic task, such as calculating the position of the second-largest number in a sequence. To explain why such a model has good performance, we can produce a <em>mechanistic estimate</em> of its accuracy.<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> By "mechanistic", we mean that the estimate reasons deductively based on the structure of the model, in contrast to a sampling-based estimate, which makes inductive inferences about the overall performance from individual examples.<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup> Further explanation of this concept can be found <a href="https://www.alignment.org/blog/competing-with-sampling/#what-makes-an-algorithm-mechanistic">here</a>.</p>
+<p>Not all mechanistic estimates are high quality. For example, if the model had to choose between 10 different numbers, before doing any analysis at all, we might estimate the accuracy of the model to be 10%. This would be a mechanistic estimate, but a very crude one. So we need some way to evaluate the quality of a mechanistic estimate. We generally do this using one of two methods:</p>
+<ol>
+<li><strong>Mean squared error versus compute.</strong> The more conceptually straightforward way to evaluate a mechanistic estimate is to simply ask how close it gets to the model's actual accuracy. The more compute-intensive the mechanistic estimate, the closer it should get to the actual accuracy. Our <a href="https://www.alignment.org/blog/competing-with-sampling/#the-matching-sampling-principle">matching sampling principle</a> is roughly the following conjecture: there is a mechanistic estimation procedure that (given suitable advice) performs at least as well as random sampling in mean squared error for any given computational budget.</li>
+<li><strong>Surprise accounting.</strong> This is an information-theoretic metric that asks: how surprising is the model's actual accuracy, now that we have access to the mechanistic estimate? We accrue surprise in one of two ways: either the estimate itself performed some kind of calculation or check with a surprising result, or the model's actual accuracy is still surprising even after accounting for the mechanistic estimate and its uncertainty. Further explanation of this idea can be found <a href="https://www.alignment.org/blog/formal-verification-heuristic-explanations-and-surprise-accounting/">here</a>.</li>
+</ol>
+<p>Surprise accounting is useful because it gives us a notion of "full understanding": a mechanistic estimate with as few bits of total surprise as the number of bits of optimization used to select the model. On the other hand, mean squared error versus compute is more relevant to applications such as <a href="https://www.alignment.org/blog/estimating-tail-risk-in-neural-networks/">low probability estimation</a>, as well as being easier to work with. We have been increasingly focused on <a href="https://www.alignment.org/blog/competing-with-sampling">matching the mean squared error of random sampling</a>, which remains a challenging baseline, although we generally consider this to be easier than achieving a full understanding. The two metrics are often closely related, and we will walk through examples of both metrics in the case study below.</p>
+<p>For most of the larger models from AlgZoo (including the 432-parameter model \(M_{16,10}\) discussed below), we would consider it a major research breakthrough if we were able to produce a mechanistic estimate that matched the performance of random sampling under the mean squared error versus compute metric.<sup class="footnote-ref"><a href="#fn3" id="fnref3">[3]</a></sup> It would be an even harder accomplishment to achieve a full understanding under the surprise accounting metric, but we are less focused on this.</p>
+<h2 id="case-study-2nd-argmax-rnns">Case study: 2nd argmax RNNs</h2>
+<p>The models in <a href="https://github.com/alignment-research-center/alg-zoo">AlgZoo</a> are divided into four families, based on the task they have been trained to perform. The family we have spent by far the longest studying is the family of models trained to find the position of the second-largest number in a sequence, which we call the "2nd argmax" of the sequence.</p>
+<p>The models in this family are parameterized by a hidden size \(d\) and a sequence length \(n\). The model \(M_{d,n}\) is a 1-layer ReLU RNN with \(d\) hidden neurons that takes in a sequence of \(n\) real numbers and produces a vector of logit probabilities of length \(n\). It has three parameter matrices:</p>
+<ul>
+<li>the input-to-hidden matrix \(W^{hi}\in\mathbb R^{d\times 1}\)</li>
+<li>the hidden-to-hidden matrix \(W^{hh}\in\mathbb R^{d\times d}\)</li>
+<li>the hidden-to-output matrix \(W^{oh}\in\mathbb R^{n\times d}\)</li>
+</ul>
+<p>The logits of \(M_{d,n}\) on input sequence \(x_0,\ldots,x_{n-1}\in\mathbb R\) are computed as follows:</p>
+<ul>
+<li>\(h_0=0\in\mathbb R^d\)</li>
+<li>\(h _ {t+1}=\mathrm{ReLU}\left(W^{hh}h _ t+W^{hi}x _ t\right)\) for \(t=0,\ldots,n-1\)</li>
+<li>\(\mathrm{logits}=W^{oh}h_n\)</li>
+</ul>
+<p>Diagrammatically:<br>
+<img src="https://storage.ghost.io/c/28/54/2854d6f9-e89b-45f1-9aa3-f33676f42daf/content/images/2026/01/2nd_argmax_architecture.png" alt="2nd_argmax_architecture.png" loading="lazy"></p>
+<p>Each model in this family is trained to make the largest logit be the one that corresponds to the position of second-largest input, using softmax cross-entropy loss.</p>
+<p>The models we'll discuss here are \(M_{2,2}\), \(M_{4,3}\) and \(M_{16,10}\). For each of these models, we'd like to understand why the trained model has high accuracy on standard Gaussian input sequences.</p>
+<h3 id="hidden-size-2-sequence-length-2">Hidden size 2, sequence length 2</h3>
+<p>The model \(M_{2,2}\) can be loaded in AlgZoo using <code>zoo_2nd_argmax(2, 2)</code>. It has 10 parameters and almost perfect 100% accuracy, with an error rate of roughly 1 in 13,000. This means that the difference between the model's logits,<br>
+\[\Delta\left(x _ 0,x _ 1\right):=\mathrm{logits}\left(x _ 0,x _ 1\right) _ 1-\mathrm{logits}\left(x _ 0,x _ 1\right) _ 0,\]is almost always negative when \(x_1&gt;x_0\) and positive when \(x_0&gt;x_1\). We'd like to mechanistically explain why the model has this property.</p>
+<p>To do this, note first that because the model uses ReLU activations and there are no biases, \(\Delta\) is a piecewise linear function of \(x_0\) and \(x_1\) in which the pieces are bounded by rays through the origin in the \(x_0\)-\(x_1\) plane.</p>
+<p>Now, we can "standardize" the model to obtain an exactly equivalent model for which the entries of \(W^{hi}\) lie in \(\left\{\pm 1\right\}\), by rescaling the neurons of the hidden state. Once we do this, we see that<br>
+\[W^{hi}=\begin{pmatrix}+1\\-1\end{pmatrix},\qquad W^{hh}\in\begin{pmatrix}\left[-1,0\right)&amp;\left[1,\infty\right)\\\left[1,\infty\right)&amp;\left[-1,0\right)\end{pmatrix}\qquad\text{and}\qquad W^{oh}\in\begin{pmatrix}\left(0,\infty\right)&amp;\left(-\infty,0\right)\\\left(-\infty,0\right)&amp;\left(0,\infty\right)\end{pmatrix}.\]</p>
+<p>From these observations, we can prove that, on each linear piece of \(\Delta\),<br>
+\[\Delta\left(x_0,x_1\right)=a_0x_0-a_1x_1\]with \(a_0,a_1&gt;0\), and moreover, the pieces of \(\Delta\) are arranged in the \(x_0\)-\(x_1\) plane according to the following diagram:</p>
+<p style="text-align: center;"><img src="https://storage.ghost.io/c/28/54/2854d6f9-e89b-45f1-9aa3-f33676f42daf/content/images/2025/12/2nd_argmax_2_2.png" style="width: 640px;"></p>
+<p>Here, a double arrow indicates that a boundary lies somewhere between its neighboring axis and the dashed line \(x_0=x_1\), but we don't need to worry about exactly where it lies within this range.</p>
+<p>Looking at the coefficients of each linear piece, we observe that:</p>
+<ul>
+<li>In the two blue regions, we have \(a_0&lt;a_ 1\)</li>
+<li>In the two green regions, we have \(a_0&gt;a_1\)</li>
+<li>In the two yellow regions, we have \(a_0\approx a_1\) to within around 1 part in \(2^{11}\)</li>
+</ul>
+<p>This implies that:</p>
+<ul>
+<li>\(\Delta\left(x_0,x_1\right)&lt;0\) in the blue and green regions above the line \(x_0=x_1\)</li>
+<li>\(\Delta\left(x_0,x_1\right)&gt;0\) in the blue and green regions below the line \(x_0=x_1\)</li>
+<li>\(\Delta\left(x_0,x_1\right)\) is approximately proportional to \(x_0-x_1\) in the two yellow regions</li>
+</ul>
+<p>Together, these imply that the model has almost 100% accuracy. More precisely, the error rate is the fraction of the unit disk lying between the model's decision boundary and the line \(x_0=x_1\), which is around 1 in \(2\pi\times 2^{11}\approx 13,000\). This is very close to the model's empirically-measured error rate.</p>
+<p><strong>Mean squared error versus compute.</strong> Using only a handful of computational operations, we were able to mechanistically estimate the model's accuracy to within under 1 part in 13,000, which would have taken tens of thousands of samples. So our mechanistic estimate was much more computationally efficient than random sampling. Moreover, we could have easily produced a much more precise estimate (exact to within floating point error) by simply computing how close \(a_0\) and \(a_1\) were in the two yellow regions.</p>
+<p><strong>Surprise accounting.</strong> As explained <a href="https://www.alignment.org/blog/formal-verification-heuristic-explanations-and-surprise-accounting/#surprise-accounting">here</a>, the total surprise decomposes into the surprise of the explanation plus the surprise given the explanation. The surprise given the explanation is close to 0 bits, since the calculation was essentially exact. For the surprise of the explanation, we can walk through the steps we took:</p>
+<ul>
+<li>We "standardized" the model, which simply replaced the model with an exactly equivalent one. This did not depend on the model's parameters at all, and so doesn't incur any surprise.</li>
+<li>We checked the signs of all 10 of the model's parameters, and whether or not each of the 4 entries of \(W^{hh}\) was greater than or less than 1 in magnitude, incurring 14 bits of surprise.</li>
+<li>We deduced from this the form of the piecewise linear function \(\Delta\). This was another step that didn't depend on the model's parameters and so doesn't incur any surprise.</li>
+<li>We checked which of the two linear coefficients was larger in magnitude in each of the 4 blue and green regions, incurring 4 bits of surprise.</li>
+<li>We checked that the two linear coefficients were equal in magnitude in each of the 2 yellow regions to within 1 part in \(2^{11}\), incurring around 22 bits of surprise.</li>
+</ul>
+<p>Adding this up, the total surprise is around 40 bits. This plausibly matches the number of bits of optimization used to select the model, since it was probably necessary to optimize the linear coefficients in the yellow regions to be almost equal. So we can be relatively comfortable in saying that we have achieved a full understanding.</p>
+<p>Note that our analysis here was pretty "brute force": we essentially checked each linear region of \(\Delta\) one by one, with a little work up front to reduce the total number of checks required. Even though we consider this to constitute a full understanding in this case, we would not draw the same conclusion for much deeper models. This is because the number of regions would grow exponentially with depth, making the number of bits of surprise far larger than the number of bits taken up by the weights of the model (which is an upper bound on the number of bits of optimization used to select the model). The same exponential blowup would also prevent us from matching the efficiency of sampling at reasonable computational budgets.</p>
+<p>Finally, it is interesting to note that our analysis allows us to construct a model by hand that gets exactly 100% accuracy, by taking<br>
+\[W^{hi}=\begin{pmatrix}+1\\-1\end{pmatrix},\qquad W^{hh}=\begin{pmatrix}-1&amp;+1\\+1&amp;-1\end{pmatrix}\qquad\text{and}\qquad W^{oh}=\begin{pmatrix}+1&amp;-1\\-1&amp;+1\end{pmatrix}.\]</p>
+<h3 id="hidden-size-4-sequence-length-3">Hidden size 4, sequence length 3</h3>
+<p>The model \(M_{4,3}\) can be loaded in AlgZoo using <code>zoo_2nd_argmax(4, 3)</code>. It has 32 parameters and an accuracy of 98.5%.</p>
+<p>Our analysis of \(M_{4,3}\) is broadly similar to our analysis of \(M_{2,2}\), but the model is already deep enough that we wouldn't consider a fully brute force explanation to be adequate. To deal with this, we exploit various approximate symmetries in the model to reduce the total number of computational operations as well as the surprise of the explanation. Our full analysis can be found in these sets of notes:</p>
+<ul>
+<li><a href="https://drive.google.com/file/d/1qH61_WshTrgYh0YLj5vkONzk8x00zImN/view"><strong>Symmetric RNNs</strong></a> by George Robinson</li>
+<li><a href="https://drive.google.com/file/d/1t2rXhDQqWrOXRwjqstbrBPWiCmYlMts_/view"><strong>Heuristic explanations for 2nd argmax models</strong></a> by Jacob Hilton</li>
+</ul>
+<p>In the second set of notes, we provide two different mechanistic estimates for the model's accuracy that use different amounts of compute, depending on which approximate symmetries are exploited. We analyze both estimates according to our two metrics. We find that we are able to roughly match the computational efficiency of sampling,<sup class="footnote-ref"><a href="#fn4" id="fnref4">[4]</a></sup> and we think we more-or-less have a full understanding, although this is less clear.</p>
+<p>Finally, our analysis once again allows us to construct an improved model by hand, which has 99.99% accuracy.<sup class="footnote-ref"><a href="#fn5" id="fnref5">[5]</a></sup></p>
+<h3 id="hidden-size-16-sequence-length-10">Hidden size 16, sequence length 10</h3>
+<p>The model \(M_{16,10}\) can be loaded in AlgZoo using <code>example_2nd_argmax()</code>.<sup class="footnote-ref"><a href="#fn6" id="fnref6">[6]</a></sup> It has 432 parameters and an accuracy of 95.3%.</p>
+<p>This model is deep enough that a brute force approach is no longer viable. Instead, we look for "features" in the activation space of the model's hidden state.</p>
+<p>After rescaling the neurons of the hidden state, we notice an approximately isolated subcircuit formed by neurons 2 and 4, with no strong connections to the outputs of any other neurons:<br>
+\[W^{hi} _ {\left(2,4\right)}\approx\begin{pmatrix}0\\+1\end{pmatrix},\qquad W^{hh} _ {\left(2,4\right),\left(2,4\right)}\approx\begin{pmatrix}+1&amp;+1\\-1&amp;-1\end{pmatrix}\qquad\text{and}\qquad W^{hh} _ {\left(2,4\right),\left(0,1,3,\ldots\right)}\approx\begin{pmatrix}0&amp;\ldots\\0&amp;\ldots\end{pmatrix}.\]</p>
+<p>It follows that after unrolling the RNN for \(t\) steps:</p>
+<ul>
+<li>Neuron 2 is approximately \(\max\left(0,x_0,\ldots,x_{t-2}\right)\)</li>
+<li>Neuron 4 is approximately \(\max\left(0,x_0,\ldots,x_{t-1}\right)-\max\left(0,x_0,\ldots,x_{t-2}\right)\)</li>
+</ul>
+<p>This can be proved by induction using the identity \(\mathrm{ReLU}\left(a-b\right)=\max\left(a,b\right)-b\) for neuron 4.</p>
+<p>Next, we notice that neurons 6 and 7 fit into a larger approximately isolated subcircuit together with neurons 2 and 4:<br>
+\[W^{hi} _ {\left(6,7\right)}\approx\begin{pmatrix}-1\\-1\end{pmatrix},\qquad W^{hh} _ {\left(6,7\right),\left(2,4\right)}\approx\begin{pmatrix}+1&amp;0\\+1&amp;+1\end{pmatrix}\qquad\text{and}\qquad W^{hh} _ {\left(6,7\right),\left(0,1,3,\ldots\right)}\approx\begin{pmatrix}0&amp;\ldots\\0&amp;\ldots\end{pmatrix}.\]</p>
+<p>Using the same identity, it follows that after unrolling the RNN for \(t\) steps:</p>
+<ul>
+<li>Neuron 6 is approximately \(\max\left(0,x_0,\ldots,x_{t-3},x_{t-1}\right)-x_{t-1}\)</li>
+<li>Neuron 7 is approximately \(\max\left(0,x_0,\ldots,x_{t-1}\right)-x_{t-1}\)</li>
+</ul>
+<p>We can keep going, and add in neuron 1 to the subcircuit:<br>
+\[W^{hi} _ {\left(1\right)}\approx\begin{pmatrix}-1\end{pmatrix},\qquad W^{hh} _ {\left(1\right),\left(2,4,6,7\right)}\approx\begin{pmatrix}+1&amp;+1&amp;+1&amp;-1\end{pmatrix}\qquad\text{and}\qquad W^{hh} _ {\left(1\right),\left(0,1,3,\ldots\right)}\approx\begin{pmatrix}0&amp;\ldots\end{pmatrix}.\]</p>
+<p>Hence after unrolling the RNN for \(t\) steps, neuron 1 is approximately<br>
+\[\max\left(0,x_0,\ldots,x_{t-4},x_{t-2},x_{t-1}\right)-x_{t-1},\]forming another "leave-one-out-maximum" feature (minus the most recent input).</p>
+<p>In fact, by generalizing this idea, we can construct a model by hand that uses 22 hidden neurons to form all 10 leave-one-out-maximum features, and leverages these to achieve an accuracy of 99%.<sup class="footnote-ref"><a href="#fn7" id="fnref7">[7]</a></sup></p>
+<p>Unfortunately, however, it is challenging to go much further than this:</p>
+<ul>
+<li>We have exploited the approximate weight sparsity of 5 of the hidden neurons, but most of the remaining 11 hidden neurons are more densely connected.</li>
+<li>We have produced a handcrafted model with high accuracy, but we have not produced a correspondence between most of hidden neurons of the trained model and the hidden neurons of the handcrafted model.</li>
+<li>We have used approximations in our analysis, but have not dealt with the approximation error, which gets increasingly significant as we consider more complex neurons.</li>
+</ul>
+<p>Fundamentally, even though we have some understanding of the model, our explanation is incomplete because we not have not turned this understanding into an adequate mechanistic estimate of the model's accuracy.</p>
+<p>Ultimately, to produce a mechanistic estimate for the accuracy of this model that is competitive with sampling (or that constitutes a full understanding), we expect we would have to somehow combine this kind of feature analysis with elements of the "brute force after exploiting symmetries" approach used for the models \(M_{2,2}\) and \(M_{4,3}\), and to do so in a primarily algorithmic way. This is why we consider producing such a mechanistic estimate to be a formidable research challenge.</p>
+<p>Some notes with further discussion of this model can be found here:</p>
+<ul>
+<li><a href="https://drive.google.com/file/d/1USCD1LPa6hXMTj7PAO6Jmc4dVdxemZY3/view"><strong>RNNs for the 2nd argmax</strong></a> and <a href="https://colab.research.google.com/drive/1yRv18_Gp0twoZ-kptMygVhAq-azj2bBq">complementary notebook</a> by Zihao Chen</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>The models in AlgZoo are small, but for all but the tiniest of them, it is a considerable challenge to mechanistically estimate their accuracy competitively with sampling, let alone fully understand them in the sense of surprise accounting. At the same time, AlgZoo models are trained on tasks that can easily be performed by LLMs, so fully understanding them is practically a prerequisite for ambitious LLM interpretability. Overall, we would be keen to see other ambitious-oriented researchers explore our models, and more concretely, we would be excited to see better mechanistic estimates for our models in the sense of mean squared error versus compute. One specific challenge we pose is the following.</p>
+<p><strong>Challenge</strong>: Design a method for mechanistically estimating the accuracy of the 432-parameter model \(M_{16,10}\)<sup class="footnote-ref"><a href="#fn8" id="fnref8">[8]</a></sup> that matches the performance of random sampling in terms of mean squared error versus compute. A cheap way to measure mean squared error is to add noise to the model's weights (enough to significantly alter the model's accuracy) and check the squared error of the method on average over the choice of noisy model.<sup class="footnote-ref"><a href="#fn9" id="fnref9">[9]</a></sup></p>
+<p>How does ARC's broader approach relate to this? The analysis we have presented here is relatively traditional mechanistic interpretability, but we think of this analysis mainly as a warm-up. Ultimately, we seek a scalable, algorithmic approach to producing mechanistic estimates, which we have been pursuing in our <a href="https://www.alignment.org/blog/competing-with-sampling/#our-progress-so-far">recent work</a>. Furthermore, we are ambitious in the sense that we would like to fully exploit the structure present in models to mechanistically estimate any quantity of interest.<sup class="footnote-ref"><a href="#fn10" id="fnref10">[10]</a></sup> Thus our approach is best described as "ambitious" and "mechanistic", but perhaps not as "interpretability".</p>
+<p><em>Cross-posting for comments: <a href="https://www.lesswrong.com/posts/x8BbjZqooS4LFXS8Z/algzoo-uninterpreted-models-with-fewer-than-1-500-parameters">LessWrong</a>, <a href="https://www.alignmentforum.org/posts/x8BbjZqooS4LFXS8Z/algzoo-uninterpreted-models-with-fewer-than-1-500-parameters">Alignment Forum</a></em></p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>Technically, the model was trained to minimize cross-entropy loss (with a small amount of weight decay), not to maximize accuracy, but the two are closely related, so we will gloss over this distinction. <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p>The term "mechanistic estimate" is essentially synonymous with "heuristic explanation" as used <a href="https://www.alignment.org/blog/formal-verification-heuristic-explanations-and-surprise-accounting/">here</a> or "heuristic argument" as used <a href="https://arxiv.org/abs/2211.06738">here</a>, except that it refers more naturally to a numeric output rather than the process used to produce it, and has other connotations we now prefer. <a href="#fnref2" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn3" class="footnote-item"><p>An estimate for a single model could be close by chance, so the method should match sampling on average over random seeds. <a href="#fnref3" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn4" class="footnote-item"><p>To assess the mean squared error of our method, we add noise to the model's weights and check the squared error of our method on average over the choice of noisy model. <a href="#fnref4" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn5" class="footnote-item"><p>This handcrafted model can be loaded in AlgZoo using <code>handcrafted_2nd_argmax(3)</code>. Credit to Michael Sklar for correspondence that led to this construction. <a href="#fnref5" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn6" class="footnote-item"><p>We treat this model as separate from the "official" model zoo because it was trained before we standardized our codebase. Credit to Zihao Chen for originally training and analyzing this model. The model from the zoo that can be loaded using <code>zoo_2nd_argmax(16, 10)</code> has the same architecture, and is probably fairly similar, but we have not analyzed it. <a href="#fnref6" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn7" class="footnote-item"><p>This handcrafted model can be loaded in AlgZoo using <code>handcrafted_2nd_argmax(10)</code>. Note that this handcrafted model has more hidden neurons than the trained model \(M_{16,10}\). <a href="#fnref7" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn8" class="footnote-item"><p>The specific model we are referring to can be be loaded in AlgZoo using <code>example_2nd_argmax()</code>. Additional 2nd argmax models with the same architecture, which a good method should also work well on, can be loaded using <code>zoo_2nd_argmax(16, 10, seed=seed)</code> for <code>seed</code> equal to 0, 1, 2, 3 or 4. <a href="#fnref8" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn9" class="footnote-item"><p>A better but more expensive way to measure mean squared error is to instead average over random seeds used to train the model. <a href="#fnref9" class="footnote-backref">↩︎</a></p>
+</li>
+<li id="fn10" class="footnote-item"><p>We are ambitious in this sense because of our <a href="https://ai-alignment.com/my-research-methodology-b94f2751cb2c">worst-case theoretical methodology</a>, but at the same time, we are focused more on applications such as <a href="https://www.alignment.org/blog/estimating-tail-risk-in-neural-networks/">low probability estimation</a> than on understanding inherently, for which partial success could result in pragmatic wins. <a href="#fnref10" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+            <aside class="gh-sidebar"><div class="gh-toc"></div></aside>
+      </section>
+
+      <footer class="post__footer">
+
+
+
+
+      <br>
+      
+
+      </footer>
+
+
+  </article>
+</main>
+
+
+
+
+
+  <script>
+if (typeof window.themeSettings !== "undefined" && typeof window.themeSettings.katex !== "undefined" && window.themeSettings.katex == "disabled"){
+
+} else {
+  var autoRenderScript = document.createElement( 'script' );
+  autoRenderScript.type = 'text/javascript';
+  autoRenderScript.defer = true;
+  autoRenderScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/contrib/auto-render.min.js';
+  document.body.appendChild(autoRenderScript);
+
+  var katexScript = document.createElement( 'script' );
+  katexScript.type = 'text/javascript';
+  katexScript.defer = true;
+  katexScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.js';
+  katexScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.js';
+  document.body.appendChild(katexScript);
+
+  var cb = function() {
+    var l = document.createElement('link'); l.rel = 'stylesheet';
+    l.href = 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.css';
+    var h = document.getElementsByTagName('head')[0];
+    h.parentNode.insertBefore(l, h);
+  };
+  var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+      webkitRequestAnimationFrame || msRequestAnimationFrame;
+  if (raf) raf(cb);
+  else window.addEventListener('load', cb);
+
+  window.onload = function() {
+    renderMathInElement(document.getElementById("content"),
+          {
+              delimiters: [
+                  {left: "\\[", right: "\\]", display: true},
+                  {left: "\\(", right: "\\)", display: false}
+              ]
+          });
+
+    // LaTeX doesn't line break, so it can make the page too wide on mobile,
+    // so we check all the LaTeX to see if it's wider than the device,
+    // in which case we lower the font size until it's small enough.
+    // We run the fix function several times, because LaTeX can take a while to
+    // take its final shape even after the KaTeX render (which is synchronous),
+    // probably due to fonts taking time to render.
+    // Jacob commented this out because it is a horrific hack that was looping infintely when pages were opened in the background
+    /*
+    function fixExcessiveLatexWidths() {
+      document.querySelectorAll('.katex-display').forEach(function(el) {
+        let fontSize = 100;
+        while (el.offsetLeft + el.clientWidth + 30 > window.outerWidth) {
+          el.style.fontSize = `${fontSize}%`;
+          fontSize -= 5;
+        }
+      })
+    }
+    window.setTimeout(fixExcessiveLatexWidths, 100)
+    window.setTimeout(fixExcessiveLatexWidths, 500)
+    window.setTimeout(fixExcessiveLatexWidths, 1000)
+    window.setTimeout(fixExcessiveLatexWidths, 2000)
+    */
+  }
+}
+</script>
+
+  <footer class="site-footer">
+
+    <!-- <nav class="site-footer__navigation" role="navigation">
+      <ul>
+
+        <li class="nav-rss" style="">
+          <a href="https://www.alignment.org/rss">
+            <i class="fa fa-rss"></i>
+            <span hidden>Subscribe with RSS</span>
+          </a>
+        </li>
+      </ul>
+    </nav> -->
+
+  <div class="site-footer__attribution">
+
+    <span class="site-footer__attribution--copyright">
+      &copy; 2026
+      Alignment Research Center
+    </span>
+
+
+  </div>
+
+</footer>
+
+  <script>
+    var cb = function() {
+      var l = document.createElement('link'); l.rel = 'stylesheet';
+      l.href = 'https://www.alignment.org/assets/css/defer.min.css?v=I3EVKlOQoN3UYrkJ';
+      var h = document.getElementsByTagName('head')[0];
+      h.parentNode.insertBefore(l, h);
+    };
+    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+        webkitRequestAnimationFrame || msRequestAnimationFrame;
+    if (raf) raf(cb);
+    else window.addEventListener('load', cb);
+
+    // Because translations don’t work in JS...
+    var moreText = "+ more";
+    var menuText = "menu";
+    var subscribeSuccessText = "You’ve successfully subscribed to  Alignment Research Center!";
+
+  </script>
+
+  <script src="https://www.alignment.org/assets/js/tocbot.4.20.1.min.js?v=chGv2t2mDtpcZqzg"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+      const postContent = document.querySelector(".post__content");
+      if (!postContent) return;
+      const headings = postContent.querySelectorAll('h1, h2, h3, h4, h5').length;
+      if (headings > 1) {
+        tocbot.init({
+          // Where to render the table of contents.
+          tocSelector: '.gh-toc',
+          // Where to grab the headings to build the table of contents.
+          contentSelector: '.post__content',
+          // Which headings to grab inside of the contentSelector element.
+          headingSelector: 'h1, h2, h3, h4',
+          // Ensure correct positioning
+          hasInnerContainers: true,
+          headingsOffset: 140,
+          scrollSmoothOffset: -140
+        });
+
+        function adjustMainMargin() {
+          // Firefox doesn't support the :has selector (at time of writing, March 2023), so we do the tocbot
+          // adjustment after page load, too. (And also after resizes.)
+          if (window.innerWidth >= 960 && window.innerWidth <= 1500 && document.querySelector('.toc-list')) {
+            if (window.innerWidth > 1220) {
+              document.querySelector('main').style.margin = '0 2rem 0 20rem';
+            } else {
+              document.querySelector('main').style.margin = '0 2rem 0 16rem';
+            }
+          } else {
+            document.querySelector('main').style.margin = '0 auto';
+          }
+        }
+
+        window.addEventListener("resize", function(event) {
+          adjustMainMargin();
+        });
+
+        adjustMainMargin();
+      }
+    });
+  </script>
+
+  <script type="application/javascript">
+if (document.querySelector('.footnote-item') !== null) {
+    
+// Get all the footnote blocks
+const footnotes = document.querySelectorAll('section.footnotes');
+
+// Get the last footnote block
+const lastFootnotes = footnotes[footnotes.length - 1];
+
+// Loop backwards through each footnote block except the last one and extract the footnotes
+for (let i = footnotes.length - 2; i >= 0; i--) {
+  const footnoteList = footnotes[i].querySelector('.footnotes-list');
+  const footnotesArray = Array.from(footnoteList.children);
+
+  // Loop backwards through each footnote and prepend it to the last footnote list
+  for (let j = footnotesArray.length - 1; j >= 0; j--) {
+    lastFootnotes.querySelector('.footnotes-list').prepend(footnotesArray[j]);
+  }
+
+  // Remove the current footnote block
+  footnotes[i].remove();
+}
+// Remove all hr.footnotes-sep elements
+document.querySelectorAll('hr.footnotes-sep').forEach((hr) => hr.remove());;
+
+// Rewrite ref ids.
+document.querySelectorAll('sup.footnote-ref a').forEach((ref, index) => {
+  ref.setAttribute('href', `#fn${index + 1}`);
+  ref.setAttribute('id', `fnref${index + 1}`);
+  ref.textContent = `[${index + 1}]`;
+});
+
+// Rewrite bottom ids.
+// Loop through each footnote item and rewrite its ID to be sequential
+document.querySelectorAll('.footnote-item').forEach((item, index) => {
+  item.setAttribute('id', `fn${index + 1}`);
+  item.querySelector('a.footnote-backref').setAttribute('href', `#fnref${index + 1}`);
+});
+// Get the footnotes section
+const footnotesSection = document.querySelector('section.footnotes');
+
+// Get the parent element of the footnotes section
+const parent = footnotesSection.parentNode;
+
+// Get all the elements in the parent
+const elements = parent.querySelectorAll('*');
+
+// Move the footnotes section after the last element
+const lastElement = elements[elements.length - 1];
+const hr = document.createElement('hr');
+hr.classList.add('footnotes-sep');
+parent.insertBefore(hr, lastElement.nextSibling);
+parent.insertBefore(footnotesSection, lastElement.nextSibling);
+
+}
+</script>
+
+
+  <script src="https://www.alignment.org/assets/js/priority-nav.min.js?v=eq4qoKI-amrsKBli"></script>
+
+  <script async src="https://www.alignment.org/assets/js/index.min.js?v=Et9Ml7S0xxr7EziJ"></script>
+
+  <script defer src="https://www.alignment.org/assets/js/prism.min.js?v=J4ArX61UkE5AIR2p"></script>
+
+  <!--
+    Responsive lightbox. Adds data-jslghtbx to images in a post,
+    then runs the lightbox. Shouldn’t slow anything down.
+  -->
+  <script defer src="https://www.alignment.org/assets/js/lightbox.min.js?v=82NwEImJVomq9_Kd"></script>
+  <script src="https://www.alignment.org/assets/js/littlefoot.min.js?v=iQ0IyijoxvyFphNa" type="application/javascript"></script>
+
+  <script>
+    littlefoot.littlefoot({
+      activateOnHover: true,
+      dismissOnUnhover: true,
+      buttonTemplate: `<button
+  aria-label="Footnote <% number %>"
+  class="littlefoot__button"
+  id="<% reference %>"
+  title="See Footnote <% number %>"
+/>
+  <% number %>
+</button>`,
+      activateCallback: function(popover, button){renderMathInElement(popover, {delimiters: [{left: "\\[", right: "\\]", display: true}, {left: "\\(", right: "\\)", display: false}]});}
+    }) // Pass any littlefoot settings here.
+
+    document.querySelectorAll('section.footnotes .footnote-backref').forEach(function(el) {
+      const href = el.href.split('#')[1]
+      el.href = '#lf-' + href;
+    });
+
+    document.addEventListener("click", function(event) {
+      if (!Array.from(event.target.classList).includes('littlefoot__button')) return
+      if (window.innerWidth < 768) return; // Littlefoot displays footnote at the bottom of the window below 768
+
+      document.querySelector('section.footnotes').scrollIntoView();
+    });
+
+    function enlighten(targetArea){
+      if(document.getElementById(targetArea)){
+        var elms =
+        document.getElementById(targetArea).getElementsByTagName("img");
+        for (var i = 0; i < elms.length; i++) {
+          if (elms[i].classList.contains("noLightbox")) continue;
+          if(elms[i].classList.contains('jslghtbx-thmb')){
+            //alert('hasclass');
+          }else{
+            elms[i].setAttribute("data-jslghtbx", "");
+          }
+        }
+      }
+    }
+    var interval = window.setInterval(function(){
+      if(typeof Lightbox != "undefined") {
+        enlighten('jlb-content');
+        var lightbox = new Lightbox();
+        lightbox.load();
+        window.clearInterval(interval);
+      }
+    },50);
+  </script>
+
+</body>
+</html>

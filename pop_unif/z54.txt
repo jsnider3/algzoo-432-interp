@@ -1,0 +1,12 @@
+zoo models: mystery acc N 95.24% U 93.82%, median |margin| 8.20, norm 40.3, late; seed0 acc N 90.98% U 87.51%, median |margin| 3.39, norm 30.8, none; seed1 acc N 88.07% U 84.40%, median |margin| 2.88, norm 34.8, none; seed2 acc N 94.89% U 92.66%, median |margin| 5.62, norm 77.0, event; seed3 acc N 93.21% U 89.84%, median |margin| 5.17, norm 32.1, event; seed4 acc N 88.98% U 85.13%, median |margin| 3.12, norm 29.1, none
+
+group                    n  acc N(0,1) median (5-95%)    acc Unif median (5-95%)    median |margin| (5-95%)  norm median  late/event/none     mystery percentile: accN accU margin norm
+unif b128               64   91.41 (83.76-94.30)          89.93 (83.14-92.70)         6.31 ( 4.33- 7.92)            49.2  0.28/0.12/0.59     98.4  98.4  96.9  31.2   best acc N 96.06%
+                     late-pointer networks: 18, acc N median 92.33%, median |margin| median 6.60
+unif b256               64   89.08 (76.73-93.96)          88.41 (76.85-92.83)         5.27 ( 3.00- 7.25)            39.2  0.11/0.16/0.73    100.0  98.4 100.0  53.1   best acc N 94.95%
+                     late-pointer networks: 7, acc N median 87.57%, median |margin| median 4.91
+unif b512               64   82.04 (69.44-91.06)          81.17 (70.32-89.20)         3.74 ( 2.41- 5.83)            29.0  0.08/0.09/0.83    100.0 100.0 100.0  87.5   best acc N 93.76%
+                     late-pointer networks: 5, acc N median 82.97%, median |margin| median 4.09
+unif b1024              64   79.28 (67.36-86.18)          78.34 (66.99-84.76)         3.27 ( 2.09- 4.42)            25.5  0.11/0.03/0.86    100.0 100.0 100.0  93.8   best acc N 88.86%
+                     late-pointer networks: 7, acc N median 77.92%, median |margin| median 3.18
+zoo recipe (1,024)    1024   93.20 (85.99-96.39)          90.06 (81.53-94.56)         4.37 ( 2.62- 6.20)            35.2  0.17/0.37/0.46     74.2  87.0 100.0  66.3   best acc N 97.18%

@@ -1,0 +1,60 @@
+
+degree 1: 11 Hermite polynomials, fitted on 262,144 inputs; scored on 524,288 fresh inputs
+network                  true acc  recursive   direct  R^2 h_10  R^2 logit gaps
+mystery                    95.31%     23.71%   22.71%    0.5184          0.5221
+seed0                      91.00%     10.28%   10.63%    0.3548          0.7916
+seed1                      88.12%     19.98%   17.56%    0.3961          0.7375
+seed2                      94.87%     18.28%   15.79%    0.3918          0.2095
+seed3                      93.21%     18.27%   19.39%    0.5229          0.6279
+seed4                      89.03%     10.35%   12.16%    0.3462          0.7968
+zoo-recipe pop 0           86.48%     10.32%    8.50%    0.3302          0.8412
+zoo-recipe pop 341         93.31%      6.60%   16.97%    0.3269          0.2189
+zoo-recipe pop 682         95.73%     23.32%   23.38%    0.5319          0.2188
+mystery-recipe pop 0       89.40%     22.56%   20.76%    0.4933          0.2171
+mystery-recipe pop 341     94.19%     14.85%   16.58%    0.3893          0.2200
+mystery-recipe pop 682     91.18%     14.90%   22.51%    0.5675          0.1871
+
+degree 2: 66 Hermite polynomials, fitted on 262,144 inputs; scored on 524,288 fresh inputs
+network                  true acc  recursive   direct  R^2 h_10  R^2 logit gaps
+mystery                    95.31%     21.53%   15.39%    0.7587          0.6317
+seed0                      91.00%     13.34%   14.11%    0.7696          0.8522
+seed1                      88.12%     23.81%   16.72%    0.7511          0.8259
+seed2                      94.87%     14.32%   10.37%    0.6969          0.5193
+seed3                      93.21%     19.25%   12.21%    0.7787          0.7198
+seed4                      89.03%     12.40%   12.41%    0.7618          0.8521
+zoo-recipe pop 0           86.48%     12.99%   12.54%    0.7760          0.8980
+zoo-recipe pop 341         93.31%      6.97%   11.02%    0.6529          0.5235
+zoo-recipe pop 682         95.73%     18.85%   16.84%    0.7713          0.4572
+mystery-recipe pop 0       89.40%     15.29%   16.92%    0.7919          0.5360
+mystery-recipe pop 341     94.19%     13.11%   10.97%    0.7179          0.5155
+mystery-recipe pop 682     91.18%     14.01%   17.03%    0.8084          0.5187
+
+degree 3: 286 Hermite polynomials, fitted on 262,144 inputs; scored on 524,288 fresh inputs
+network                  true acc  recursive   direct  R^2 h_10  R^2 logit gaps
+mystery                    95.31%     33.06%   23.76%    0.8734          0.7108
+seed0                      91.00%     28.16%   28.95%    0.9132          0.8959
+seed1                      88.12%     30.99%   24.19%    0.8975          0.8836
+seed2                      94.87%     17.40%   14.34%    0.8400          0.7204
+seed3                      93.21%     31.55%   21.88%    0.8880          0.7900
+seed4                      89.03%     25.20%   25.49%    0.9115          0.8967
+zoo-recipe pop 0           86.48%     29.34%   28.55%    0.9206          0.9326
+zoo-recipe pop 341         93.31%      9.08%   13.10%    0.8076          0.7213
+zoo-recipe pop 682         95.73%     24.10%   20.06%    0.8804          0.6313
+mystery-recipe pop 0       89.40%     19.91%   25.03%    0.8978          0.7389
+mystery-recipe pop 341     94.19%     18.81%   16.49%    0.8638          0.7147
+mystery-recipe pop 682     91.18%     19.62%   22.36%    0.9143          0.7254
+
+degree 4: 1001 Hermite polynomials, fitted on 131,072 inputs; scored on 524,288 fresh inputs
+network                  true acc  recursive   direct  R^2 h_10  R^2 logit gaps
+mystery                    95.31%     40.06%   31.10%    0.9078          0.7818
+seed0                      91.00%     34.26%   36.08%    0.9330          0.9206
+seed1                      88.12%     35.78%   28.56%    0.9241          0.9149
+seed2                      94.87%     17.75%   18.99%    0.8828          0.7961
+seed3                      93.21%     34.82%   27.56%    0.9219          0.8471
+seed4                      89.03%     30.11%   31.09%    0.9321          0.9222
+zoo-recipe pop 0           86.48%     35.26%   35.52%    0.9388          0.9478
+zoo-recipe pop 341         93.31%     12.36%   16.12%    0.8592          0.7960
+zoo-recipe pop 682         95.73%     30.80%   26.90%    0.9131          0.7265
+mystery-recipe pop 0       89.40%     21.52%   30.26%    0.9228          0.8082
+mystery-recipe pop 341     94.19%     19.97%   21.66%    0.8981          0.7934
+mystery-recipe pop 682     91.18%     20.41%   27.62%    0.9369          0.7991

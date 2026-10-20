@@ -1,0 +1,34 @@
+zoo                    n  1024  accuracy mean 92.39%  SD 3.43  range 78.60-97.12
+unif                   n  1024  accuracy mean 90.56%  SD 3.70  range 70.78-96.28
+zoo models             n     6  accuracy mean 91.89%  SD 2.78  range 88.04-95.30
+noise 0.003            n   256  accuracy mean 94.13%  SD 0.67  range 90.26-95.08
+noise 0.01             n   256  accuracy mean 83.96%  SD 4.87  range 62.83-91.76
+unif b128_seed0        n    64  accuracy mean 90.52%  SD 3.49  range 77.88-96.07
+unif b256_seed1        n    64  accuracy mean 88.08%  SD 5.75  range 68.72-94.93
+unif b512_seed2        n    64  accuracy mean 81.59%  SD 6.08  range 66.33-93.80
+unif b1024_seed3       n    64  accuracy mean 78.30%  SD 6.77  range 54.54-88.90
+mystery accuracy 95.305%
+
+G(1,1): 44 features, network rows 563.4 FE
+  train zoo  (  618.5 FE): | zoo (cross-fit) RMS 0.579 mean +0.012 MSE/s   0.30 | unif RMS 4.011 mean +3.677 MSE/s  11.82
+     zoo models (mystery, seed0-4): +2.223 +0.510 -0.037 -0.180 -0.155 +0.121   noise 0.003 RMS 3.378 mean +3.319 MSE/s  12.79 | noise 0.01 RMS 10.910 mean +10.546 MSE/s  55.64 | unif b128_seed0 RMS 3.824 mean +3.568 MSE/s  10.70 | unif b256_seed1 RMS 4.984 mean +4.392 MSE/s  15.11 | unif b512_seed2 RMS 6.952 mean +6.448 MSE/s  20.40 | unif b1024_seed3 RMS 7.980 mean +7.442 MSE/s  23.82
+  train unif (  618.5 FE): | unif (cross-fit) RMS 0.957 mean +0.002 MSE/s   0.67 | zoo RMS 5.652 mean -5.318 MSE/s  28.59
+     zoo models (mystery, seed0-4): -0.553 -6.192 -6.501 -4.797 -5.558 -6.717   noise 0.003 RMS 0.801 mean +0.508 MSE/s   0.72 | noise 0.01 RMS 7.225 mean +6.870 MSE/s  24.40 | unif b128_seed0 RMS 0.875 mean +0.143 MSE/s   0.56 | unif b256_seed1 RMS 1.269 mean -0.695 MSE/s   0.98 | unif b512_seed2 RMS 2.076 mean -0.944 MSE/s   1.82 | unif b1024_seed3 RMS 2.298 mean -1.210 MSE/s   1.98
+  train both (  661.9 FE): | zoo (cross-fit) RMS 0.978 mean -0.200 MSE/s   0.92 | unif (cross-fit) RMS 1.201 mean +0.217 MSE/s   1.13
+     zoo models (mystery, seed0-4): +0.878 +0.878 -0.395 -0.733 -0.948 +0.567   noise 0.003 RMS 2.059 mean +1.968 MSE/s   5.09 | noise 0.01 RMS 6.418 mean +5.981 MSE/s  20.60 | unif b128_seed0 RMS 1.130 mean +0.213 MSE/s   1.00 | unif b256_seed1 RMS 2.090 mean +1.604 MSE/s   2.84 | unif b512_seed2 RMS 4.807 mean +4.321 MSE/s  10.44 | unif b1024_seed3 RMS 7.267 mean +6.734 MSE/s  21.14
+
+G(1,2): 54 features, network rows 1057.4 FE
+  train zoo  ( 1129.7 FE): | zoo (cross-fit) RMS 0.509 mean +0.010 MSE/s   0.42 | unif RMS 2.844 mean +2.649 MSE/s  10.85
+     zoo models (mystery, seed0-4): +1.837 -0.487 +0.477 -0.005 -0.409 -0.096   noise 0.003 RMS 2.869 mean +2.815 MSE/s  16.85 | noise 0.01 RMS 9.543 mean +9.205 MSE/s  77.75 | unif b128_seed0 RMS 2.812 mean +2.659 MSE/s  10.56 | unif b256_seed1 RMS 3.642 mean +3.269 MSE/s  14.74 | unif b512_seed2 RMS 5.133 mean +4.851 MSE/s  20.31 | unif b1024_seed3 RMS 6.465 mean +5.703 MSE/s  28.56
+  train unif ( 1129.7 FE): | unif (cross-fit) RMS 0.649 mean +0.007 MSE/s   0.57 | zoo RMS 3.747 mean -3.542 MSE/s  22.95
+     zoo models (mystery, seed0-4): -0.367 -5.510 -3.245 -2.462 -4.624 -4.327   noise 0.003 RMS 0.739 mean +0.537 MSE/s   1.12 | noise 0.01 RMS 5.604 mean +5.267 MSE/s  26.81 | unif b128_seed0 RMS 0.563 mean +0.093 MSE/s   0.42 | unif b256_seed1 RMS 0.887 mean -0.492 MSE/s   0.87 | unif b512_seed2 RMS 1.442 mean -0.648 MSE/s   1.60 | unif b1024_seed3 RMS 3.540 mean -0.131 MSE/s   8.56
+  train both ( 1180.2 FE): | zoo (cross-fit) RMS 0.643 mean -0.088 MSE/s   0.70 | unif (cross-fit) RMS 0.777 mean +0.110 MSE/s   0.85
+     zoo models (mystery, seed0-4): +0.178 -0.600 +0.732 -0.059 -1.036 +0.062   noise 0.003 RMS 1.151 mean +1.040 MSE/s   2.83 | noise 0.01 RMS 4.023 mean +3.723 MSE/s  14.44 | unif b128_seed0 RMS 0.657 mean +0.092 MSE/s   0.60 | unif b256_seed1 RMS 1.042 mean +0.638 MSE/s   1.26 | unif b512_seed2 RMS 2.165 mean +1.912 MSE/s   3.77 | unif b1024_seed3 RMS 4.235 mean +3.124 MSE/s  12.80
+
+G(1,4): 74 features, network rows 2045.4 FE
+  train zoo  ( 2151.9 FE): | zoo (cross-fit) RMS 0.432 mean +0.007 MSE/s   0.58 | unif RMS 1.787 mean +1.600 MSE/s   8.17
+     zoo models (mystery, seed0-4): +1.538 -0.508 +0.808 -0.186 -0.637 -0.450   noise 0.003 RMS 2.247 mean +2.211 MSE/s  19.68 | noise 0.01 RMS 6.974 mean +6.642 MSE/s  79.10 | unif b128_seed0 RMS 1.720 mean +1.585 MSE/s   7.53 | unif b256_seed1 RMS 2.759 mean +2.178 MSE/s  16.11 | unif b512_seed2 RMS 4.076 mean +3.621 MSE/s  24.40 | unif b1024_seed3 RMS 5.061 mean +4.450 MSE/s  33.34
+  train unif ( 2151.9 FE): | unif (cross-fit) RMS 0.557 mean +0.005 MSE/s   0.79 | zoo RMS 2.980 mean -2.724 MSE/s  27.66
+     zoo models (mystery, seed0-4): -0.066 -4.484 -2.709 -1.586 -2.526 -4.456   noise 0.003 RMS 0.770 mean +0.654 MSE/s   2.31 | noise 0.01 RMS 5.659 mean +5.098 MSE/s  52.08 | unif b128_seed0 RMS 0.529 mean +0.080 MSE/s   0.71 | unif b256_seed1 RMS 0.785 mean -0.298 MSE/s   1.30 | unif b512_seed2 RMS 1.241 mean -0.466 MSE/s   2.26 | unif b1024_seed3 RMS 2.197 mean -0.189 MSE/s   6.28
+  train both ( 2216.6 FE): | zoo (cross-fit) RMS 0.466 mean -0.047 MSE/s   0.70 | unif (cross-fit) RMS 0.609 mean +0.053 MSE/s   0.98
+     zoo models (mystery, seed0-4): +0.328 -0.554 +0.925 -0.083 -0.668 -0.375   noise 0.003 RMS 0.999 mean +0.928 MSE/s   4.01 | noise 0.01 RMS 3.939 mean +3.597 MSE/s  25.99 | unif b128_seed0 RMS 0.566 mean +0.063 MSE/s   0.84 | unif b256_seed1 RMS 0.782 mean +0.284 MSE/s   1.33 | unif b512_seed2 RMS 1.621 mean +1.075 MSE/s   3.97 | unif b1024_seed3 RMS 3.573 mean +1.989 MSE/s  17.11

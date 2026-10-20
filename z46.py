@@ -21,7 +21,7 @@ from seeds_clocks import load as zload
 from scipy.special import ndtr, ndtri, betaincinv
 args=[a for a in sys.argv[1:] if not a.startswith('--')]; SCR='--screen' in sys.argv; R0=14 if SCR else 2
 NB=int(next((a.split('=')[1] for a in sys.argv if a.startswith('--boxes=')),2)); NBOX=NB**3
-dev='cuda'; K=int(args[0]) if len(args)>0 else 8; nin=int(args[1]) if len(args)>1 else 32
+dev='cuda' if th.cuda.is_available() else 'cpu'; K=int(args[0]) if len(args)>0 else 8; nin=int(args[1]) if len(args)>1 else 32
 P,_=load('pop1k/seed0.npz'); Z=[zload(f) for f in ["weights.npz"]+[f"weights_seed{i}.npz" for i in range(5)]]
 Wz=[th.tensor(np.stack([z[i] for z in Z]),dtype=th.float32) for i in range(3)]
 Wall=[th.cat([a,b]) for a,b in zip(P,Wz)]; NT=Wall[0].shape[0]

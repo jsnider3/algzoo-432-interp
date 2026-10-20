@@ -14,7 +14,7 @@ from z2 import load
 from seeds_clocks import load as zload
 from lines import trace_line
 from scipy.special import ndtr, ndtri, roots_jacobi
-dev='cuda'; q=8; K=8
+dev='cuda' if th.cuda.is_available() else 'cpu'; q=8; K=8
 P,_=load('pop1k/seed0.npz'); Z=[zload(f) for f in ["weights.npz"]+[f"weights_seed{i}.npz" for i in range(5)]]
 Wz=[th.tensor(np.stack([z[i] for z in Z]),dtype=th.float32) for i in range(3)]
 Wall=[th.cat([a,b]) for a,b in zip(P,Wz)]; NT=Wall[0].shape[0]

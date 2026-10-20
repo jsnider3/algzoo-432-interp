@@ -1,0 +1,4 @@
+b64: mean 90.68% SD 3.53; mystery percentile: b64 96.9, b128 (1,024) 97.2
+G(1,1)   618.5 FE: b64 RMS 1.269 mean +0.804 MSE/s 1.20
+G(1,2)  1129.7 FE: b64 RMS 0.929 mean +0.490 MSE/s 1.17
+G(1,4)  2151.9 FE: b64 RMS 0.635 mean +0.254 MSE/s 1.04
