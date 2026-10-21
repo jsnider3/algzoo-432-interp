@@ -1,7 +1,7 @@
 """Learned rows from a richer pool: the MF4 rows of the 8-box K = 4 design (gfeat.rows(2, 4): two equal-probability
 pieces of each of the three order-statistic coordinates, so 8 sets of M, R, Q values, x 4 S values x 720 arrangements
 = 23,040 candidates), with z69's pulses, 20 weight statistics and predicted roles (z67's logistic classifier, nested).
-Selection: z68's greedy OMP inside each training fold, k = 8 ... 256 rows; ridge readout on the selected rows'
+Selection: z68's greedy OMP inside each training fold, k = 8 ... 128 rows; ridge readout on the selected rows'
 normalized margins and bits, log s, and the base quantities.  Cost: the selected rows' prefix trie + 30 operations
 per row + 5,000-operation allowance + pulses (6 FE) + role classifier (1.8 FE).  Fitted on the 1,024, cross-fitted
 with 8 folds, applied unchanged to the 512 new networks (independent labels) and the mystery model; each budget is

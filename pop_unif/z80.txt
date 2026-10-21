@@ -1,0 +1,5 @@
+2048 blind test networks: accuracy 90.28% SD 3.95
+   64 learned rows   61.4 FE | RMS 0.755 mean +0.038 | MSE/sampling 0.041 (0.037-0.045) | vs shrunk sampling 0.08
+  128 learned rows  107.2 FE | RMS 0.662 mean +0.034 | MSE/sampling 0.054 (0.050-0.059) | vs shrunk sampling 0.08
+  256 learned rows  192.1 FE | RMS 0.626 mean +0.036 | MSE/sampling 0.087 (0.077-0.102) | vs shrunk sampling 0.11
+  384 learned rows  271.6 FE | RMS 0.598 mean +0.027 | MSE/sampling 0.113 (0.099-0.131) | vs shrunk sampling 0.14
