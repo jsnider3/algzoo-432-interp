@@ -1,6 +1,8 @@
-"""Oracle test for Hermite / low-degree polynomial propagation (ARC, "Competing with sampling": represent every unit
-as a degree-<=d polynomial in the Gaussian inputs, propagate layer by layer; d is the largest integer with
-n^d <= 1/eps^2, so d = 2 at about 600 forward-equivalents and d = 3 at about 4,000 for n = 10 inputs).
+"""Oracle test for Hermite / low-degree polynomial propagation (ARC, "Competing with sampling", uses a step-by-step
+best degree-d Hermite approximation for intersections of random half-spaces; its random-MLP method is cumulant
+propagation instead).  Applied here: represent every unit as a degree-<=d polynomial in the Gaussian inputs and
+propagate step by step; d is the largest integer with n^d <= 1/eps^2, so d = 2 at about 600 forward-equivalents and
+d = 3 at about 4,000 for n = 10 inputs.
 Here the projection is done as well as it can be: at each step the hidden state is replaced by its exact
 least-squares projection onto Hermite polynomials of degree <= d (fitted on 2^18 N(0,1) inputs, 2^17 for d = 4),
 then fed to the next step ("recursive"); the final argmax and the 2nd-argmax target are then evaluated exactly on
