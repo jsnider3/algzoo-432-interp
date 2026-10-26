@@ -3,14 +3,14 @@ import ast, json, sys, time, types, itertools
 from pathlib import Path
 import numpy as np
 from threadpoolctl import threadpool_limits
-sys.path.insert(0, str(Path.cwd()))
+sys.path.insert(0, str(Path.cwd() / 'scripts'))
 from scipy.linalg import eigh
 from scipy.spatial.distance import cdist
 from scipy.special import ndtr, ndtri, betaincinv
 from seeds_clocks import load as zload
 
 # Load only the unchanged NumPy/SciPy definitions; torch is absent here.
-tree=ast.parse(Path('gfeat.py').read_text())
+tree=ast.parse(Path('scripts/gfeat.py').read_text())
 keep={'mu','rows','trie','stats','cost','fold_preds','pick','crossfit','fit_predict'}
 ns=dict(np=np,itertools=itertools,eigh=eigh,cdist=cdist,ndtr=ndtr,ndtri=ndtri,betaincinv=betaincinv)
 for node in tree.body:

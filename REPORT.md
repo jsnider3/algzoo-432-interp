@@ -896,7 +896,7 @@ The selector solution is therefore not walled off from the memory solution. It s
 
 ### 7.15 Second round on accuracy estimation: task-only designs, held-out seeds, adaptive sampling, and explanation-predicted boundaries (`w1.py`–`w9.py`, `x1.py`–`x4.py`)
 
-This round started from an analysis by ChatGPT Pro, given the question in `QUESTION_FOR_CHATGPT_PRO.md`. Its code was not recoverable, so I reimplemented its two main proposals from the description and checked them independently. Then, following the brief "use the explanation, and make finding it cheaper than brute force", I tested explanation-driven estimators across independently trained seeds.
+This round started from an analysis by ChatGPT Pro, given the question in `chatgpt2/questions/QUESTION_FOR_CHATGPT_PRO.md`. Its code was not recoverable, so I reimplemented its two main proposals from the description and checked them independently. Then, following the brief "use the explanation, and make finding it cheaper than brute force", I tested explanation-driven estimators across independently trained seeds.
 
 **ARC's bar, for reference.** ARC would "consider it a major research breakthrough" to produce a *mechanistic* estimate, one that "reasons deductively based on the structure of the model" rather than from sampled examples, that "matches the performance of random sampling in terms of mean squared error versus compute". The comparison is to be averaged over random seeds, and weight noise is suggested only as a cheap proxy. By that definition, everything in this section except the last part still samples.
 
@@ -972,7 +972,7 @@ The nonlinear one-input-at-a-time treatment (first-order cut-HDMR, 7.13) was, at
 
 ### 7.16 A population of 1,024 networks, and a lower-input leakage model that works (`batch_train.py`, `z1.py`–`z11.py`, `v1.py`, `lines.py`, `lw2.py`, `z12.py`–`z47.py`)
 
-This round moved from the 22 seeds of 7.15 to 1,024 freshly trained networks, with two aims: learn which mechanisms set a network's accuracy, and build a mechanistic estimate that could meet ARC's bar. The working notes hold every number: `pop1k/notes_circuit_2e28.md` (first pass, 2²⁸-sequence snapshot) and `pop1k/notes_circuit_2e30.md` (converged). Printed outputs are in `pop1k/*.txt`. ChatGPT Pro was consulted twice: the briefs are `QUESTION2_FOR_CHATGPT_PRO.md` and `QUESTION3_FOR_CHATGPT_PRO.md`, and the answers are summarized in `chatgpt2/chatgpt_answer_{1,2}.md`.
+This round moved from the 22 seeds of 7.15 to 1,024 freshly trained networks, with two aims: learn which mechanisms set a network's accuracy, and build a mechanistic estimate that could meet ARC's bar. The working notes hold every number: `pop1k/notes_circuit_2e28.md` (first pass, 2²⁸-sequence snapshot) and `pop1k/notes_circuit_2e30.md` (converged). Printed outputs are in `pop1k/*.txt`. ChatGPT Pro was consulted twice: the briefs are `chatgpt2/questions/QUESTION2_FOR_CHATGPT_PRO.md` and `chatgpt2/questions/QUESTION3_FOR_CHATGPT_PRO.md`, and the answers are summarized in `chatgpt2/chatgpt_answer_{1,2}.md`.
 
 **ARC's bar, as a budget.** An estimate with error ε matches sampling only if it costs at most p(1−p)/ε² forwards. Here p(1−p) ≈ 0.070 for the population and 0.0446 for the mystery model, so sampling reaches 1 point at 700 forwards, 0.3 at 7,800 and 0.1 at 70,000. Every error below is scored against that line.
 
@@ -1095,7 +1095,7 @@ This round moved from the 22 seeds of 7.15 to 1,024 freshly trained networks, wi
   - Enumerating linear regions already costs 100–1,000× too much for MF3.
   - Sampling top-4 configurations at about 65 forwards each is about 50× less efficient per forward (65 forwards each for a 1.3× variance gain) than sampling the network.
   - A deterministic scheme has to locate each arrangement's decision boundary in the 4 values, and evaluate the penalty only in the shell around it.
-- `QUESTION4_FOR_CHATGPT_PRO.md` poses this integral as the next question. The attempts that followed (ChatGPT's round 4 and `z20`–`z23`) are below. None reaches the line in the 10³–10⁵ range.
+- `chatgpt2/questions/QUESTION4_FOR_CHATGPT_PRO.md` poses this integral as the next question. The attempts that followed (ChatGPT's round 4 and `z20`–`z23`) are below. None reaches the line in the 10³–10⁵ range.
 
 **Round 4: the integral attempted, and a local check of the leakage model (`z13.py`, `z14.py`; ChatGPT's answer summarized in `chatgpt2/chatgpt_answer_3.md`).**
 - **No deterministic estimator reached the sampling line.** ChatGPT's best was MF3 with exact S lines. It shares recurrent prefixes across arrangements, applies sparse updates between adjacent pieces, and uses Gauss–Jacobi rules in the order-statistic CDFs.
@@ -1235,7 +1235,7 @@ This round moved from the 22 seeds of 7.15 to 1,024 freshly trained networks, wi
   - Linearizing the 10 neurons active on at least 80% gives a bias of 16 points, with about 104 regions left.
   - The rare switch-offs of the clock and memory channels are exactly what the accuracy depends on (`z19`: the double-counted flips sit in these neurons).
 - **Cost of the correction inside the enumeration.** A per-configuration lower-input model costs about 240 forwards (nearby pairs) at each of about 4 S-points on each of 5,040 arrangement lines: about 4.8M forwards per outer node, against a whole budget of 10⁵. The only form that splits into separate line integrals is the unclamped sum, and it is biased by +0.14 points (RMS 0.16, worth about 30,000 samples). It would also cost several times the anchor integral, which already needs about 10⁶ forwards.
-- **What the constraints leave open.** The brief that defines the task (`QUESTION4_FOR_CHATGPT_PRO.md`, Constraints) requires "a deterministic computation on that network's own weights".
+- **What the constraints leave open.** The brief that defines the task (`chatgpt2/questions/QUESTION4_FOR_CHATGPT_PRO.md`, Constraints) requires "a deterministic computation on that network's own weights".
   - It rules out "random or quasi-random point sets over the input or configuration space, including unscrambled Sobol or lattice rules used in place of sampling", "control variates, and importance or stratified sampling", and "any fitted prediction of accuracy or error from the population".
   - It allows "points the method chooses from the weights, such as region vertices, line pieces, roots, and quadrature nodes for a smooth reduced integrand", and design choices learned from other networks.
   - So quasi-Monte Carlo, randomized quadrature, control variates and fitted surrogates are excluded by definition, not by measurement. Bayesian quadrature on deterministic nodes is a weighted quadrature rule, limited by the integrand's smoothness like the rules above.
@@ -1274,7 +1274,7 @@ This round moved from the 22 seeds of 7.15 to 1,024 freshly trained networks, wi
   - A successful method would need structure that none of these families uses. Nothing measured here points to where that structure would come from.
 - **Verdict for ARC's bar.** Deterministic top-4 integration does not reach the sampling line anywhere in 10³–10⁵ forwards. The MF4 anchor alone needs about 10⁶ forwards to come within 3× of sampling's MSE, and it is not the accuracy (+0.3 points optimistic). The correction adds orders of magnitude more, because it is neither local to the boundary nor decomposable without bias. A closed form does not rescue it either: the position effects do not factor (`z24`), and each arrangement's value space holds hundreds of linear regions (`z25`, `z26`). So for these networks the accuracy integral has no low-cost deterministic description at the precision ARC asks for. That is a measured statement about these computations, not a proof about all algorithms. The population changes this at the low end: a correction learned from the 1,024 networks comes within 1.1× of sampling's MSE at about 1.5–1.8k forward-equivalents, all costs counted (`z47`, below).
 
-**Round 5 (ChatGPT) and its checks (`z40`–`z44`).** The brief is `QUESTION5_FOR_CHATGPT_PRO.md`. The answer is summarized in `chatgpt2/chatgpt_answer_4.md`, with its full text, code, report and results in `chatgpt2/round5/`.
+**Round 5 (ChatGPT) and its checks (`z40`–`z44`).** The brief is `chatgpt2/questions/QUESTION5_FOR_CHATGPT_PRO.md`. The answer is summarized in `chatgpt2/chatgpt_answer_4.md`, with its full text, code, report and results in `chatgpt2/round5/`.
 
 - **The scoring table (`z40.py`).** `pop1k/reference.npz` holds, for all 1,030 networks on the same 2²⁰ inputs, the true accuracy and the MF2, MF3 and MF4 anchors' accuracies. Because the inputs are paired, the leakages have SE 0.017–0.025 points.
 - **Its best estimator: two levels (`z41.py`).**
@@ -1427,7 +1427,7 @@ This round moved from the 22 seeds of 7.15 to 1,024 freshly trained networks, wi
 
 ### 7.18 Cheaper probes, single-input pulses, and a test on new networks (`z59`–`z61`, ChatGPT round 7)
 
-**The round.** `QUESTION7_FOR_CHATGPT_PRO.md` asked for a review of G(1, K) (7.17), a brainstorm of features that might carry its residual, and optimizations, all in the range where it already wins (10²–10⁴ FE). For the round, `z59` cached every mystery-recipe network's cell outputs so the fits run on a CPU (`pop_unif/cells_k{1,2,4}.npz`). The answer, its standalone estimator (`round7_estimator.py`), its PDF report and its result archive are in `chatgpt2/round7/`. Its script reproduces its own cross-fit numbers here to four decimals. `z60` rebuilds the new pieces from the answer's description and fits them with `gfeat`'s readout; it agrees within 0.01–0.02 points.
+**The round.** `chatgpt2/questions/QUESTION7_FOR_CHATGPT_PRO.md` asked for a review of G(1, K) (7.17), a brainstorm of features that might carry its residual, and optimizations, all in the range where it already wins (10²–10⁴ FE). For the round, `z59` cached every mystery-recipe network's cell outputs so the fits run on a CPU (`pop_unif/cells_k{1,2,4}.npz`). The answer, its standalone estimator (`round7_estimator.py`), its PDF report and its result archive are in `chatgpt2/round7/`. Its script reproduces its own cross-fit numbers here to four decimals. `z60` rebuilds the new pieces from the answer's description and fits them with `gfeat`'s readout; it agrees within 0.01–0.02 points.
 
 **Review.**
 - **No leakage was found.** Standardization, centring and hyperparameter choice stay inside the folds. The labels of all networks come from one shared input bank, so their errors (0.014–0.026 points) are correlated across networks. That is small next to the residuals, but a final test should use a second bank.
